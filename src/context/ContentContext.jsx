@@ -6,7 +6,6 @@ import { poetsData as initialPoetsData } from '../data/poetsData';
 
 const ContentContext = createContext();
 
-const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 const getApiBase = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (!envUrl) return '/api';
