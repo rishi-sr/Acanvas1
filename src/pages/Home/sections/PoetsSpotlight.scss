@@ -1,0 +1,440 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.poets-spotlight-section {
+  background: linear-gradient(180deg, #FBF8F7 0%, #FFFFFF 50%, #FBF8F7 100%);
+  position: relative;
+  overflow: hidden;
+  padding-top: 5rem;
+  padding-bottom: 5.5rem;
+}
+
+// ── Author Switcher Tabs ───────────────────────────────────────────────────
+.parichay-tab-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+
+  .parichay-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.8rem;
+    border-radius: $radius-pill;
+    border: 1.5px solid rgba(139, 0, 0, 0.16);
+    background: #FFFFFF;
+    color: $text-secondary;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: $transition-smooth;
+
+    svg {
+      color: $primary-cherry;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover:not(.active) {
+      border-color: $primary-cherry;
+      color: $primary-cherry;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: $cherry-gradient;
+      color: #FFFFFF;
+      border-color: transparent;
+      box-shadow: 0 6px 20px rgba(196, 30, 58, 0.32);
+
+      svg {
+        color: #FFFFFF;
+      }
+    }
+  }
+}
+
+// ── Master Parichay Card ───────────────────────────────────────────────────
+.spotlight-parichay-card {
+  background: #FFFFFF;
+  border-radius: 28px;
+  border: 1px solid rgba(139, 0, 0, 0.09);
+  box-shadow:
+    0 20px 60px rgba(139, 0, 0, 0.07),
+    0 4px 16px rgba(0, 0, 0, 0.03);
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover {
+    box-shadow:
+      0 28px 80px rgba(139, 0, 0, 0.11),
+      0 6px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  @include respond-to('lg') {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Background Card Watermark
+.parichay-card-watermark {
+  position: absolute;
+  top: 15px;
+  left: 42%;
+  width: 220px;
+  height: 220px;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 1;
+
+  @include respond-to('lg') {
+    display: none;
+  }
+}
+
+// ── Left Content Column ────────────────────────────────────────────────────
+.parichay-content-col {
+  padding: 3.2rem 3.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  position: relative;
+  z-index: 2;
+
+  @include respond-to('md') {
+    padding: 2.2rem 1.6rem;
+    gap: 1.1rem;
+  }
+}
+
+// Role Header Tag
+.parichay-role-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7D2E35;
+
+  .role-feather-icon {
+    color: $primary-cherry;
+  }
+
+  .role-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+}
+
+// Poet Display Name
+.parichay-poet-name {
+  font-family: $font-hindi-display, 'Rozha One', 'Yatra One', Georgia, serif;
+  font-size: 2.9rem;
+  font-weight: 800;
+  color: $primary-cherry-dark;
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+
+  @include respond-to('md') {
+    font-size: 2.2rem;
+  }
+}
+
+// Golden Flourish Ornament
+.parichay-gold-flourish {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.1rem 0 0.4rem;
+  width: 100%;
+  max-width: 240px;
+
+  .flourish-line {
+    flex: 1;
+    height: 1.5px;
+    background: linear-gradient(90deg, rgba(197, 160, 89, 0.7), rgba(197, 160, 89, 0.1));
+  }
+
+  .flourish-motif {
+    color: $gold-primary;
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+}
+
+// Signature Verse Callout Box
+.parichay-quote-box {
+  background: linear-gradient(135deg, #FFF9F6 0%, #FFF5F0 100%);
+  border: 1px solid rgba(139, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1.4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.02);
+
+  .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: $primary-cherry;
+    line-height: 0;
+    position: absolute;
+    opacity: 0.85;
+
+    &.open-mark {
+      top: 1.4rem;
+      left: 1rem;
+    }
+
+    &.close-mark {
+      bottom: 0.8rem;
+      right: 2.2rem;
+    }
+  }
+
+  .quote-text {
+    margin: 0;
+    padding: 0 1.2rem;
+    font-family: $font-hindi-body, 'Tiro Devanagari Hindi', Georgia, serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #2D2526;
+    line-height: 1.75;
+    text-align: left;
+  }
+
+  .quote-corner-sketch {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.75;
+  }
+}
+
+// Bio Text
+.parichay-bio-text {
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: $text-secondary;
+  margin: 0;
+}
+
+// Poetic Philosophy (काव्य- दर्शन) Card
+.parichay-philosophy-card {
+  background: #FFFAF8;
+  border: 1.2px dashed rgba(139, 0, 0, 0.2);
+  border-radius: 18px;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+
+  @include respond-to('sm') {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .philosophy-icon-badge {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background: $primary-cherry-dark;
+    @include flex-center;
+    box-shadow: 0 6px 16px rgba(92, 0, 0, 0.25);
+  }
+
+  .philosophy-text-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    .philosophy-heading {
+      font-family: $font-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $primary-cherry;
+      margin: 0;
+    }
+
+    .philosophy-body {
+      font-size: 0.92rem;
+      font-style: italic;
+      color: #3A2E30;
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Awards Row
+.parichay-awards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.2rem;
+
+  .parichay-award-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    background: #F6F0EB;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: $radius-pill;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: $text-secondary;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+
+    .award-icon {
+      color: $gold-dark;
+    }
+  }
+}
+
+// Bottom Action Link
+.parichay-action-row {
+  margin-top: 0.4rem;
+
+  .parichay-read-bio-link {
+    font-family: $font-hindi-display, 'Rozha One', serif;
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: $primary-cherry-dark;
+    text-decoration: none;
+    border-bottom: 2px solid $primary-cherry-dark;
+    padding-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: $transition-smooth;
+
+    svg {
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      color: $primary-cherry;
+      border-bottom-color: $primary-cherry;
+      gap: 0.8rem;
+
+      svg {
+        transform: translateX(4px);
+      }
+    }
+  }
+}
+
+// ── Right Image Column with Organic Curved Mask ────────────────────────────
+.parichay-image-col {
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+  background: #F4EAE7;
+
+  @include respond-to('lg') {
+    min-height: 480px;
+  }
+
+  .organic-curve-overlay {
+    position: absolute;
+    top: 0;
+    left: -2px;
+    bottom: 0;
+    width: 68px;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+
+    @include respond-to('lg') {
+      display: none;
+    }
+
+    .curve-svg-shape {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  .parichay-portrait-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    display: block;
+  }
+}
+
+// Floating Dark Crimson Glass Stats Bar
+.parichay-floating-stats {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 8;
+  background: rgba(45, 5, 10, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(197, 160, 89, 0.45);
+  border-radius: 20px;
+  padding: 1.1rem 1.6rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+
+  @include respond-to('sm') {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1.2rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .floating-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    color: #FFFFFF;
+    text-align: center;
+
+    .stat-icon {
+      color: $gold-primary;
+      margin-bottom: 0.15rem;
+    }
+
+    .stat-value {
+      font-family: $font-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.76rem;
+      color: #D9C8B5;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+  }
+
+  .floating-stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+}

@@ -1,0 +1,217 @@
+@use './variables' as *;
+@use './mixins' as *;
+@use './typography' as *;
+@use './animations' as *;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: $font-body;
+  background-color: $bg-alabaster;
+  color: $text-primary;
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 8% 12%, rgba(196, 30, 58, 0.035) 0%, transparent 40%),
+    radial-gradient(circle at 92% 82%, rgba(139, 0, 0, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(253, 245, 245, 0.85) 0%, transparent 100%);
+  background-attachment: fixed;
+}
+
+// Custom Royal Scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-parchment-deep;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $primary-cherry-light, $primary-cherry-dark);
+  border-radius: $radius-pill;
+  border: 2px solid $bg-parchment-deep;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary-cherry-vibrant;
+}
+
+// Selection Highlight
+::selection {
+  background: rgba(196, 30, 58, 0.2);
+  color: $primary-cherry-dark;
+}
+
+// Layout Container
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.75rem;
+
+  @include respond-to('sm') {
+    padding: 0 1.2rem;
+  }
+}
+
+.section-padding {
+  padding: 6.5rem 0;
+
+  @include respond-to('md') {
+    padding: 4.5rem 0;
+  }
+}
+
+// Buttons
+.btn-royal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.88rem 2rem;
+  background: $cherry-gradient;
+  color: #ffffff;
+  font-family: $font-body;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border-radius: $radius-pill;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.32);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: $transition-smooth;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: 0.5s;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(196, 30, 58, 0.45);
+    color: #ffffff;
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-royal-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.82rem 1.85rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: $primary-cherry;
+  font-family: $font-body;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border-radius: $radius-pill;
+  border: 1.5px solid $border-accent;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: $transition-smooth;
+
+  &:hover {
+    background: $primary-cherry;
+    color: #ffffff;
+    border-color: $primary-cherry;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(196, 30, 58, 0.2);
+  }
+}
+
+.btn-royal-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.8rem;
+  background: $gold-shimmer;
+  color: $ink-black;
+  font-family: $font-body;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: $radius-pill;
+  border: none;
+  box-shadow: 0 8px 20px rgba(197, 160, 89, 0.35);
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: $transition-smooth;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(197, 160, 89, 0.5);
+  }
+}
+
+// Royal Badges
+.royal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.9rem;
+  border-radius: $radius-pill;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(196, 30, 58, 0.08);
+  color: $primary-cherry;
+  border: 1px solid rgba(196, 30, 58, 0.18);
+  white-space: nowrap;
+
+  &.gold {
+    background: rgba(197, 160, 89, 0.12);
+    color: $gold-dark;
+    border-color: rgba(197, 160, 89, 0.3);
+  }
+}
+
+// Modal Backdrop & Container
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 17, 19, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}

@@ -1,0 +1,198 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.submit-poem-page {
+  padding-top: 6.5rem;
+  padding-bottom: 5.5rem;
+
+  .submit-poem-hero {
+    padding: 3.5rem 0 2rem;
+    text-align: center;
+  }
+
+  .submit-poem-container {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .submit-card-wrapper {
+    background: #FFFFFF;
+    border-radius: 24px;
+    border: 1.5px solid rgba(139, 0, 0, 0.12);
+    box-shadow:
+      0 10px 40px rgba(139, 0, 0, 0.07),
+      0 0 0 1px rgba(197, 160, 89, 0.15);
+    padding: 3rem 3.5rem;
+    position: relative;
+
+    @include respond-to('md') {
+      padding: 2rem 1.6rem;
+    }
+  }
+
+  .form-intro-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.04), rgba(197, 160, 89, 0.08));
+    border: 1px dashed rgba(197, 160, 89, 0.5);
+    border-radius: 16px;
+    padding: 1.4rem 1.8rem;
+    margin-bottom: 2.5rem;
+
+    .banner-icon {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8B0000, #C41E3A);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h4 {
+      font-family: $font-serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #8B0000;
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      font-size: 0.92rem;
+      color: $text-secondary;
+      line-height: 1.65;
+      margin: 0;
+    }
+  }
+
+  .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: $font-serif;
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: #1A1617;
+    margin-bottom: 1.3rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1.5px solid rgba(139, 0, 0, 0.08);
+  }
+
+  .form-grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+
+    @include respond-to('sm') {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 1.3rem;
+
+    label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #2D2224;
+      letter-spacing: 0.01em;
+    }
+
+    input, select, textarea {
+      padding: 0.85rem 1.1rem;
+      border: 1.5px solid rgba(139, 0, 0, 0.16);
+      border-radius: 12px;
+      font-family: $font-body;
+      font-size: 0.96rem;
+      color: #1A1617;
+      background: #FFFFFF;
+      transition: all 0.25s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #8B0000;
+        box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.08);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      line-height: 1.8;
+      font-family: 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', Georgia, serif;
+      font-size: 1.05rem;
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238B0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.1rem center;
+      padding-right: 2.5rem;
+      appearance: none;
+    }
+  }
+
+  .submit-btn-row {
+    margin-top: 1.5rem;
+
+    .submit-main-btn {
+      width: 100%;
+      padding: 1.05rem;
+      font-size: 1.02rem;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(139, 0, 0, 0.25);
+    }
+  }
+
+  // ── Submission Success ─────────────────────────────────────────
+  .submission-success-view {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .success-icon-badge {
+      color: #8B0000;
+      margin-bottom: 1.2rem;
+      animation: popIn 0.5s ease-out;
+    }
+
+    .success-heading {
+      font-family: $font-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1A1617;
+      margin-bottom: 0.8rem;
+    }
+
+    .success-message {
+      font-size: 1.05rem;
+      color: $text-secondary;
+      line-height: 1.7;
+      max-width: 550px;
+      margin-bottom: 2.2rem;
+    }
+
+    .success-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}

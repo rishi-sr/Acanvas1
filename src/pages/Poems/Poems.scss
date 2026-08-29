@@ -1,0 +1,250 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.poems-page {
+  padding-top: 6.5rem;
+
+  .poems-header {
+    padding: 3.5rem 0 2rem;
+    text-align: center;
+  }
+
+  .poems-filter-bar {
+    margin-bottom: 3.5rem;
+    background: #FFFFFF;
+    padding: 2rem;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid rgba(196, 30, 58, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .search-input-wrap {
+      position: relative;
+      width: 100%;
+
+      .search-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $primary-cherry-light;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.95rem 1.2rem 0.95rem 3.4rem;
+        border-radius: $radius-pill;
+        border: 1.5px solid $border-light;
+        background: $bg-parchment;
+        font-size: 1rem;
+        color: $text-primary;
+        outline: none;
+        transition: $transition-smooth;
+
+        &:focus {
+          border-color: $primary-cherry;
+          background: #ffffff;
+          box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.08);
+        }
+      }
+    }
+
+    .filters-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+
+      .poet-tabs {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+
+        .tab-btn {
+          padding: 0.55rem 1.3rem;
+          border-radius: $radius-pill;
+          border: 1px solid $border-light;
+          background: $bg-parchment;
+          color: $text-secondary;
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: $transition-smooth;
+
+          &:hover {
+            border-color: $primary-cherry;
+            color: $primary-cherry;
+          }
+
+          &.active {
+            background: $cherry-gradient;
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+          }
+        }
+      }
+
+      .category-select-wrap {
+        select {
+          padding: 0.55rem 1.3rem;
+          border-radius: $radius-pill;
+          border: 1px solid $border-light;
+          background: $bg-parchment;
+          color: $text-primary;
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          outline: none;
+          white-space: nowrap;
+
+          &:focus {
+            border-color: $primary-cherry;
+          }
+        }
+      }
+    }
+  }
+
+  .poems-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2.2rem;
+    margin-bottom: 5.5rem;
+  }
+
+  // Complete Poem Card Luxury Styling
+  .poem-card {
+    @include royal-card;
+    padding: 2.4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 340px;
+    background: #FFFFFF;
+    border: 1px solid rgba(139, 0, 0, 0.1);
+    box-shadow: $shadow-md;
+
+    .poem-card-top {
+      .poem-category {
+        margin-bottom: 1.1rem;
+      }
+
+      .poem-title {
+        font-family: $font-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.3;
+        margin-bottom: 0.35rem;
+      }
+
+      .poem-poet {
+        font-size: 0.88rem;
+        color: $primary-cherry;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .poem-book-tag {
+        font-size: 0.82rem;
+        color: $primary-cherry-dark;
+        margin-bottom: 1.2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .poem-snippet {
+        font-family: $font-serif;
+        font-style: italic;
+        color: $text-secondary;
+        line-height: 1.85;
+        font-size: 0.98rem;
+        white-space: pre-line;
+      }
+    }
+
+    .poem-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid $border-light;
+      padding-top: 1.2rem;
+      margin-top: 1.6rem;
+
+      .read-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: $primary-cherry;
+        font-family: $font-body;
+        font-weight: 700;
+        font-size: 0.9rem;
+        background: rgba(196, 30, 58, 0.05);
+        border: 1px solid rgba(196, 30, 58, 0.15);
+        padding: 0.45rem 1rem;
+        border-radius: $radius-pill;
+        cursor: pointer;
+        transition: $transition-smooth;
+
+        &:hover {
+          background: $cherry-gradient;
+          color: #ffffff;
+          border-color: transparent;
+          transform: translateX(3px);
+          box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+        }
+      }
+
+      .like-btn {
+        background: rgba(196, 30, 58, 0.04);
+        border: 1px solid rgba(196, 30, 58, 0.12);
+        padding: 0.45rem 0.85rem;
+        border-radius: $radius-pill;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        color: $text-muted;
+        font-weight: 600;
+        transition: $transition-smooth;
+
+        &:hover {
+          border-color: $primary-cherry-light;
+          color: $primary-cherry;
+        }
+
+        &.active {
+          color: $primary-cherry-vibrant;
+          border-color: $primary-cherry-vibrant;
+          background: rgba(196, 30, 58, 0.1);
+        }
+      }
+    }
+  }
+
+  .no-poems-found {
+    text-align: center;
+    padding: 4.5rem 1rem;
+    color: $text-muted;
+
+    h3 {
+      font-family: $font-serif;
+      font-size: 1.5rem;
+      color: $text-primary;
+      margin-bottom: 0.5rem;
+    }
+
+    .reset-filter-btn {
+      margin-top: 1.2rem;
+    }
+  }
+}

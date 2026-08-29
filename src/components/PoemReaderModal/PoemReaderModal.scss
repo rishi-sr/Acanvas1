@@ -1,0 +1,229 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.poem-modal-container {
+  background: #FFFDFD;
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-royal;
+  border: 1px solid rgba(196, 30, 58, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.dark-mode {
+    background: $ink-black;
+    color: $text-light;
+    border-color: rgba(197, 160, 89, 0.3);
+
+    .poem-modal-header {
+      background: $ink-charcoal;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .stanzas-area {
+      background: $ink-black;
+      color: #F7EFEF;
+    }
+
+    .translation-box {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .poem-modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid $border-light;
+    background: $bg-parchment;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    .header-info {
+      .poem-category-badge {
+        margin-bottom: 0.4rem;
+      }
+
+      .modal-poem-title {
+        font-family: $font-hindi-display;
+        font-size: 1.8rem;
+        color: $text-primary;
+        line-height: 1.2;
+      }
+
+      .poet-source-line {
+        font-size: 0.9rem;
+        color: $primary-cherry;
+        font-weight: 600;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+
+      .icon-action-btn {
+        background: rgba(196, 30, 58, 0.06);
+        border: 1px solid rgba(196, 30, 58, 0.15);
+        color: $text-primary;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        @include flex-center;
+        transition: $transition-smooth;
+
+        &:hover {
+          background: $primary-cherry-vibrant;
+          color: #fff;
+        }
+
+        &.active {
+          background: $primary-cherry;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .poem-controls-toolbar {
+    padding: 0.75rem 2rem;
+    background: rgba(196, 30, 58, 0.03);
+    border-bottom: 1px solid $border-light;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+
+    .font-size-adjuster {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      button {
+        padding: 0.2rem 0.6rem;
+        border-radius: $radius-sm;
+        border: 1px solid $border-light;
+        background: #fff;
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover {
+          background: $bg-parchment-deep;
+        }
+      }
+    }
+
+    .audio-recite-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: $radius-pill;
+      background: $cherry-gradient;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.35);
+      }
+    }
+  }
+
+  .poem-body-scrollable {
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+    flex: 1;
+
+    @include respond-to('sm') {
+      padding: 1.5rem;
+    }
+
+    .stanzas-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      font-family: $font-hindi-body;
+      text-align: center;
+      line-height: 2.1;
+
+      .stanza-paragraph {
+        white-space: pre-line;
+        font-weight: 500;
+      }
+    }
+
+    .translation-box {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      background: $bg-parchment;
+      border-left: 3px solid $gold-primary;
+      border-radius: 0 $radius-md $radius-md 0;
+      font-size: 0.95rem;
+      color: $text-secondary;
+      line-height: 1.7;
+
+      .trans-title {
+        font-family: $font-serif;
+        font-weight: 700;
+        color: $primary-cherry;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .poem-modal-footer {
+    padding: 1.2rem 2rem;
+    border-top: 1px solid $border-light;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $bg-parchment;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .like-count-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: $radius-pill;
+      background: #fff;
+      border: 1px solid $border-light;
+      cursor: pointer;
+      color: $text-secondary;
+      font-weight: 600;
+      transition: $transition-smooth;
+
+      &.liked {
+        color: $primary-cherry-vibrant;
+        border-color: $primary-cherry-vibrant;
+        background: rgba(196, 30, 58, 0.08);
+      }
+    }
+
+    .footer-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  }
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

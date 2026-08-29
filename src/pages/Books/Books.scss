@@ -1,0 +1,179 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.books-page {
+  padding-top: 6.5rem;
+
+  .books-hero {
+    padding: 3.5rem 0 2rem;
+    text-align: center;
+  }
+
+  .books-section-block {
+    margin-bottom: 5.5rem;
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid $border-light;
+      padding-bottom: 1.2rem;
+      margin-bottom: 2.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      .block-title {
+        font-family: $font-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: $text-primary;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+    }
+  }
+
+  .books-detailed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .detailed-book-card {
+    @include royal-card;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .card-top-flex {
+      display: flex;
+      gap: 1.8rem;
+      margin-bottom: 1.5rem;
+
+      @include respond-to('sm') {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .card-cover-wrapper {
+        flex-shrink: 0;
+
+        .mini-cover {
+          width: 120px;
+          height: 170px;
+          border-radius: 4px 10px 10px 4px;
+          box-shadow: -4px 6px 15px rgba(0, 0, 0, 0.2);
+          border-left: 5px solid rgba(0, 0, 0, 0.35);
+          padding: 0.75rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          color: #fff;
+          text-align: center;
+
+          .cover-ttl {
+            font-family: $font-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.2;
+          }
+
+          .cover-ath {
+            font-size: 0.68rem;
+            color: $gold-light;
+          }
+        }
+      }
+
+      .card-meta-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+
+        .book-badge-status {
+          margin-bottom: 0.2rem;
+        }
+
+        .book-heading {
+          font-family: $font-serif;
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: $text-primary;
+          line-height: 1.2;
+        }
+
+        .author-line {
+          font-size: 0.9rem;
+          color: $primary-cherry;
+          font-weight: 700;
+        }
+
+        .publisher-line {
+          font-size: 0.82rem;
+          color: $text-muted;
+        }
+
+        .price-rating-tag {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin-top: 0.4rem;
+
+          .price {
+            font-weight: 800;
+            color: $primary-cherry-dark;
+            font-size: 1.15rem;
+          }
+        }
+      }
+    }
+
+    .book-card-synopsis {
+      color: $text-secondary;
+      font-size: 0.94rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .book-card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border-top: 1px solid $border-light;
+      padding-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  // Pre-Order Banner
+  .preorder-vip-banner {
+    background: radial-gradient(circle at 10% 20%, rgba(196, 30, 58, 0.08) 0%, transparent 60%),
+                #FFF8F8;
+    border: 1px solid rgba(197, 160, 89, 0.4);
+    border-radius: $radius-lg;
+    padding: 3.2rem 2.5rem;
+    text-align: center;
+    box-shadow: $shadow-md;
+    margin-bottom: 5.5rem;
+
+    .vip-title {
+      font-family: $font-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: $primary-cherry-dark;
+      margin-bottom: 0.8rem;
+    }
+
+    .vip-desc {
+      max-width: 680px;
+      margin: 0 auto 1.8rem;
+      color: $text-secondary;
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+  }
+}

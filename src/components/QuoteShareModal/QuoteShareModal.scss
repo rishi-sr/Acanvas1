@@ -1,0 +1,85 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.quote-modal-container {
+  background: #FFFDFD;
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: $shadow-royal;
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  position: relative;
+  overflow: hidden;
+
+  .quote-card-preview {
+    padding: 3rem 2.5rem;
+    background: radial-gradient(circle at 10% 10%, rgba(196, 30, 58, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 90% 90%, rgba(197, 160, 89, 0.1) 0%, transparent 60%),
+                #FFF8F8;
+    border: 12px solid #FFFFFF;
+    box-shadow: inset 0 0 25px rgba(139, 0, 0, 0.05);
+    text-align: center;
+    position: relative;
+
+    .quote-mark-icon {
+      font-size: 3.5rem;
+      color: $primary-cherry-light;
+      line-height: 1;
+      opacity: 0.35;
+      margin-bottom: 0.5rem;
+      font-family: Georgia, serif;
+    }
+
+    .modal-quote-text {
+      font-family: $font-hindi-display;
+      font-size: 1.4rem;
+      color: $text-primary;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      white-space: pre-line;
+    }
+
+    .modal-quote-author {
+      font-family: $font-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: $primary-cherry;
+      margin-bottom: 0.3rem;
+    }
+
+    .modal-quote-source {
+      font-size: 0.85rem;
+      color: $text-muted;
+      letter-spacing: 0.05em;
+    }
+
+    .reflection-callout {
+      margin-top: 1.8rem;
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: $radius-md;
+      border: 1px dashed rgba(196, 30, 58, 0.25);
+      font-size: 0.9rem;
+      color: $text-secondary;
+      line-height: 1.6;
+
+      .curator-tag {
+        font-weight: 700;
+        color: $primary-cherry-dark;
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+
+  .quote-modal-actions {
+    padding: 1.2rem 2rem;
+    background: $bg-parchment;
+    border-top: 1px solid $border-light;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}

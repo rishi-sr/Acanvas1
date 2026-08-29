@@ -1,0 +1,102 @@
+@use 'sass:map';
+@use './variables' as *;
+
+@mixin glass-panel($blur: 16px, $bg: $bg-glass, $border: $border-light) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $border;
+}
+
+@mixin royal-card {
+  background: $bg-card;
+  backdrop-filter: blur(12px);
+  border: 1px solid $border-light;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  transition: $transition-smooth;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: $cherry-gradient;
+    opacity: 0;
+    transition: $transition-smooth;
+  }
+
+  &:hover {
+    background: $bg-card-hover;
+    transform: translateY(-6px);
+    box-shadow: $shadow-royal;
+    border-color: $border-accent;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin gold-text-gradient {
+  background: $gold-shimmer;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+@mixin cherry-text-gradient {
+  background: $cherry-gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Media Queries
+$breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-above($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: (map.get($breakpoints, $breakpoint) + 1px)) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
