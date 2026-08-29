@@ -31,57 +31,66 @@ const FeaturedPoems = () => {
           </div>
         </div>
 
-        <div className="poems-grid">
-          {featured.map((poem, index) => {
-            const isLiked = !!likedItems[`poem_${poem.id}`];
-            const isHindi = lang === 'hi';
-            const displayTitle = isHindi && poem.titleHindi ? poem.titleHindi : poem.title;
-            const displayPoet = isHindi && poem.poetHindi ? poem.poetHindi : poem.poet;
-            const displayExcerpt = isHindi && poem.originalHindiStanzas?.[0]
-              ? poem.originalHindiStanzas[0].split('\n')[0]
-              : poem.excerpt;
+        {featured.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3.5rem 1.5rem', background: '#FFFFFF', borderRadius: '16px', border: '1px dashed rgba(139, 0, 0, 0.2)', maxWidth: '600px', margin: '0 auto' }}>
+            <Feather size={36} color="var(--primary-color, #8B0000)" style={{ opacity: 0.6, margin: '0 auto 1rem' }} />
+            <p style={{ color: 'var(--text-muted, #71717A)', fontSize: '1.05rem', margin: 0 }}>
+              {lang === 'hi' ? 'जल्द ही नई रचनाएँ यहाँ प्रकाशित की जाएंगी।' : 'New poems and literary works will be published here soon.'}
+            </p>
+          </div>
+        ) : (
+          <div className="poems-grid">
+            {featured.map((poem, index) => {
+              const isLiked = !!likedItems[`poem_${poem.id}`];
+              const isHindi = lang === 'hi';
+              const displayTitle = isHindi && poem.titleHindi ? poem.titleHindi : poem.title;
+              const displayPoet = isHindi && poem.poetHindi ? poem.poetHindi : poem.poet;
+              const displayExcerpt = isHindi && poem.originalHindiStanzas?.[0]
+                ? poem.originalHindiStanzas[0].split('\n')[0]
+                : poem.excerpt;
 
-            return (
-              <motion.div
-                key={poem.id}
-                className="poem-card"
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-              >
-                <div className="poem-card-top">
-                  <div className="poem-category">
-                    <span className="royal-tag">{poem.category}</span>
+              return (
+                <motion.div
+                  key={poem.id}
+                  className="poem-card"
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                >
+                  <div className="poem-card-top">
+                    <div className="poem-category">
+                      <span className="royal-tag">{poem.category}</span>
+                    </div>
+                    <h3 className="poem-title">{displayTitle}</h3>
+                    <div className="poem-poet">{t('featuredPoems.by')} {displayPoet}</div>
+                    <div className="poem-snippet">
+                      "{displayExcerpt}"
+                    </div>
                   </div>
-                  <h3 className="poem-title">{displayTitle}</h3>
-                  <div className="poem-poet">{t('featuredPoems.by')} {displayPoet}</div>
-                  <div className="poem-snippet">
-                    "{displayExcerpt}"
+
+                  <div className="poem-card-bottom">
+                    <button
+                      className="read-btn"
+                      onClick={() => setActivePoemModal(poem)}
+                    >
+                      <span>{t('featuredPoems.readBtn')}</span>
+                      <ArrowRight size={14} />
+                    </button>
+
+                    <button
+                      className={`like-btn ${isLiked ? 'active' : ''}`}
+                      onClick={() => toggleLike('poem', poem.id)}
+                    >
+                      <Heart size={15} fill={isLiked ? '#C41E3A' : 'none'} />
+                      <span>{poem.likes || 0}</span>
+                    </button>
                   </div>
-                </div>
-
-                <div className="poem-card-bottom">
-                  <button
-                    className="read-btn"
-                    onClick={() => setActivePoemModal(poem)}
-                  >
-                    <span>{t('featuredPoems.readBtn')}</span>
-                    <ArrowRight size={14} />
-                  </button>
-
-                  <button
-                    className={`like-btn ${isLiked ? 'active' : ''}`}
-                    onClick={() => toggleLike('poem', poem.id)}
-                  >
-                    <Heart size={15} fill={isLiked ? '#C41E3A' : 'none'} />
-                    <span>{poem.likes || 0}</span>
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
 
         <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
           <Link to="/poems" className="btn-royal">

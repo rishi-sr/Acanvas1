@@ -29,50 +29,59 @@ const BooksShowcase = () => {
           </div>
         </div>
 
-        <div className="books-grid">
-          {books.map((book, idx) => {
-            const isUpcoming = book.status === 'upcoming';
+        {books.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3.5rem 1.5rem', background: '#FFFFFF', borderRadius: '16px', border: '1px dashed rgba(139, 0, 0, 0.2)', maxWidth: '600px', margin: '0 auto' }}>
+            <BookOpen size={36} color="var(--primary-color, #8B0000)" style={{ opacity: 0.6, margin: '0 auto 1rem' }} />
+            <p style={{ color: 'var(--text-muted, #71717A)', fontSize: '1.05rem', margin: 0 }}>
+              {t('books.subtitle')}: जल्द ही पुस्तकें यहाँ प्रदर्शित की जाएंगी।
+            </p>
+          </div>
+        ) : (
+          <div className="books-grid">
+            {books.map((book, idx) => {
+              const isUpcoming = book.status === 'upcoming';
 
-            return (
-              <motion.div
-                key={book.id}
-                className="book-card-item"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-              >
-                <div>
-                  <div
-                    className="book-spine-effect"
-                    style={{ background: book.coverGradient || 'linear-gradient(145deg, #8B0000 0%, #3B050B 100%)' }}
-                  >
-                    <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', opacity: 0.8 }}>
-                      AKSHAR CANVAS
+              return (
+                <motion.div
+                  key={book.id}
+                  className="book-card-item"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.12 }}
+                >
+                  <div>
+                    <div
+                      className="book-spine-effect"
+                      style={{ background: book.coverGradient || 'linear-gradient(145deg, #8B0000 0%, #3B050B 100%)' }}
+                    >
+                      <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', opacity: 0.8 }}>
+                        AKSHAR CANVAS
+                      </div>
+                      <div className="inner-title">{book.title}</div>
+                      <div className="inner-author">{book.author}</div>
                     </div>
-                    <div className="inner-title">{book.title}</div>
-                    <div className="inner-author">{book.author}</div>
+
+                    <span className={`royal-tag ${isUpcoming ? 'gold' : ''}`} style={{ marginBottom: '0.8rem' }}>
+                      {isUpcoming ? t('books.upcoming') : `${t('books.published')} ${book.year}`}
+                    </span>
+
+                    <h3 className="book-title-name">{book.title}</h3>
+                    <div className="book-author-name">{book.author}</div>
                   </div>
 
-                  <span className={`royal-tag ${isUpcoming ? 'gold' : ''}`} style={{ marginBottom: '0.8rem' }}>
-                    {isUpcoming ? t('books.upcoming') : `${t('books.published')} ${book.year}`}
-                  </span>
-
-                  <h3 className="book-title-name">{book.title}</h3>
-                  <div className="book-author-name">{book.author}</div>
-                </div>
-
-                <button
-                  className="btn-royal-outline btn-view-book"
-                  onClick={() => setSelectedBook(book)}
-                >
-                  <BookOpen size={14} />
-                  <span>{t('books.viewDetails')}</span>
-                </button>
-              </motion.div>
-            );
-          })}
-        </div>
+                  <button
+                    className="btn-royal-outline btn-view-book"
+                    onClick={() => setSelectedBook(book)}
+                  >
+                    <BookOpen size={14} />
+                    <span>{t('books.viewDetails')}</span>
+                  </button>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
 
         <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
           <Link to="/books" className="btn-royal">

@@ -32,7 +32,7 @@ const translations = {
     'hero.art.quote':    '"कागज़ के कैनवास पर जब स्याही की बूँदें गिरती हैं, तो मौन भी एक अमर राग बन जाता है।"',
 
     // ── Featured Poems ──
-    'featuredPoems.subtitle': 'काव्य-धारा',
+    'featuredPoems.subtitle': 'साहित्य',
     'featuredPoems.title1':   'चर्चित',
     'featuredPoems.title2':   'कविताएँ एवं ग़ज़लें',
     'featuredPoems.desc':     'अस्तित्वगत सत्य, कोमल प्रेम और सांस्कृतिक अनुगूँज को समेटे चुनिंदा रचनाएँ।',
@@ -257,7 +257,7 @@ const translations = {
     'hero.art.quote':    '"Upon the canvas of paper, when drops of ink descend, even silence blossoms into an eternal melody."',
 
     // ── Featured Poems ──
-    'featuredPoems.subtitle': 'Poetic Currents',
+    'featuredPoems.subtitle': 'Sahitya',
     'featuredPoems.title1':   'Celebrated',
     'featuredPoems.title2':   'Poems & Ghazals',
     'featuredPoems.desc':     'A curated selection of acclaimed compositions capturing existential truths, tender romance, and cultural resonance.',
