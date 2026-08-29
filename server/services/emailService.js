@@ -1,11 +1,5 @@
 import nodemailer from 'nodemailer';
 
-const isEmailJsConfigured = () => {
-  return !!(
-    process.env.EMAILJS_SERVICE_ID &&
-    process.env.EMAILJS_TEMPLATE_ID &&
-    process.env.EMAILJS_PUBLIC_KEY
-  );
 export const getEmailJsConfig = () => {
   const service_id = (process.env.EMAILJS_SERVICE_ID || process.env.VITE_EMAILJS_SERVICE_ID || process.env.EMAIL_SERVICE_ID || '').trim();
   const template_id = (process.env.EMAILJS_TEMPLATE_ID || process.env.VITE_EMAILJS_TEMPLATE_ID || process.env.EMAIL_TEMPLATE_ID || '').trim();
@@ -28,10 +22,6 @@ const sendViaEmailJs = async (templateParams) => {
   }
 
   const payload = {
-    service_id: process.env.EMAILJS_SERVICE_ID,
-    template_id: process.env.EMAILJS_TEMPLATE_ID,
-    user_id: process.env.EMAILJS_PUBLIC_KEY,
-    accessToken: process.env.EMAILJS_PRIVATE_KEY || undefined,
     service_id,
     template_id,
     user_id,
