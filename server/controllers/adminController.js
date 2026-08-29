@@ -1,4 +1,5 @@
 import { db } from '../config/db.js';
+import { getEmailJsConfig, notifyContactInquiry } from '../services/emailService.js';
 
 export const exportDatabase = async (req, res) => {
   try {
@@ -85,6 +86,56 @@ export const getSystemStatus = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Could not fetch status' });
+  }
+};
+
+export const testEmailService = async (req, res) => {
+  try {
+    const { isConfigured, service_id, template_id, user_id, accessToken } = getEmailJsConfig();
+    const smtpConfigured = !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+    const targetEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'aksharcanvas@gmail.com';
+
+    const testInquiry = {
+      id: `diag-${Date.now()}`,
+      name: 'Email Diagnostic Tester',
+      email: 'aksharcanvas@gmail.com',
+      phone: '+91 99999 00000',
+      city: 'Live Test',
+      eventType: 'Diagnostics',
+      date: new Date().toISOString().slice(0, 10),
+      message: 'This is a live test inquiry from Akshar Canvas server diagnostic tool to verify Gmail and EmailJS delivery.'
+    };
+
+    console.log('🧪 [TEST EMAIL] Running email diagnostic test...');
+    const result = await notifyContactInquiry(testInquiry);
+
+    return res.status(200).json({
+      success: result.success && !result.simulated,
+      serviceUsed: result.simulated ? 'none (simulated logger)' : result.service,
+      targetRecipient: targetEmail,
+      environmentCheck: {
+        emailjs: {
+          configured: isConfigured,
+          serviceIdFound: !!service_id,
+          templateIdFound: !!template_id,
+          publicKeyFound: !!user_id,
+          hasPrivateKey: !!accessToken
+        },
+        smtp: {
+          configured: smtpConfigured,
+          host: process.env.SMTP_HOST || null,
+          user: process.env.SMTP_USER || null
+        }
+      },
+      dispatchResult: result
+    });
+  } catch (error) {
+    console.error('❌ [TEST EMAIL ERROR]:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
   }
 };
 

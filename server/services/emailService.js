@@ -6,16 +6,40 @@ const isEmailJsConfigured = () => {
     process.env.EMAILJS_TEMPLATE_ID &&
     process.env.EMAILJS_PUBLIC_KEY
   );
+export const getEmailJsConfig = () => {
+  const service_id = (process.env.EMAILJS_SERVICE_ID || process.env.VITE_EMAILJS_SERVICE_ID || process.env.EMAIL_SERVICE_ID || '').trim();
+  const template_id = (process.env.EMAILJS_TEMPLATE_ID || process.env.VITE_EMAILJS_TEMPLATE_ID || process.env.EMAIL_TEMPLATE_ID || '').trim();
+  const user_id = (process.env.EMAILJS_PUBLIC_KEY || process.env.VITE_EMAILJS_PUBLIC_KEY || process.env.EMAILJS_USER_ID || process.env.EMAIL_PUBLIC_KEY || '').trim();
+  const accessToken = (process.env.EMAILJS_PRIVATE_KEY || process.env.EMAILJS_ACCESS_TOKEN || '').trim() || undefined;
+
+  const isConfigured = !!(service_id && template_id && user_id);
+  return { isConfigured, service_id, template_id, user_id, accessToken };
+};
+
+export const isEmailJsConfigured = () => {
+  return getEmailJsConfig().isConfigured;
 };
 
 const sendViaEmailJs = async (templateParams) => {
+  const { isConfigured, service_id, template_id, user_id, accessToken } = getEmailJsConfig();
+
+  if (!isConfigured) {
+    throw new Error('EmailJS variables (EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY) not found in environment');
+  }
+
   const payload = {
     service_id: process.env.EMAILJS_SERVICE_ID,
     template_id: process.env.EMAILJS_TEMPLATE_ID,
     user_id: process.env.EMAILJS_PUBLIC_KEY,
     accessToken: process.env.EMAILJS_PRIVATE_KEY || undefined,
+    service_id,
+    template_id,
+    user_id,
+    ...(accessToken ? { accessToken } : {}),
     template_params: templateParams
   };
+
+  console.log(`📡 [EMAILJS DISPATCH] Calling EmailJS API (Service: ${service_id}, Template: ${template_id})`);
 
   const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
@@ -27,9 +51,11 @@ const sendViaEmailJs = async (templateParams) => {
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error(`❌ [EMAILJS ERROR ${response.status}]:`, errorText);
     throw new Error(`EmailJS Error (${response.status}): ${errorText}`);
   }
 
+  console.log('✅ [EMAILJS SUCCESS] Email successfully dispatched by EmailJS');
   return true;
 };
 
