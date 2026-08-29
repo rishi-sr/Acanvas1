@@ -73,6 +73,7 @@ const getSmtpTransporter = () => {
  */
 export const notifyPoemSubmission = async (submissionData) => {
   const { poetName, city, email, title, category, poemText, reflection, id } = submissionData;
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'aksharcanvas@gmail.com';
   const currentTime = new Date().toLocaleString('en-IN', {
     timeZone: 'Asia/Kolkata',
     dateStyle: 'medium',
@@ -80,6 +81,8 @@ export const notifyPoemSubmission = async (submissionData) => {
   });
 
   const fullPoemMessage = `Title: "${title}"\nPoet: ${poetName} (${city || 'N/A'})\nCategory: ${category}\nEmail: ${email || 'N/A'}\n\nVerses:\n${poemText}\n\nPoet Reflection: ${reflection || 'N/A'}`;
+
+  let emailJsError = null;
 
   // 1. Try EmailJS First
   if (isEmailJsConfigured()) {
@@ -99,6 +102,7 @@ export const notifyPoemSubmission = async (submissionData) => {
       console.log('✅ [EMAIL DISPATCH] Poem Submission Email sent successfully via EmailJS.');
       return { success: true, service: 'emailjs' };
     } catch (err) {
+      emailJsError = err.message;
       console.error('❌ [EMAIL SERVICE] EmailJS poem notification failed:', err.message);
     }
   }
@@ -126,8 +130,13 @@ export const notifyPoemSubmission = async (submissionData) => {
       });
       return { success: true, service: 'smtp' };
     } catch (err) {
-      console.error('SMTP email dispatch error:', err);
+      console.error('SMTP email dispatch error:', err.message);
+      return { success: false, service: 'smtp', error: err.message, emailJsError };
     }
+  }
+
+  if (emailJsError) {
+    return { success: false, service: 'emailjs', error: emailJsError, simulated: false };
   }
 
   // 3. Fallback Logger
@@ -155,6 +164,8 @@ export const notifyContactInquiry = async (inquiryData) => {
 
   const fullMessage = `${message}\n\n────────────────────\n📞 Contact: ${phone || 'N/A'}\n📍 City: ${city || 'N/A'}\n🎭 Purpose: ${eventType || 'General Inquiry'}\n🗓️ Date: ${date || 'Flexible'}`;
 
+  let emailJsError = null;
+
   // 1. Try EmailJS First
   if (isEmailJsConfigured()) {
     try {
@@ -164,19 +175,20 @@ export const notifyContactInquiry = async (inquiryData) => {
         name: name,
         time: currentTime,
         message: fullMessage,
-        email: email,
+        email: email || '',
         phone: phone || '',
         city: city || '',
         eventType: eventType || '',
         date: date || '',
         to_email: adminEmail,
-        reply_to: email,
+        reply_to: email || undefined,
         subject: `Contact Us: ${eventType || 'Inquiry'} - ${name}`,
         inquiry_id: id
       });
       console.log('✅ [EMAIL DISPATCH] Contact Inquiry Email sent successfully via EmailJS.');
       return { success: true, service: 'emailjs' };
     } catch (err) {
+      emailJsError = err.message;
       console.error('❌ [EMAIL SERVICE] EmailJS contact notification failed:', err.message);
     }
   }
@@ -206,8 +218,14 @@ export const notifyContactInquiry = async (inquiryData) => {
       });
       return { success: true, service: 'smtp' };
     } catch (err) {
-      console.error('SMTP inquiry dispatch error:', err);
+      console.error('SMTP inquiry dispatch error:', err.message);
+      return { success: false, service: 'smtp', error: err.message, emailJsError };
     }
+  }
+
+  // If EmailJS failed and no SMTP was configured
+  if (emailJsError) {
+    return { success: false, service: 'emailjs', error: emailJsError, simulated: false };
   }
 
   // 3. Fallback Logger
