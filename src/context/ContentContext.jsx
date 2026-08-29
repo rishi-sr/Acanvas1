@@ -7,6 +7,17 @@ import { poetsData as initialPoetsData } from '../data/poetsData';
 const ContentContext = createContext();
 
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+const getApiBase = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (!envUrl) return '/api';
+  const cleanUrl = envUrl.trim().replace(/\/+$/, '');
+  if (cleanUrl.endsWith('/api')) {
+    return cleanUrl;
+  }
+  return `${cleanUrl}/api`;
+};
+
+const API_BASE = getApiBase();
 
 const STORAGE_KEYS = {
   TOKEN: 'akshar_auth_token_v3',

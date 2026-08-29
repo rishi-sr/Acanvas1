@@ -85,6 +85,16 @@ app.use('/api/books', bookRoutes);
 app.use('/api/contact', inquiryRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root Welcome / Ping
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    system: 'Akshar Canvas Backend API',
+    health: '/api/health',
+    version: '1.0.0'
+  });
+});
+
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
