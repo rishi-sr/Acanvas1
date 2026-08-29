@@ -57,7 +57,6 @@ const getSmtpTransporter = () => {
  */
 export const notifyPoemSubmission = async (submissionData) => {
   const { poetName, city, email, title, category, poemText, reflection, id } = submissionData;
-  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@aksharcanvas.com';
   const currentTime = new Date().toLocaleString('en-IN', {
     timeZone: 'Asia/Kolkata',
     dateStyle: 'medium',
@@ -69,24 +68,10 @@ export const notifyPoemSubmission = async (submissionData) => {
   // 1. Try EmailJS First
   if (isEmailJsConfigured()) {
     try {
-      console.log('📬 [EMAIL DISPATCH] Sending Poem Submission via EmailJS...');
       console.log('📬 [EMAIL DISPATCH] Sending Poem Submission via EmailJS to', adminEmail);
       await sendViaEmailJs({
-        subject: `📜 New Poem Submission: "${title}" by ${poetName}`,
         title: `Poem Submission: "${title}"`,
         name: poetName,
-        from_name: poetName,
-        poet_name: poetName,
-        author_name: poetName,
-        title: title,
-        poem_title: title,
-        email: email || 'Not Provided',
-        from_email: email || 'no-reply@aksharcanvas.com',
-        city: city || 'Not Specified',
-        category: category || 'General',
-        message: `New Poem Submission:\n\nTitle: "${title}"\nPoet: ${poetName} (${city || 'N/A'})\nCategory: ${category}\n\nVerses:\n${poemText}\n\nReflection: ${reflection || 'N/A'}`,
-        poem_text: poemText,
-        reflection: reflection || '',
         time: currentTime,
         message: fullPoemMessage,
         email: email || '',
@@ -98,7 +83,6 @@ export const notifyPoemSubmission = async (submissionData) => {
       console.log('✅ [EMAIL DISPATCH] Poem Submission Email sent successfully via EmailJS.');
       return { success: true, service: 'emailjs' };
     } catch (err) {
-      console.error('EmailJS poem notification failed, checking SMTP fallback:', err.message);
       console.error('❌ [EMAIL SERVICE] EmailJS poem notification failed:', err.message);
     }
   }
@@ -145,7 +129,6 @@ export const notifyPoemSubmission = async (submissionData) => {
  */
 export const notifyContactInquiry = async (inquiryData) => {
   const { name, email, phone, city, eventType, date, message, id } = inquiryData;
-  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@aksharcanvas.com';
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'aksharcanvas@gmail.com';
 
   const currentTime = new Date().toLocaleString('en-IN', {
@@ -159,22 +142,13 @@ export const notifyContactInquiry = async (inquiryData) => {
   // 1. Try EmailJS First
   if (isEmailJsConfigured()) {
     try {
-      console.log('📬 [EMAIL DISPATCH] Sending Contact Inquiry via EmailJS...');
       console.log('📬 [EMAIL DISPATCH] Sending Contact Inquiry via EmailJS to', adminEmail);
       await sendViaEmailJs({
-        subject: `💌 New Contact Inquiry: ${name} (${eventType})`,
         title: `${eventType || 'General Inquiry'} - ${name}`,
         name: name,
-        from_name: name,
         time: currentTime,
         message: fullMessage,
         email: email,
-        from_email: email,
-        phone: phone,
-        city: city || 'Not Specified',
-        event_type: eventType,
-        date: date || 'Flexible',
-        message: message,
         phone: phone || '',
         city: city || '',
         eventType: eventType || '',
@@ -187,7 +161,6 @@ export const notifyContactInquiry = async (inquiryData) => {
       console.log('✅ [EMAIL DISPATCH] Contact Inquiry Email sent successfully via EmailJS.');
       return { success: true, service: 'emailjs' };
     } catch (err) {
-      console.error('EmailJS contact notification failed, checking SMTP fallback:', err.message);
       console.error('❌ [EMAIL SERVICE] EmailJS contact notification failed:', err.message);
     }
   }
