@@ -2,11 +2,37 @@
 @use '../../styles/mixins' as *;
 
 .books-page {
-  padding-top: 6.5rem;
+  padding-top: 5rem;
+  padding-bottom: 4rem;
 
   .books-hero {
-    padding: 3.5rem 0 2rem;
+    padding: 2.2rem 0 1rem;
     text-align: center;
+
+    .main-title {
+      font-family: $font-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: $primary-cherry;
+      margin-bottom: 0.5rem;
+    }
+
+    .desc {
+      font-family: $font-body;
+      font-size: 1.05rem;
+      color: $text-secondary;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .ornament-divider {
+      margin: 1rem auto 0;
+    }
+  }
+
+  .books-content-container {
+    padding-top: 0.5rem;
   }
 
   // Author Tabs Navigation Bar
@@ -16,16 +42,16 @@
     justify-content: center;
     gap: 0.85rem;
     flex-wrap: wrap;
-    margin-bottom: 3rem;
+    margin-bottom: 1.8rem;
 
     .author-tab-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.6rem;
+      padding: 0.65rem 1.4rem;
       border-radius: $radius-pill;
       font-family: $font-serif;
-      font-size: 1.02rem;
+      font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
       border: 1px solid rgba(197, 160, 89, 0.35);
@@ -50,7 +76,7 @@
         background: $cherry-gradient;
         color: #FFFFFF;
         border-color: transparent;
-        box-shadow: 0 6px 20px rgba(196, 30, 58, 0.32);
+        box-shadow: 0 4px 16px rgba(196, 30, 58, 0.28);
         transform: translateY(-2px);
 
         svg {
@@ -61,45 +87,47 @@
   }
 
   .books-section-block {
-    margin-bottom: 5.5rem;
+    margin-bottom: 2.5rem;
 
-    .block-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 2px solid $border-light;
-      padding-bottom: 1.2rem;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
+    &.upcoming-block {
+      margin-top: 2rem;
+      border-top: 1px dashed rgba(197, 160, 89, 0.3);
+      padding-top: 1.5rem;
 
-      .block-title {
-        font-family: $font-serif;
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: $text-primary;
+      .upcoming-header {
+        margin-bottom: 1.2rem;
         display: flex;
-        align-items: center;
-        gap: 0.65rem;
+        justify-content: center;
       }
     }
   }
 
   .no-books-found {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     background: #FFFFFF;
     border: 1px dashed rgba(197, 160, 89, 0.4);
-    border-radius: $radius-lg;
+    border-radius: 12px;
     color: $text-muted;
-    font-size: 1.05rem;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+
+    .empty-icon {
+      color: $gold-dark;
+      opacity: 0.75;
+    }
   }
 
   // Strict 3-column layout per row, cards never stretch if 1 or 2 items
   .books-detailed-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
+    align-items: stretch;
 
     @include respond-to('lg') {
       grid-template-columns: repeat(2, 1fr);
@@ -111,47 +139,63 @@
   }
 
   .detailed-book-card {
-    @include royal-card;
-    padding: 1.8rem 1.6rem;
+    background: #FFFFFF;
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    box-shadow: 0 4px 16px rgba(139, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 1.3rem 1.2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #FFFFFF;
-    border: 1px solid rgba(197, 160, 89, 0.3);
-    box-shadow: $shadow-md;
-    border-radius: $radius-md;
-    height: 100%;
+    transition: all 0.3s ease;
 
-    .card-top-flex {
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(139, 0, 0, 0.1);
+      border-color: rgba(196, 30, 58, 0.4);
+    }
+
+    &.upcoming-card {
+      border-color: rgba(197, 160, 89, 0.45);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF8 100%);
+    }
+
+    .card-top-content {
       display: flex;
-      gap: 1.2rem;
-      margin-bottom: 1.2rem;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
 
       .card-cover-wrapper {
         flex-shrink: 0;
 
         .mini-cover {
-          width: 100px;
-          height: 145px;
-          border-radius: 4px 8px 8px 4px;
-          box-shadow: -3px 5px 12px rgba(0, 0, 0, 0.2);
-          border-left: 4px solid rgba(0, 0, 0, 0.35);
-          padding: 0.65rem 0.5rem;
+          width: 88px;
+          height: 125px;
+          border-radius: 3px 6px 6px 3px;
+          box-shadow: -2px 4px 10px rgba(0, 0, 0, 0.2);
+          border-left: 3px solid rgba(0, 0, 0, 0.35);
+          padding: 0.55rem 0.45rem;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           color: #fff;
           text-align: center;
 
+          .cover-brand {
+            font-size: 0.5rem;
+            letter-spacing: 0.08em;
+            opacity: 0.8;
+          }
+
           .cover-ttl {
             font-family: $font-serif;
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             font-weight: 700;
             line-height: 1.2;
           }
 
           .cover-ath {
-            font-size: 0.62rem;
+            font-size: 0.58rem;
             color: $gold-light;
           }
         }
@@ -160,47 +204,57 @@
       .card-meta-wrap {
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
+        justify-content: center;
+        gap: 0.2rem;
         flex: 1;
 
         .book-badge-status {
-          margin-bottom: 0.15rem;
-
           .royal-tag {
-            font-size: 0.72rem;
-            padding: 0.2rem 0.6rem;
+            font-size: 0.68rem;
+            padding: 0.15rem 0.5rem;
+            display: inline-block;
           }
         }
 
         .book-heading {
           font-family: $font-serif;
-          font-size: 1.25rem;
+          font-size: 1.12rem;
           font-weight: 700;
           color: $text-primary;
           line-height: 1.25;
+          margin-top: 0.15rem;
         }
 
         .author-line {
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: $primary-cherry;
-          font-weight: 700;
+          font-weight: 600;
         }
 
         .publisher-line {
-          font-size: 0.78rem;
+          font-size: 0.74rem;
           color: $text-muted;
         }
 
         .price-rating-tag {
           display: flex;
           align-items: center;
-          gap: 0.65rem;
-          margin-top: 0.25rem;
+          gap: 0.6rem;
+          margin-top: 0.2rem;
 
           .price {
             font-weight: 800;
             color: $primary-cherry-dark;
-            font-size: 1.08rem;
+            font-size: 1.02rem;
+          }
+
+          .rating-tag {
+            font-size: 0.78rem;
+            color: $gold-dark;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
           }
         }
       }
@@ -208,11 +262,11 @@
 
     .book-card-synopsis {
       color: $text-secondary;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      margin-bottom: 1.3rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 0.9rem;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -220,18 +274,20 @@
     .book-card-actions {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.6rem;
+      gap: 0.55rem;
       border-top: 1px solid $border-light;
-      padding-top: 1rem;
+      padding-top: 0.85rem;
 
       .btn-royal-outline, .btn-royal, .btn-royal-gold {
-        padding: 0.45rem 0.9rem;
-        font-size: 0.82rem;
+        flex: 1;
+        justify-content: center;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8rem;
         border-radius: $radius-pill;
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
+        text-align: center;
       }
     }
   }
