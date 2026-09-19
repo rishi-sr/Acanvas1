@@ -11,6 +11,10 @@ import Books from './pages/Books/Books';
 import Quotes from './pages/Quotes/Quotes';
 import SubmitPoem from './pages/SubmitPoem/SubmitPoem';
 import Contact from './pages/Contact/Contact';
+import Workshop from './pages/Workshop/Workshop';
+import Reporting from './pages/Reporting/Reporting';
+import Samkalieen from './pages/Samkalieen/Samkalieen';
+import Gallery from './pages/Gallery/Gallery';
 import Admin from './pages/Admin/Admin';
 import { ContentProvider } from './context/ContentContext';
 import { AudioProvider } from './context/AudioContext';
@@ -31,8 +35,13 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/poems" element={<Poems />} />
           <Route path="/books" element={<Books />} />
+          <Route path="/sahitya" element={<Poems />} />
+          <Route path="/poems" element={<Poems />} />
+          <Route path="/workshop" element={<Workshop />} />
+          <Route path="/reporting" element={<Reporting />} />
+          <Route path="/samkalieen" element={<Samkalieen />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/quotes" element={<Quotes />} />
           <Route path="/submit-poem" element={<SubmitPoem />} />
           <Route path="/contact" element={<Contact />} />

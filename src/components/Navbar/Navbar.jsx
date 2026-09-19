@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Feather, Sparkles, ArrowUpRight, BookOpen, Quote, Home, Info, Mail, PenTool } from 'lucide-react';
+import { Menu, X, Feather, Sparkles, ArrowUpRight, BookOpen, Home, Info, Newspaper, Compass, Image, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import './Navbar.scss';
@@ -48,52 +48,59 @@ const Navbar = () => {
   const navLinks = [
     { 
       path: '/', 
-      label: t('nav.home'), 
+      label: t('nav.home') || 'होम', 
       num: '01', 
       sub: 'मुख्य पृष्ठ',
       icon: Home 
     },
     { 
       path: '/about', 
-      label: t('nav.about'), 
+      label: t('nav.parichay') || 'परिचय', 
       num: '02', 
       sub: 'कवयित्री परिचय',
       icon: Info 
     },
     { 
-      path: '/poems', 
-      label: t('nav.poems'), 
-      num: '03', 
-      sub: 'काव्य संग्रह',
-      icon: Feather 
-    },
-    { 
       path: '/books', 
-      label: t('nav.books'), 
-      num: '04', 
+      label: t('nav.pustake') || 'पुस्तकें', 
+      num: '03', 
       sub: 'साहित्यिक कृतियाँ',
       icon: BookOpen 
     },
     { 
-      path: '/quotes', 
-      label: t('nav.quotes'), 
+      path: '/sahitya', 
+      label: t('nav.sahitya') || 'साहित्य', 
+      num: '04', 
+      sub: 'काव्य एवं रचना संसार',
+      icon: Feather 
+    },
+    { 
+      path: '/workshop', 
+      label: t('nav.workshop') || 'वर्कशॉप', 
       num: '05', 
-      sub: 'प्रेरणा एवं विचार',
-      icon: Quote 
+      sub: 'सृजन एवं कार्यशाला',
+      icon: Sparkles 
     },
     { 
-      path: '/submit-poem', 
-      label: t('nav.submitPoem'), 
+      path: '/reporting', 
+      label: t('nav.reporting') || 'रिपोर्टिंग', 
       num: '06', 
-      sub: 'काव्य रचना भेजें',
-      icon: PenTool 
+      sub: 'मीडिया एवं समाचार',
+      icon: Newspaper 
     },
     { 
-      path: '/contact', 
-      label: t('nav.contact'), 
+      path: '/samkalieen', 
+      label: t('nav.samkalieen') || 'समकालीन', 
       num: '07', 
-      sub: 'संवाद एवं आमंत्रण',
-      icon: Mail 
+      sub: 'वैचारिक आलेख व विमर्श',
+      icon: Compass 
+    },
+    { 
+      path: '/gallery', 
+      label: t('nav.gallary') || 'गैलरी', 
+      num: '08', 
+      sub: 'चित्र दीर्घा व स्मृतियाँ',
+      icon: Image 
     }
   ];
 

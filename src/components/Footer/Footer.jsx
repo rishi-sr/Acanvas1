@@ -53,12 +53,14 @@ const Footer = () => {
         {/* Horizontal Navigation Links */}
         <nav className="footer-horizontal-nav" aria-label="Footer Navigation">
           <ul className="footer-nav-list">
-            <li><Link to="/"><BookOpen size={14} /> {t('footer.nav.home')}</Link></li>
-            <li><Link to="/about"><Feather size={14} /> {t('footer.nav.about')}</Link></li>
-            <li><Link to="/poems"><Feather size={14} /> {t('footer.nav.poems')}</Link></li>
-            <li><Link to="/books"><BookOpen size={14} /> {t('footer.nav.books')}</Link></li>
-            <li><Link to="/quotes"><Feather size={14} /> {t('footer.nav.quotes')}</Link></li>
-            <li><Link to="/submit-poem"><Send size={14} /> {t('nav.submitPoem')}</Link></li>
+            <li><Link to="/"><BookOpen size={14} /> {t('nav.home') || 'होम'}</Link></li>
+            <li><Link to="/about"><Feather size={14} /> {t('nav.parichay') || 'परिचय'}</Link></li>
+            <li><Link to="/books"><BookOpen size={14} /> {t('nav.pustake') || 'पुस्तकें'}</Link></li>
+            <li><Link to="/sahitya"><Feather size={14} /> {t('nav.sahitya') || 'साहित्य'}</Link></li>
+            <li><Link to="/workshop"><Feather size={14} /> {t('nav.workshop') || 'वर्कशॉप'}</Link></li>
+            <li><Link to="/reporting"><Feather size={14} /> {t('nav.reporting') || 'रिपोर्टिंग'}</Link></li>
+            <li><Link to="/samkalieen"><Feather size={14} /> {t('nav.samkalieen') || 'समकालीन'}</Link></li>
+            <li><Link to="/gallery"><Feather size={14} /> {t('nav.gallary') || 'गैलरी'}</Link></li>
           </ul>
         </nav>
 
