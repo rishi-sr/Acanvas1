@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Newspaper, Calendar, MapPin, Tag, ExternalLink, Sparkles, Feather, Award } from 'lucide-react';
+import { Newspaper, Calendar, MapPin, Tag } from 'lucide-react';
 import './Reporting.scss';
 
 const Reporting = () => {
-  const [activeCategory, setActiveCategory] = useState('all');
-
   const reports = [
     {
       id: 1,
@@ -64,17 +62,12 @@ const Reporting = () => {
     }
   ];
 
-  const filteredReports = activeCategory === 'all'
-    ? reports
-    : reports.filter(r => r.category === activeCategory);
-
   return (
     <div className="reporting-page">
       {/* Hero Banner */}
       <section className="reporting-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">मीडिया एवं मंच</span>
             <h1 className="main-title">
               साहित्यिक <span className="highlight">रिपोर्टिंग</span>
             </h1>
@@ -88,57 +81,17 @@ const Reporting = () => {
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="reporting-content section-padding">
+      {/* Main Content (All reports directly on single page without tabs) */}
+      <section className="reporting-content">
         <div className="container">
-          {/* Category Filter */}
-          <div className="reporting-filters">
-            <button
-              type="button"
-              className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('all')}
-            >
-              सभी रिपोर्टिंग
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeCategory === 'media' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('media')}
-            >
-              मंच एवं समाचार
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeCategory === 'release' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('release')}
-            >
-              पुस्तक विमोचन
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeCategory === 'interview' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('interview')}
-            >
-              साक्षात्कार
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeCategory === 'award' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('award')}
-            >
-              सम्मान
-            </button>
-          </div>
-
-          {/* Reports Grid */}
           <div className="reports-grid">
-            {filteredReports.map(report => (
+            {reports.map((report, idx) => (
               <motion.article
                 key={report.id}
                 className="report-card"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35, delay: idx * 0.08 }}
               >
                 <div className="report-card-top">
                   <span className="report-badge">
@@ -164,8 +117,8 @@ const Reporting = () => {
                 <p className="report-excerpt">{report.excerpt}</p>
 
                 <div className="report-tags">
-                  {report.tags.map((t, idx) => (
-                    <span key={idx} className="tag-chip">
+                  {report.tags.map((t, tIdx) => (
+                    <span key={tIdx} className="tag-chip">
                       <Tag size={11} />
                       <span>{t}</span>
                     </span>
@@ -181,4 +134,3 @@ const Reporting = () => {
 };
 
 export default Reporting;
-

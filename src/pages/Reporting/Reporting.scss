@@ -2,53 +2,49 @@
 @use '../../styles/mixins' as *;
 
 .reporting-page {
-  padding-top: 5.5rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
   background: $bg-parchment;
   min-height: 100vh;
 
   .reporting-hero {
-    padding: 3rem 0 1.5rem;
-    background: radial-gradient(circle at 50% 30%, rgba(196, 30, 58, 0.05) 0%, transparent 70%);
+    padding: 2.5rem 0 1.2rem;
     text-align: center;
+
+    .main-title {
+      font-family: $font-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: $primary-cherry;
+      margin-bottom: 0.5rem;
+    }
+
+    .desc {
+      font-family: $font-body;
+      font-size: 1.05rem;
+      color: $text-secondary;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .ornament-divider {
+      margin: 1rem auto 0;
+    }
   }
 
-  .reporting-filters {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 2.8rem;
-    flex-wrap: wrap;
-
-    .filter-btn {
-      padding: 0.55rem 1.35rem;
-      border-radius: $radius-pill;
-      border: 1.5px solid rgba(139, 0, 0, 0.15);
-      background: #FFFFFF;
-      color: $text-secondary;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: $transition-smooth;
-
-      &:hover:not(.active) {
-        border-color: $primary-cherry;
-        color: $primary-cherry;
-      }
-
-      &.active {
-        background: $cherry-gradient;
-        color: #FFFFFF;
-        border-color: transparent;
-        box-shadow: 0 4px 15px rgba(196, 30, 58, 0.25);
-      }
-    }
+  .reporting-content {
+    padding-top: 1.5rem;
   }
 
   .reports-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+
+    @include respond-to('lg') {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
     @include respond-to('sm') {
       grid-template-columns: 1fr;
@@ -57,65 +53,65 @@
 
   .report-card {
     background: #FFFFFF;
-    border-radius: 20px;
-    border: 1px solid rgba(139, 0, 0, 0.08);
-    padding: 2rem 2.2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    padding: 1.6rem 1.6rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(139, 0, 0, 0.04);
-    transition: $transition-smooth;
+    box-shadow: 0 4px 18px rgba(139, 0, 0, 0.04);
+    transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(139, 0, 0, 0.09);
-      border-color: rgba(139, 0, 0, 0.18);
+      box-shadow: 0 12px 32px rgba(139, 0, 0, 0.09);
+      border-color: rgba(196, 30, 58, 0.35);
     }
 
     .report-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
 
       .report-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.35rem;
         background: rgba(196, 30, 58, 0.08);
         color: $primary-cherry;
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 700;
-        padding: 0.3rem 0.75rem;
+        padding: 0.25rem 0.65rem;
         border-radius: $radius-pill;
       }
 
       .report-source {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: $gold-dark;
       }
     }
 
     .report-title {
-      font-family: $font-hindi-display, Georgia, serif;
-      font-size: 1.35rem;
+      font-family: $font-serif;
+      font-size: 1.2rem;
       font-weight: 700;
       color: $primary-cherry-dark;
-      margin: 0 0 0.75rem;
+      margin: 0 0 0.55rem;
       line-height: 1.35;
     }
 
     .report-meta {
       display: flex;
-      gap: 1.2rem;
-      margin-bottom: 1rem;
-      font-size: 0.82rem;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.8rem;
       color: $text-muted;
 
       .meta-item {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
+        gap: 0.3rem;
 
         svg {
           color: $primary-cherry;
@@ -124,30 +120,30 @@
     }
 
     .report-excerpt {
-      font-size: 0.92rem;
-      line-height: 1.7;
+      font-size: 0.88rem;
+      line-height: 1.65;
       color: $text-secondary;
-      margin: 0 0 1.4rem;
+      margin: 0 0 1.2rem;
       flex: 1;
     }
 
     .report-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
+      gap: 0.4rem;
       margin-top: auto;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(139, 0, 0, 0.06);
+      padding-top: 0.85rem;
+      border-top: 1px dashed rgba(139, 0, 0, 0.1);
 
       .tag-chip {
         display: inline-flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.25rem;
         background: #FAF6F4;
         color: $text-secondary;
-        padding: 0.25rem 0.65rem;
+        padding: 0.2rem 0.55rem;
         border-radius: $radius-pill;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 500;
 
         svg {

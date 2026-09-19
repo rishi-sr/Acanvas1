@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Calendar, Clock, MapPin, Users, CheckCircle, ArrowRight, BookOpen, Feather } from 'lucide-react';
+import { Sparkles, Calendar, Clock, CheckCircle, ArrowRight, Feather } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext';
 import './Workshop.scss';
 
 const Workshop = () => {
-  const { t } = useLanguage();
-  const [selectedTopic, setSelectedTopic] = useState('all');
-
   const workshops = [
     {
       id: 1,
@@ -56,17 +52,12 @@ const Workshop = () => {
     }
   ];
 
-  const filteredWorkshops = selectedTopic === 'all'
-    ? workshops
-    : workshops.filter(w => w.type === selectedTopic);
-
   return (
     <div className="workshop-page">
       {/* Hero Banner */}
       <section className="workshop-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">साहित्यिक कार्यशालाएँ</span>
             <h1 className="main-title">
               सृजन एवं <span className="highlight">वर्कशॉप्स</span>
             </h1>
@@ -80,49 +71,17 @@ const Workshop = () => {
         </div>
       </section>
 
-      {/* Filter Tabs */}
-      <section className="workshop-content section-padding">
+      {/* Main Content (All workshops directly on single page without tabs) */}
+      <section className="workshop-content">
         <div className="container">
-          <div className="workshop-filter-tabs">
-            <button
-              type="button"
-              className={`filter-btn ${selectedTopic === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedTopic('all')}
-            >
-              सभी सत्र
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${selectedTopic === 'poetry' ? 'active' : ''}`}
-              onClick={() => setSelectedTopic('poetry')}
-            >
-              काव्य व छंद साधना
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${selectedTopic === 'story' ? 'active' : ''}`}
-              onClick={() => setSelectedTopic('story')}
-            >
-              स्टोरीटेलिंग
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${selectedTopic === 'performance' ? 'active' : ''}`}
-              onClick={() => setSelectedTopic('performance')}
-            >
-              मंच प्रस्तुति
-            </button>
-          </div>
-
-          {/* Workshop Cards Grid */}
           <div className="workshop-grid">
-            {filteredWorkshops.map(ws => (
+            {workshops.map((ws, idx) => (
               <motion.div
                 key={ws.id}
                 className="workshop-card"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35, delay: idx * 0.08 }}
               >
                 <div className="card-top">
                   <span className="workshop-badge">
@@ -134,7 +93,7 @@ const Workshop = () => {
 
                 <h3 className="workshop-title">{ws.title}</h3>
                 <p className="workshop-mentor">
-                  <Feather size={15} />
+                  <Feather size={14} />
                   <span>मार्गदर्शक: {ws.mentor}</span>
                 </p>
 
@@ -142,11 +101,11 @@ const Workshop = () => {
 
                 <div className="workshop-meta">
                   <div className="meta-item">
-                    <Calendar size={15} />
+                    <Calendar size={14} />
                     <span>{ws.date}</span>
                   </div>
                   <div className="meta-item">
-                    <Clock size={15} />
+                    <Clock size={14} />
                     <span>{ws.time}</span>
                   </div>
                 </div>
@@ -154,9 +113,9 @@ const Workshop = () => {
                 <div className="workshop-highlights">
                   <h4 className="highlights-head">प्रमुख विषय:</h4>
                   <ul>
-                    {ws.highlights.map((h, idx) => (
-                      <li key={idx}>
-                        <CheckCircle size={14} className="check-icon" />
+                    {ws.highlights.map((h, hIdx) => (
+                      <li key={hIdx}>
+                        <CheckCircle size={13} className="check-icon" />
                         <span>{h}</span>
                       </li>
                     ))}
@@ -166,7 +125,7 @@ const Workshop = () => {
                 <div className="card-bottom">
                   <Link to="/contact" className="btn-royal workshop-enroll-btn">
                     <span>कार्यशाला हेतु पंजीकरण करें</span>
-                    <ArrowRight size={15} />
+                    <ArrowRight size={14} />
                   </Link>
                 </div>
               </motion.div>
@@ -179,4 +138,3 @@ const Workshop = () => {
 };
 
 export default Workshop;
-
