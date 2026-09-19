@@ -81,17 +81,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
-          <div className="footer-col">
-            <h4 className="footer-heading">{t('footer.themes.heading')}</h4>
-            <ul className="footer-links">
-              <li><Link to="/poems?theme=philosophy">{t('footer.theme.1')}</Link></li>
-              <li><Link to="/poems?theme=love">{t('footer.theme.2')}</Link></li>
-              <li><Link to="/poems?theme=empowerment">{t('footer.theme.3')}</Link></li>
-              <li><Link to="/books?filter=upcoming">{t('footer.theme.4')}</Link></li>
-              <li><Link to="/contact">{t('footer.theme.5')}</Link></li>
-            </ul>
-          </div>
 
           {/* Newsletter */}
           <div className="footer-col footer-newsletter">
