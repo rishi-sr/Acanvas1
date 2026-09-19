@@ -19,6 +19,7 @@ import quoteRoutes from './routes/quoteRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import inquiryRoutes from './routes/inquiryRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import galleryRoutes from './routes/galleryRoutes.js';
 
 // Middleware
 import { globalLimiter } from './middleware/rateLimiter.js';
@@ -84,6 +85,7 @@ app.use('/api/quotes', quoteRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/contact', inquiryRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 // Root Welcome / Ping
 app.get('/', (req, res) => {

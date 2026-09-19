@@ -18,7 +18,8 @@ import {
   Shield,
   Mail,
   Save,
-  Sparkles
+  Sparkles,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
@@ -30,6 +31,7 @@ const Admin = () => {
     poems,
     books,
     quotes,
+    gallery,
     submissions,
     inquiries,
     systemStatus,
@@ -44,6 +46,9 @@ const Admin = () => {
     deleteBook,
     addQuote,
     deleteQuote,
+    addGalleryItem,
+    deleteGalleryItem,
+    uploadGalleryImage,
     approveSubmission,
     updateSubmissionStatus,
     deleteSubmission,
@@ -108,6 +113,21 @@ const Admin = () => {
     curatedBy: 'Kanchan Lata Jaiswal',
     poetReflection: '',
     tags: 'Literature'
+  });
+
+  // Gallery Management State
+  const [showAddGallery, setShowAddGallery] = useState(false);
+  const [galleryImageFile, setGalleryImageFile] = useState(null);
+  const [galleryImagePreview, setGalleryImagePreview] = useState('');
+  const [uploadingGalleryImg, setUploadingGalleryImg] = useState(false);
+  const [newGalleryItem, setNewGalleryItem] = useState({
+    title: '',
+    category: 'stage',
+    date: '',
+    location: '',
+    image: '',
+    aspectRatio: '1:1',
+    caption: ''
   });
 
   const handleLogin = async (e) => {
@@ -186,6 +206,42 @@ const Admin = () => {
       tags: newQuote.tags.split(',').map(t => t.trim())
     });
     setShowAddQuote(false);
+  };
+
+  const handleCreateGalleryItem = async (e) => {
+    e.preventDefault();
+    let imgUrl = newGalleryItem.image;
+
+    if (galleryImageFile) {
+      setUploadingGalleryImg(true);
+      const upRes = await uploadGalleryImage(galleryImageFile);
+      setUploadingGalleryImg(false);
+      if (upRes.success && upRes.imageUrl) {
+        imgUrl = upRes.imageUrl;
+      }
+    }
+
+    if (!imgUrl) {
+      imgUrl = '/assets/kanchan-portrait.png';
+    }
+
+    await addGalleryItem({
+      ...newGalleryItem,
+      image: imgUrl
+    });
+
+    setShowAddGallery(false);
+    setGalleryImageFile(null);
+    setGalleryImagePreview('');
+    setNewGalleryItem({
+      title: '',
+      category: 'stage',
+      date: '',
+      location: '',
+      image: '',
+      aspectRatio: '1:1',
+      caption: ''
+    });
   };
 
   // Lock Screen
@@ -324,6 +380,13 @@ const Admin = () => {
           >
             <Quote size={16} />
             <span>Master Quotes ({quotes.length})</span>
+          </button>
+          <button
+            className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
+            onClick={() => setActiveTab('gallery')}
+          >
+            <ImageIcon size={16} />
+            <span>चित्र दीर्घा / Gallery ({gallery.length})</span>
           </button>
           <button
             className={`admin-tab-btn ${activeTab === 'inquiries' ? 'active' : ''}`}
@@ -934,6 +997,237 @@ const Admin = () => {
                           className="btn-table-del"
                           onClick={() => deleteQuote(q.id)}
                           title="Delete Quote"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TAB: GALLERY MANAGEMENT */}
+        {activeTab === 'gallery' && (
+          <div className="admin-panel-content">
+            <div className="panel-top-bar">
+              <h2 className="panel-heading">चित्र दीर्घा (Gallery Management)</h2>
+              <button className="btn-royal" onClick={() => setShowAddGallery(!showAddGallery)}>
+                <Plus size={16} />
+                <span>{showAddGallery ? 'Close Form' : 'चित्र जोड़ें / Add Photo'}</span>
+              </button>
+            </div>
+
+            {showAddGallery && (
+              <form onSubmit={handleCreateGalleryItem} className="admin-form-modal">
+                <h3 className="modal-title">नई फोटो / स्मृति जोड़ें (Add Gallery Photo)</h3>
+
+                {/* Aspect Ratio Selector */}
+                <div className="form-row-full" style={{ marginBottom: '1.2rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.6rem', fontWeight: 700 }}>
+                    फोटो ओरिएंटेशन / Aspect Ratio चुनें *
+                  </label>
+                  <div className="aspect-ratio-selector">
+                    <button
+                      type="button"
+                      className={`ratio-btn ${newGalleryItem.aspectRatio === '1:1' ? 'active' : ''}`}
+                      onClick={() => setNewGalleryItem({ ...newGalleryItem, aspectRatio: '1:1' })}
+                    >
+                      <div className="ratio-box square" />
+                      <div className="ratio-text">
+                        <strong>1:1 Square</strong>
+                        <span>वर्गाकार (पोर्ट्रेट / क्लोज-अप)</span>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={`ratio-btn ${newGalleryItem.aspectRatio === '16:9' ? 'active' : ''}`}
+                      onClick={() => setNewGalleryItem({ ...newGalleryItem, aspectRatio: '16:9' })}
+                    >
+                      <div className="ratio-box wide" />
+                      <div className="ratio-text">
+                        <strong>16:9 Landscape</strong>
+                        <span>क्षैतिज (स्टेज शो / ग्रुप फोटो)</span>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={`ratio-btn ${newGalleryItem.aspectRatio === '9:16' ? 'active' : ''}`}
+                      onClick={() => setNewGalleryItem({ ...newGalleryItem, aspectRatio: '9:16' })}
+                    >
+                      <div className="ratio-box tall" />
+                      <div className="ratio-text">
+                        <strong>9:16 Portrait</strong>
+                        <span>लंबवत (रील / फुल बॉडी)</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="modal-grid">
+                  <div className="form-row-full">
+                    <label>शीर्षक / Event Title *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="उदा. साहित्य कुंभ — काव्य पाठ"
+                      value={newGalleryItem.title}
+                      onChange={(e) => setNewGalleryItem({ ...newGalleryItem, title: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>श्रेणी / Category *</label>
+                    <select
+                      value={newGalleryItem.category}
+                      onChange={(e) => setNewGalleryItem({ ...newGalleryItem, category: e.target.value })}
+                    >
+                      <option value="stage">मंच प्रस्तुतियाँ (Stage Performance)</option>
+                      <option value="launch">पुस्तक विमोचन (Book Launch)</option>
+                      <option value="meet">साहित्यिक गोष्ठी (Literary Meet)</option>
+                      <option value="awards">सम्मान (Awards & Honors)</option>
+                      <option value="workshop">कार्यशाला (Workshop)</option>
+                    </select>
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>माह / वर्ष (Date)</label>
+                    <input
+                      type="text"
+                      placeholder="उदा. फरवरी 2026"
+                      value={newGalleryItem.date}
+                      onChange={(e) => setNewGalleryItem({ ...newGalleryItem, date: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>स्थान (Location)</label>
+                    <input
+                      type="text"
+                      placeholder="उदा. नई दिल्ली / लखनऊ"
+                      value={newGalleryItem.location}
+                      onChange={(e) => setNewGalleryItem({ ...newGalleryItem, location: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                {/* Photo File Upload or URL */}
+                <div className="modal-grid" style={{ marginTop: '0.8rem' }}>
+                  <div className="form-row-full">
+                    <label>फोटो फ़ाइल चुनें (Upload Image File)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setGalleryImageFile(file);
+                          setGalleryImagePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>या इमेज URL दर्ज करें (Image URL)</label>
+                    <input
+                      type="text"
+                      placeholder="https://... या /assets/..."
+                      value={newGalleryItem.image}
+                      onChange={(e) => {
+                        setNewGalleryItem({ ...newGalleryItem, image: e.target.value });
+                        setGalleryImagePreview(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Live Preview */}
+                {(galleryImagePreview || newGalleryItem.image) && (
+                  <div className="admin-img-preview-wrap" style={{ marginTop: '1rem' }}>
+                    <span className="preview-label" style={{ fontWeight: 700, fontSize: '0.85rem', display: 'block', marginBottom: '0.4rem' }}>
+                      Live Preview ({newGalleryItem.aspectRatio}):
+                    </span>
+                    <div
+                      className="preview-img-container"
+                      style={{
+                        width: '200px',
+                        aspectRatio: newGalleryItem.aspectRatio === '16:9' ? '16/9' : newGalleryItem.aspectRatio === '9:16' ? '9/16' : '1/1',
+                        overflow: 'hidden',
+                        borderRadius: '10px',
+                        border: '2px solid #C5A059',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      <img
+                        src={galleryImagePreview || newGalleryItem.image}
+                        alt="Preview"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="form-row-full" style={{ marginTop: '0.8rem' }}>
+                  <label>विवरण / संक्षिप्त कैप्शन (Caption)</label>
+                  <textarea
+                    rows={2}
+                    placeholder="फोटो के संबंध में एक-दो पंक्तियों का संक्षिप्त विवरण..."
+                    value={newGalleryItem.caption}
+                    onChange={(e) => setNewGalleryItem({ ...newGalleryItem, caption: e.target.value })}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn-royal"
+                  disabled={uploadingGalleryImg}
+                  style={{ marginTop: '1.2rem' }}
+                >
+                  <Plus size={16} />
+                  <span>{uploadingGalleryImg ? 'Uploading Photo...' : 'Save to Gallery'}</span>
+                </button>
+              </form>
+            )}
+
+            {/* Gallery Items Table */}
+            <div style={{ overflowX: 'auto' }}>
+              <table className="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Orientation</th>
+                    <th>Date & Location</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {gallery.map(item => (
+                    <tr key={item.id}>
+                      <td>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', background: '#f0e6e6' }}>
+                          <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                      </td>
+                      <td style={{ fontWeight: 700 }}>{item.title}</td>
+                      <td><span className="royal-tag">{item.category}</span></td>
+                      <td>
+                        <span className="royal-tag gold" style={{ fontSize: '0.7rem' }}>
+                          {item.aspectRatio || '1:1'}
+                        </span>
+                      </td>
+                      <td>{item.date} {item.location ? `• ${item.location}` : ''}</td>
+                      <td>
+                        <button
+                          className="btn-table-del"
+                          onClick={() => deleteGalleryItem(item.id)}
+                          title="Delete Image"
                         >
                           <Trash2 size={14} />
                         </button>

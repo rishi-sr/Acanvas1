@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { initialPoems } from '../data/initialPoems';
 import { initialBooks } from '../data/initialBooks';
 import { initialQuotes } from '../data/initialQuotes';
+import { initialGallery } from '../data/initialGallery';
 import { poetsData as initialPoetsData } from '../data/poetsData';
 
 const ContentContext = createContext();
@@ -35,6 +36,9 @@ export const ContentProvider = ({ children }) => {
 
   // Quotes State
   const [quotes, setQuotes] = useState(initialQuotes);
+
+  // Gallery State
+  const [gallery, setGallery] = useState(initialGallery);
 
   // Reader Submissions State (for moderation)
   const [submissions, setSubmissions] = useState([]);
@@ -119,7 +123,13 @@ export const ContentProvider = ({ children }) => {
         setBooks(bookRes.data.data);
       }
 
-      // 5. Fetch System Status
+      // 5. Fetch Gallery Items
+      const galleryRes = await safeFetchJson(`${API_BASE}/gallery`);
+      if (galleryRes.ok && Array.isArray(galleryRes.data?.data)) {
+        setGallery(galleryRes.data.data);
+      }
+
+      // 6. Fetch System Status
       const statusRes = await safeFetchJson(`${API_BASE}/admin/status`);
       if (statusRes.ok && statusRes.data) {
         setSystemStatus(statusRes.data);
@@ -446,6 +456,78 @@ export const ContentProvider = ({ children }) => {
   };
 
   // ==========================================
+  // GALLERY CRUD
+  // ==========================================
+  const addGalleryItem = async (itemData) => {
+    try {
+      const res = await fetch(`${API_BASE}/gallery`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(itemData)
+      });
+      const data = await res.json();
+      if (res.ok && data.data) {
+        setGallery(prev => [data.data, ...prev]);
+        return data.data;
+      }
+    } catch {}
+
+    const newItem = {
+      ...itemData,
+      id: `gallery-${Date.now()}`
+    };
+    setGallery(prev => [newItem, ...prev]);
+    return newItem;
+  };
+
+  const updateGalleryItem = async (id, updatedFields) => {
+    try {
+      await fetch(`${API_BASE}/gallery/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedFields)
+      });
+    } catch {}
+
+    setGallery(prev => prev.map(g => (g.id === id ? { ...g, ...updatedFields } : g)));
+  };
+
+  const deleteGalleryItem = async (id) => {
+    try {
+      await fetch(`${API_BASE}/gallery/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch {}
+
+    setGallery(prev => prev.filter(g => g.id !== id));
+  };
+
+  const uploadGalleryImage = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await fetch(`${API_BASE}/gallery/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Image upload failed');
+      }
+
+      return { success: true, imageUrl: data.imageUrl };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  };
+
+  // ==========================================
   // SUBMISSIONS & CONTACT INQUIRIES
   // ==========================================
   const submitReaderPoem = async (poemData) => {
@@ -621,6 +703,7 @@ export const ContentProvider = ({ children }) => {
         poems,
         books,
         quotes,
+        gallery,
         submissions,
         inquiries,
         likedItems,
@@ -641,6 +724,10 @@ export const ContentProvider = ({ children }) => {
         addQuote,
         updateQuote,
         deleteQuote,
+        addGalleryItem,
+        updateGalleryItem,
+        deleteGalleryItem,
+        uploadGalleryImage,
         submitReaderPoem,
         approveSubmission,
         updateSubmissionStatus,
