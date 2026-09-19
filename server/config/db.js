@@ -22,34 +22,17 @@ const defaultDatabase = {
       nameHindi: "कंचन लता जायसवाल",
       title: "Senior Poetess, Author & Cultural Thinker",
       titleHindi: "वरिष्ठ कवयित्री, लेखिका एवं सांस्कृतिक चिंतक",
-      signatureQuote: "When words arise from the sanctum of silence, they transcend mere poetry to become the music of the soul.",
-      signatureQuoteHindi: "जब शब्द मौन के गर्भ से उठते हैं, तो वे केवल कविता नहीं रहते — आत्मा का संगीत बन जाते हैं।",
-      shortBio: "A distinguished literary luminary breathing life into human emotions, cultural ethos, maternal warmth, and deep life philosophy through her evocative and graceful pen.",
-      shortBioHindi: "मानवीय भावनाओं, सांस्कृतिक लोकाचार, मातृत्व की ऊष्मा और जीवन के गहन दर्शन को अपनी भावपूर्ण लेखनी से जीवंत करने वाली एक विशिष्ट साहित्यिक विभूति।",
-      fullBio: [
-        "Kanchan Lata Jaiswal is one of contemporary Indian literature's most profound and sensitive voices. Her poetry beautifully synthesizes the timeless fragrance of traditional Indian values with the existential reflections of modern life. Her creative universe spans the vast horizon of human emotions, maternal affection, social consciousness, and inner awakening.",
-        "Dedicated to literary craft for over three decades, she has captivated audiences across national stages, Doordarshan, All India Radio, and prestigious literary conventions. Her published works have touched hearts and received widespread acclaim.",
-        "Her signature style lies in the unpretentious elegance of her vocabulary and the boundless depth of her emotional nuance, creating an immediate, transformative connection with readers."
-      ],
-      fullBioHindi: [
-        "कंचन लता जायसवाल समकालीन भारतीय साहित्य की सबसे गहन और संवेदनशील आवाज़ों में से एक हैं। उनकी कविताएँ भारतीय परंपरागत मूल्यों की कालातीत सुगंध और आधुनिक जीवन के अस्तित्ववादी चिंतन का अद्भुत समन्वय प्रस्तुत करती हैं। उनका रचनात्मक संसार मानवीय भावनाओं, मातृत्व की आत्मीयता, सामाजिक चेतना और आंतरिक जागरण के विस्तृत क्षितिज को समेटे है।",
-        "तीन दशकों से अधिक समय से साहित्य-साधना में समर्पित, उन्होंने राष्ट्रीय मंचों, दूरदर्शन, आकाशवाणी और प्रतिष्ठित साहित्यिक सम्मेलनों में अपनी उपस्थिति से श्रोताओं को मंत्रमुग्ध किया है। उनकी प्रकाशित कृतियाँ लाखों पाठकों के हृदय को स्पर्श कर चुकी हैं।",
-        "उनकी लेखन-शैली की पहचान है — शब्दों की निश्छल सुंदरता और भावनाओं की असीमित गहराई, जो पाठकों के साथ एक तात्कालिक और परिवर्तनकारी संपर्क स्थापित करती है।"
-      ],
-      philosophy: "Poetry for me is not mere ornamentation—it is the sacred medium through which life's struggles and profound truths are distilled into immortal verses.",
-      philosophyHindi: "मेरे लिए कविता केवल अलंकरण नहीं है — यह वह पवित्र माध्यम है जिसके द्वारा जीवन के संघर्ष और गहन सत्य अमर पंक्तियों में ढल जाते हैं।",
+      signatureQuote: "When words arise from the sanctum of silence, they transcend mere poetry to become the music of the heart.",
+      signatureQuoteHindi: "जब शब्द मौन के गर्भ से उठते हैं, तो वे केवल कविता नहीं रहते — हृदय का संगीत बन जाते हैं।",
+      shortBio: "",
+      shortBioHindi: "",
+      fullBio: [],
+      fullBioHindi: [],
+      philosophy: "",
+      philosophyHindi: "",
       avatarUrl: "",
-      awards: [
-        { year: "2024", title: "Sahitya Sadhak Samman", organization: "U.P. Language Institute" },
-        { year: "2022", title: "Sharda Kavya Gaurav", organization: "All India Sahitya Parishad" },
-        { year: "2019", title: "Samvedna Shikhar Award", organization: "Sahitya Sangam Sansthan" }
-      ],
-      stats: {
-        publishedBooks: 4,
-        poemsCount: "350+",
-        stageEvents: "120+",
-        experience: "25+ Years"
-      },
+      awards: [],
+      stats: {},
       social: {
         instagram: "https://instagram.com",
         facebook: "https://facebook.com",

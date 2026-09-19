@@ -123,41 +123,13 @@ const PoetsSpotlight = () => {
                 </div>
               </div>
 
-              {/* Short Bio Paragraph */}
-              <p className="parichay-bio-text">
-                {Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
+              {/* Bio Paragraph if available */}
+              {(() => {
+                const bio = Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
                   ? (isHindi ? currentPoet.fullBioHindi[0] : currentPoet.fullBio[0])
-                  : (isHindi ? currentPoet.shortBioHindi || currentPoet.shortBio : currentPoet.shortBio || currentPoet.shortBioHindi)}
-              </p>
-
-              {/* Poetic Philosophy (काव्य- दर्शन) Card */}
-              <div className="parichay-philosophy-card">
-                <div className="philosophy-icon-badge">
-                  <BookOpen size={22} color="#FFFFFF" />
-                </div>
-                <div className="philosophy-text-wrap">
-                  <h4 className="philosophy-heading">
-                    {isHindi ? 'काव्य- दर्शन' : 'Poetic Philosophy'}
-                  </h4>
-                  <p className="philosophy-body">
-                    {isHindi
-                      ? (currentPoet.philosophyHindi || currentPoet.philosophy)
-                      : (currentPoet.philosophy || currentPoet.philosophyHindi)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Awards Pill Chips */}
-              {currentPoet.awards && currentPoet.awards.length > 0 && (
-                <div className="parichay-awards-row">
-                  {currentPoet.awards.map((aw, i) => (
-                    <div key={i} className="parichay-award-chip">
-                      {i % 2 === 0 ? <Trophy size={14} className="award-icon" /> : <Star size={14} className="award-icon" />}
-                      <span>{aw.title} ({aw.year})</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+                  : (isHindi ? currentPoet.shortBioHindi || currentPoet.shortBio : currentPoet.shortBio || currentPoet.shortBioHindi);
+                return bio ? <p className="parichay-bio-text">{bio}</p> : null;
+              })()}
 
               {/* Read Full Biography Link */}
               <div className="parichay-action-row">
@@ -206,31 +178,6 @@ const PoetsSpotlight = () => {
                 alt={currentPoet.name}
                 className="parichay-portrait-photo"
               />
-
-              {/* Floating Dark Crimson Glass Stats Bar */}
-              <div className="parichay-floating-stats">
-                <div className="floating-stat-item">
-                  <Feather size={17} className="stat-icon" />
-                  <span className="stat-value">{currentPoet.stats?.publishedBooks || (isGarima ? 3 : 4)}</span>
-                  <span className="stat-label">{isHindi ? 'पुस्तकें' : 'Books'}</span>
-                </div>
-
-                <div className="floating-stat-divider" />
-
-                <div className="floating-stat-item">
-                  <BookOpen size={17} className="stat-icon" />
-                  <span className="stat-value">{currentPoet.stats?.poemsCount || (isGarima ? '200+' : '350+')}</span>
-                  <span className="stat-label">{isHindi ? (isGarima ? 'ग़ज़लें' : 'कविताएँ') : 'Poems'}</span>
-                </div>
-
-                <div className="floating-stat-divider" />
-
-                <div className="floating-stat-item">
-                  <Sparkles size={17} className="stat-icon" />
-                  <span className="stat-value">{currentPoet.stats?.experience || (isGarima ? '12+ Years' : '25+ Years')}</span>
-                  <span className="stat-label">{isHindi ? (isGarima ? 'यात्रा' : 'साधना') : 'Journey'}</span>
-                </div>
-              </div>
             </div>
           </motion.div>
         </AnimatePresence>
