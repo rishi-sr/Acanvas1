@@ -1,30 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Feather, Heart, Mail, Send, BookOpen, Globe, Share2 } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Feather, Mail, Send, BookOpen } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import './Footer.scss';
 
 const Footer = () => {
   const { t } = useLanguage();
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email.trim() || !email.includes('@')) return;
-
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.85 },
-      colors: ['#8B0000', '#C5A059', '#FFFFFF', '#C41E3A']
-    });
-
-    setSubscribed(true);
-    setEmail('');
-    setTimeout(() => setSubscribed(false), 5000);
-  };
 
   return (
     <footer className="site-footer">
@@ -79,34 +60,6 @@ const Footer = () => {
               <li><Link to="/quotes"><Feather size={14} /> {t('footer.nav.quotes')}</Link></li>
               <li><Link to="/submit-poem"><Send size={14} /> {t('nav.submitPoem')}</Link></li>
             </ul>
-          </div>
-
-
-          {/* Newsletter */}
-          <div className="footer-col footer-newsletter">
-            <h4 className="footer-heading">{t('footer.newsletter.heading')}</h4>
-            <p style={{ color: 'rgba(250,242,243,0.7)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-              {t('footer.newsletter.desc')}
-            </p>
-            {subscribed ? (
-              <div className="newsletter-success">
-                {t('footer.newsletter.success')}
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="newsletter-form">
-                <input
-                  type="email"
-                  placeholder={t('footer.newsletter.placeholder')}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <button type="submit" className="btn-royal btn-subscribe">
-                  <Send size={15} />
-                  <span>{t('footer.newsletter.btn')}</span>
-                </button>
-              </form>
-            )}
           </div>
         </div>
 
