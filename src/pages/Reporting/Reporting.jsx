@@ -1,66 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Newspaper, Calendar, MapPin, Tag } from 'lucide-react';
+import { useContent } from '../../context/ContentContext';
 import './Reporting.scss';
 
 const Reporting = () => {
-  const reports = [
-    {
-      id: 1,
-      title: "अखिल भारतीय काव्य कुंभ — 'अक्षर कैनवास' की गूंज",
-      media: "राष्ट्रीय साहित्य दर्पण",
-      date: "फरवरी 2026",
-      location: "नई दिल्ली",
-      category: "media",
-      badge: "मुख्य समाचार",
-      excerpt: "दो पीढ़ियों के सशक्त काव्य मिलन 'अक्षर कैनवास' को राष्ट्रीय मंच पर श्रोताओं और आलोचकों द्वारा अभूतपूर्व सराहना मिली। डॉ. कंचन जायसवाल के दार्शनिक चिंतन और गरिमा सिंह की ओजस्वी ग़ज़लों ने श्रोताओं को मंत्रमुग्ध कर दिया।",
-      tags: ["काव्य मंच", "राष्ट्रीय सम्मान", "साहित्य समागम"]
-    },
-    {
-      id: 2,
-      title: "काव्य संग्रह 'चाक पे माटी सा मन' का भव्य लोकार्पण",
-      media: "दैनिक साहित्यालोक",
-      date: "जनवरी 2026",
-      location: "वाराणसी",
-      category: "release",
-      badge: "पुस्तक विमोचन",
-      excerpt: "गरिमा सिंह के चर्चित काव्य संग्रह 'चाक पे माटी सा मन' का विमोचन देश के मूर्धन्य साहित्यकारों की उपस्थिति में संपन्न हुआ। वक्ताओं ने इसे आधुनिक हिंदी कविता में संवेदना का नया क्षितिज बताया।",
-      tags: ["पुस्तक विमोचन", "चाक पे माटी सा मन", "समीक्षा"]
-    },
-    {
-      id: 3,
-      title: "परंपरा और आधुनिकता का संतुलन: डॉ. कंचन जायसवाल का विशेष साक्षात्कार",
-      media: "सांस्कृतिक चेतना मासिक",
-      date: "दिसंबर 2025",
-      location: "प्रयागराज",
-      category: "interview",
-      badge: "विशेष साक्षात्कार",
-      excerpt: "वरिष्ठ लेखिका डॉ. कंचन जायसवाल ने अपने विस्तृत साक्षात्कार में भारतीय सांस्कृतिक मूल्यों, स्त्री चेतना और समकालीन कविता की दिशा पर अपने गहन विचार साझा किए।",
-      tags: ["साक्षात्कार", "संस्कृति", "विमर्श"]
-    },
-    {
-      id: 4,
-      title: "साहित्यिक महोत्सव 2025 में 'युवा गौरव सम्मान' से अलंकृत",
-      media: "कला एवं अक्षर पत्रिका",
-      date: "नवंबर 2025",
-      location: "लखनऊ",
-      category: "award",
-      badge: "सम्मान एवं अलंकरण",
-      excerpt: "साहित्यिक क्षेत्र में निरंतर रचनात्मक योगदान और मौलिक रचनाधर्मिता के लिए गरिमा सिंह को प्रतिष्ठित 'युवा रचनाकार सम्मान' प्रदान किया गया।",
-      tags: ["सम्मान", "पुरस्कार", "युवा प्रतिभा"]
-    },
-    {
-      id: 5,
-      title: "आकाशवाणी पर विशेष काव्य पाठ व साहित्यिक वार्ता",
-      media: "आकाशवाणी (AIR)",
-      date: "अक्टूबर 2025",
-      location: "राष्ट्रीय प्रसारण",
-      category: "broadcast",
-      badge: "आकाशवाणी प्रसारण",
-      excerpt: "आकाशवाणी के राष्ट्रीय साहित्यिक कार्यक्रम में डॉ. कंचन जायसवाल और गरिमा सिंह की चुनिंदा कविताओं का प्रसारण किया गया, जिसे देश भर के श्रोताओं का भरपूर स्नेह मिला।",
-      tags: ["आकाशवाणी", "रेडियो पाठ", "काव्य धारा"]
-    }
-  ];
+  const { reports = [] } = useContent();
 
   return (
     <div className="reporting-page">
@@ -81,52 +26,80 @@ const Reporting = () => {
         </div>
       </section>
 
-      {/* Main Content (All reports directly on single page without tabs) */}
+      {/* Main Content */}
       <section className="reporting-content">
         <div className="container">
-          <div className="reports-grid">
-            {reports.map((report, idx) => (
-              <motion.article
-                key={report.id}
-                className="report-card"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: idx * 0.08 }}
-              >
-                <div className="report-card-top">
-                  <span className="report-badge">
-                    <Newspaper size={13} />
-                    <span>{report.badge}</span>
-                  </span>
-                  <span className="report-source">{report.media}</span>
-                </div>
+          {(!reports || reports.length === 0) ? (
+            <div className="no-items-found" style={{ textAlign: 'center', padding: '4.5rem 1.5rem', background: '#FFFFFF', borderRadius: '16px', border: '1px solid rgba(197, 160, 89, 0.25)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', margin: '2rem auto', maxWidth: '640px' }}>
+              <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.2rem' }}>
+                <Newspaper size={28} color="#C5A059" />
+              </div>
+              <h3 style={{ fontSize: '1.3rem', fontFamily: 'Cinzel, serif', color: '#1C191A', marginBottom: '0.6rem', fontWeight: 700 }}>
+                वर्तमान में कोई प्रेस कवरेज / रिपोर्टिंग सूचीबद्ध नहीं है
+              </h3>
+              <p style={{ color: '#7D6B6E', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                राष्ट्रीय समाचार पत्रों, पत्रिकाओं एवं मीडिया में प्रकाशित होने वाली आगामी रिपोर्टें व समीक्षाएँ यहाँ प्रदर्शित की जाएँगी।
+              </p>
+            </div>
+          ) : (
+            <div className="reports-grid">
+              {reports.map((report, idx) => {
+                const tagsList = Array.isArray(report.tags)
+                  ? report.tags
+                  : (typeof report.tags === 'string' ? report.tags.split(',').map(t => t.trim()).filter(Boolean) : []);
 
-                <h3 className="report-title">{report.title}</h3>
+                return (
+                  <motion.article
+                    key={report.id || idx}
+                    className="report-card"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: idx * 0.08 }}
+                  >
+                    <div className="report-card-top">
+                      <span className="report-badge">
+                        <Newspaper size={13} />
+                        <span>{report.badge || 'समाचार'}</span>
+                      </span>
+                      {report.media && <span className="report-source">{report.media}</span>}
+                    </div>
 
-                <div className="report-meta">
-                  <div className="meta-item">
-                    <Calendar size={14} />
-                    <span>{report.date}</span>
-                  </div>
-                  <div className="meta-item">
-                    <MapPin size={14} />
-                    <span>{report.location}</span>
-                  </div>
-                </div>
+                    <h3 className="report-title">{report.title}</h3>
 
-                <p className="report-excerpt">{report.excerpt}</p>
+                    {(report.date || report.location) && (
+                      <div className="report-meta">
+                        {report.date && (
+                          <div className="meta-item">
+                            <Calendar size={14} />
+                            <span>{report.date}</span>
+                          </div>
+                        )}
+                        {report.location && (
+                          <div className="meta-item">
+                            <MapPin size={14} />
+                            <span>{report.location}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
-                <div className="report-tags">
-                  {report.tags.map((t, tIdx) => (
-                    <span key={tIdx} className="tag-chip">
-                      <Tag size={11} />
-                      <span>{t}</span>
-                    </span>
-                  ))}
-                </div>
-              </motion.article>
-            ))}
-          </div>
+                    {report.excerpt && <p className="report-excerpt">{report.excerpt}</p>}
+
+                    {tagsList.length > 0 && (
+                      <div className="report-tags">
+                        {tagsList.map((t, tIdx) => (
+                          <span key={tIdx} className="tag-chip">
+                            <Tag size={11} />
+                            <span>{t}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </motion.article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </div>

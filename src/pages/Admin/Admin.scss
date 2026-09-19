@@ -501,6 +501,30 @@
           background: rgba(196, 30, 58, 0.02);
         }
 
+        .table-actions-cell {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .btn-table-edit {
+          background: rgba(197, 160, 89, 0.12);
+          border: 1px solid rgba(197, 160, 89, 0.35);
+          color: $gold-dark;
+          padding: 0.4rem 0.75rem;
+          border-radius: $radius-sm;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: $transition-smooth;
+
+          &:hover {
+            background: $gold-primary;
+            color: #fff;
+          }
+        }
+
         .btn-table-del {
           background: rgba(196, 30, 58, 0.08);
           border: 1px solid rgba(196, 30, 58, 0.2);

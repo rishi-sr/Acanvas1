@@ -34,6 +34,15 @@ export const ContentProvider = ({ children }) => {
   // Books State
   const [books, setBooks] = useState(initialBooks);
 
+  // Workshops State
+  const [workshops, setWorkshops] = useState([]);
+
+  // Reports State
+  const [reports, setReports] = useState([]);
+
+  // Samkalieen (Contemporary Articles) State
+  const [samkalieen, setSamkalieen] = useState([]);
+
   // Quotes State
   const [quotes, setQuotes] = useState(initialQuotes);
 
@@ -123,13 +132,31 @@ export const ContentProvider = ({ children }) => {
         setBooks(bookRes.data.data);
       }
 
-      // 5. Fetch Gallery Items
+      // 5. Fetch Workshops
+      const wsRes = await safeFetchJson(`${API_BASE}/workshops`);
+      if (wsRes.ok && Array.isArray(wsRes.data?.data)) {
+        setWorkshops(wsRes.data.data);
+      }
+
+      // 6. Fetch Reports
+      const repRes = await safeFetchJson(`${API_BASE}/reports`);
+      if (repRes.ok && Array.isArray(repRes.data?.data)) {
+        setReports(repRes.data.data);
+      }
+
+      // 7. Fetch Samkalieen
+      const samRes = await safeFetchJson(`${API_BASE}/samkalieen`);
+      if (samRes.ok && Array.isArray(samRes.data?.data)) {
+        setSamkalieen(samRes.data.data);
+      }
+
+      // 8. Fetch Gallery Items
       const galleryRes = await safeFetchJson(`${API_BASE}/gallery`);
       if (galleryRes.ok && Array.isArray(galleryRes.data?.data)) {
         setGallery(galleryRes.data.data);
       }
 
-      // 6. Fetch System Status
+      // 9. Fetch System Status
       const statusRes = await safeFetchJson(`${API_BASE}/admin/status`);
       if (statusRes.ok && statusRes.data) {
         setSystemStatus(statusRes.data);
@@ -528,6 +555,141 @@ export const ContentProvider = ({ children }) => {
   };
 
   // ==========================================
+  // WORKSHOP CRUD
+  // ==========================================
+  const addWorkshop = async (workshopData) => {
+    try {
+      const res = await fetch(`${API_BASE}/workshops`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(workshopData)
+      });
+      const data = await res.json();
+      if (res.ok && data.data) {
+        setWorkshops(prev => [data.data, ...prev]);
+        return data.data;
+      }
+    } catch {}
+
+    const newWs = { ...workshopData, id: `ws-${Date.now()}` };
+    setWorkshops(prev => [newWs, ...prev]);
+    return newWs;
+  };
+
+  const updateWorkshop = async (id, updatedFields) => {
+    try {
+      await fetch(`${API_BASE}/workshops/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedFields)
+      });
+    } catch {}
+
+    setWorkshops(prev => prev.map(w => (w.id === id ? { ...w, ...updatedFields } : w)));
+  };
+
+  const deleteWorkshop = async (id) => {
+    try {
+      await fetch(`${API_BASE}/workshops/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch {}
+
+    setWorkshops(prev => prev.filter(w => w.id !== id));
+  };
+
+  // ==========================================
+  // REPORT CRUD
+  // ==========================================
+  const addReport = async (reportData) => {
+    try {
+      const res = await fetch(`${API_BASE}/reports`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(reportData)
+      });
+      const data = await res.json();
+      if (res.ok && data.data) {
+        setReports(prev => [data.data, ...prev]);
+        return data.data;
+      }
+    } catch {}
+
+    const newRep = { ...reportData, id: `rep-${Date.now()}` };
+    setReports(prev => [newRep, ...prev]);
+    return newRep;
+  };
+
+  const updateReport = async (id, updatedFields) => {
+    try {
+      await fetch(`${API_BASE}/reports/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedFields)
+      });
+    } catch {}
+
+    setReports(prev => prev.map(r => (r.id === id ? { ...r, ...updatedFields } : r)));
+  };
+
+  const deleteReport = async (id) => {
+    try {
+      await fetch(`${API_BASE}/reports/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch {}
+
+    setReports(prev => prev.filter(r => r.id !== id));
+  };
+
+  // ==========================================
+  // SAMKALIEEN (ARTICLES) CRUD
+  // ==========================================
+  const addSamkalieen = async (samData) => {
+    try {
+      const res = await fetch(`${API_BASE}/samkalieen`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(samData)
+      });
+      const data = await res.json();
+      if (res.ok && data.data) {
+        setSamkalieen(prev => [data.data, ...prev]);
+        return data.data;
+      }
+    } catch {}
+
+    const newSam = { ...samData, id: `sam-${Date.now()}` };
+    setSamkalieen(prev => [newSam, ...prev]);
+    return newSam;
+  };
+
+  const updateSamkalieen = async (id, updatedFields) => {
+    try {
+      await fetch(`${API_BASE}/samkalieen/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedFields)
+      });
+    } catch {}
+
+    setSamkalieen(prev => prev.map(s => (s.id === id ? { ...s, ...updatedFields } : s)));
+  };
+
+  const deleteSamkalieen = async (id) => {
+    try {
+      await fetch(`${API_BASE}/samkalieen/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+    } catch {}
+
+    setSamkalieen(prev => prev.filter(s => s.id !== id));
+  };
+
+  // ==========================================
   // SUBMISSIONS & CONTACT INQUIRIES
   // ==========================================
   const submitReaderPoem = async (poemData) => {
@@ -702,6 +864,9 @@ export const ContentProvider = ({ children }) => {
         authors,
         poems,
         books,
+        workshops,
+        reports,
+        samkalieen,
         quotes,
         gallery,
         submissions,
@@ -721,6 +886,15 @@ export const ContentProvider = ({ children }) => {
         addBook,
         updateBook,
         deleteBook,
+        addWorkshop,
+        updateWorkshop,
+        deleteWorkshop,
+        addReport,
+        updateReport,
+        deleteReport,
+        addSamkalieen,
+        updateSamkalieen,
+        deleteSamkalieen,
         addQuote,
         updateQuote,
         deleteQuote,

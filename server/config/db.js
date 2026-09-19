@@ -98,77 +98,10 @@ const defaultDatabase = {
   },
   poems: [],
   quotes: [],
-  books: [
-    {
-      id: "book-chaak-pe-maati",
-      title: "चाक पे माटी सा मन",
-      titleHindi: "चाक पे माटी सा मन",
-      author: "Garima Singh",
-      authorHindi: "गरिमा सिंह",
-      authorId: "garima",
-      status: "published",
-      year: "2024",
-      expectedDate: "",
-      pages: 160,
-      isbn: "978-93-89000-01-2",
-      publisher: "अक्षर कैनवास पब्लिकेशन्स",
-      tagline: "कविता संग्रह",
-      synopsis: "कविता संग्रह \"चाक पे माटी सा मन\" जीवन के विविध रंगों, मानवीय संवेदनाओं और अनुभूतियों की सजीव अभिव्यक्ति है।",
-      sampleExcerpt: "माटी का मन चाक पे घूमे, सांसों की लय साधे...",
-      coverGradient: "linear-gradient(145deg, #1C191A 0%, #8B0000 100%)",
-      accentColor: "#C5A059",
-      price: "₹299",
-      rating: 5.0,
-      reviewsCount: 12,
-      buyLinks: { amazon: "#", flipkart: "#" }
-    },
-    {
-      id: "book-tripath",
-      title: "त्रिपथ",
-      titleHindi: "त्रिपथ",
-      author: "Garima Singh",
-      authorHindi: "गरिमा सिंह",
-      authorId: "garima",
-      status: "published",
-      year: "2023",
-      expectedDate: "",
-      pages: 190,
-      isbn: "978-93-89000-02-9",
-      publisher: "साहित्य संगम",
-      tagline: "साँझा काव्य संग्रह",
-      synopsis: "साँझा काव्य संग्रह \"त्रिपथ\" में समकालीन कवियों की प्रतिनिधि रचनाओं का संकलन।",
-      sampleExcerpt: "जो धड़कन में अनकहा रह गया, वही कागज़ पर उतरकर ग़ज़ल बन गया।",
-      coverGradient: "linear-gradient(145deg, #4D0000 0%, #1A1617 100%)",
-      accentColor: "#C5A059",
-      price: "₹250",
-      rating: 4.9,
-      reviewsCount: 8,
-      buyLinks: { amazon: "#", flipkart: "#" }
-    },
-    {
-      id: "book-kanchan-maun",
-      title: "मौन के गर्भ से",
-      titleHindi: "मौन के गर्भ से",
-      author: "Dr. Kanchan Jaiswal",
-      authorHindi: "डॉ. कंचन जायसवाल",
-      authorId: "kanchan",
-      status: "published",
-      year: "2024",
-      expectedDate: "",
-      pages: 175,
-      isbn: "978-93-89000-03-6",
-      publisher: "अक्षर कैनवास पब्लिकेशन्स",
-      tagline: "काव्य संकलन एवं शोध प्रबंध",
-      synopsis: "डॉ. कंचन जायसवाल का प्रतिनिधि काव्य संकलन जिसमें भारतीय परंपरागत मूल्यों और समकालीन चेतना का सुंदर समन्वय है।",
-      sampleExcerpt: "जब शब्द मौन के गर्भ से उठते हैं, तो वे केवल कविता नहीं रहते — हृदय का संगीत बन जाते हैं।",
-      coverGradient: "linear-gradient(145deg, #8B0000 0%, #3D0000 100%)",
-      accentColor: "#C5A059",
-      price: "₹320",
-      rating: 5.0,
-      reviewsCount: 15,
-      buyLinks: { amazon: "#", flipkart: "#" }
-    }
-  ],
+  books: [],
+  workshops: [],
+  reports: [],
+  samkalieen: [],
   gallery: [],
   submissions: [],
   inquiries: []
@@ -241,6 +174,7 @@ const BookSchema = new mongoose.Schema({
   titleHindi: String,
   author: String,
   authorHindi: String,
+  authorId: String,
   status: String,
   year: String,
   expectedDate: String,
@@ -255,6 +189,42 @@ const BookSchema = new mongoose.Schema({
   accentColor: String,
   coverImageUrl: String,
   buyLinks: mongoose.Schema.Types.Mixed
+}, { strict: false });
+
+const WorkshopSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  mentor: String,
+  date: String,
+  time: String,
+  mode: String,
+  type: String,
+  desc: String,
+  highlights: [String]
+}, { strict: false });
+
+const ReportSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  media: String,
+  date: String,
+  location: String,
+  category: String,
+  badge: String,
+  excerpt: String,
+  tags: [String]
+}, { strict: false });
+
+const SamkalieenSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: String,
+  author: String,
+  category: String,
+  date: String,
+  readTime: String,
+  lead: String,
+  paragraphs: [String],
+  quote: String
 }, { strict: false });
 
 const SubmissionSchema = new mongoose.Schema({
@@ -300,6 +270,9 @@ const Models = {
   poems: mongoose.models.Poem || mongoose.model('Poem', PoemSchema),
   quotes: mongoose.models.Quote || mongoose.model('Quote', QuoteSchema),
   books: mongoose.models.Book || mongoose.model('Book', BookSchema),
+  workshops: mongoose.models.Workshop || mongoose.model('Workshop', WorkshopSchema),
+  reports: mongoose.models.Report || mongoose.model('Report', ReportSchema),
+  samkalieen: mongoose.models.Samkalieen || mongoose.model('Samkalieen', SamkalieenSchema),
   submissions: mongoose.models.Submission || mongoose.model('Submission', SubmissionSchema),
   inquiries: mongoose.models.Inquiry || mongoose.model('Inquiry', InquirySchema),
   gallery: mongoose.models.Gallery || mongoose.model('Gallery', GallerySchema)
@@ -322,12 +295,15 @@ export const connectMongoIfConfigured = async () => {
       for (const [key, authorData] of Object.entries(defaultDatabase.authors)) {
         await Models.authors.findOneAndUpdate({ id: key }, authorData, { upsert: true });
       }
-      await Models.poems.insertMany(defaultDatabase.poems);
-      await Models.quotes.insertMany(defaultDatabase.quotes);
-      await Models.books.insertMany(defaultDatabase.books);
-      await Models.gallery.insertMany(defaultDatabase.gallery);
-      await Models.submissions.insertMany(defaultDatabase.submissions);
-      await Models.inquiries.insertMany(defaultDatabase.inquiries);
+      if (defaultDatabase.poems.length) await Models.poems.insertMany(defaultDatabase.poems);
+      if (defaultDatabase.quotes.length) await Models.quotes.insertMany(defaultDatabase.quotes);
+      if (defaultDatabase.books.length) await Models.books.insertMany(defaultDatabase.books);
+      if (defaultDatabase.workshops.length) await Models.workshops.insertMany(defaultDatabase.workshops);
+      if (defaultDatabase.reports.length) await Models.reports.insertMany(defaultDatabase.reports);
+      if (defaultDatabase.samkalieen.length) await Models.samkalieen.insertMany(defaultDatabase.samkalieen);
+      if (defaultDatabase.gallery.length) await Models.gallery.insertMany(defaultDatabase.gallery);
+      if (defaultDatabase.submissions.length) await Models.submissions.insertMany(defaultDatabase.submissions);
+      if (defaultDatabase.inquiries.length) await Models.inquiries.insertMany(defaultDatabase.inquiries);
       console.log('🍃 MongoDB initial seeding complete.');
     }
     return true;
@@ -486,10 +462,13 @@ export const db = {
       const poems = await Models.poems.find({}).lean();
       const quotes = await Models.quotes.find({}).lean();
       const books = await Models.books.find({}).lean();
+      const workshops = await Models.workshops.find({}).lean();
+      const reports = await Models.reports.find({}).lean();
+      const samkalieen = await Models.samkalieen.find({}).lean();
       const gallery = await Models.gallery.find({}).lean();
       const submissions = await Models.submissions.find({}).lean();
       const inquiries = await Models.inquiries.find({}).lean();
-      return { authors, poems, quotes, books, gallery, submissions, inquiries };
+      return { authors, poems, quotes, books, workshops, reports, samkalieen, gallery, submissions, inquiries };
     }
     return readDb();
   },
@@ -499,12 +478,15 @@ export const db = {
       throw new Error('Invalid backup data format');
     }
     if (isMongoConnected) {
-      if (importedData.poems) { await Models.poems.deleteMany({}); await Models.poems.insertMany(importedData.poems); }
-      if (importedData.quotes) { await Models.quotes.deleteMany({}); await Models.quotes.insertMany(importedData.quotes); }
-      if (importedData.books) { await Models.books.deleteMany({}); await Models.books.insertMany(importedData.books); }
-      if (importedData.gallery) { await Models.gallery.deleteMany({}); await Models.gallery.insertMany(importedData.gallery); }
-      if (importedData.submissions) { await Models.submissions.deleteMany({}); await Models.submissions.insertMany(importedData.submissions); }
-      if (importedData.inquiries) { await Models.inquiries.deleteMany({}); await Models.inquiries.insertMany(importedData.inquiries); }
+      if (importedData.poems) { await Models.poems.deleteMany({}); if (importedData.poems.length) await Models.poems.insertMany(importedData.poems); }
+      if (importedData.quotes) { await Models.quotes.deleteMany({}); if (importedData.quotes.length) await Models.quotes.insertMany(importedData.quotes); }
+      if (importedData.books) { await Models.books.deleteMany({}); if (importedData.books.length) await Models.books.insertMany(importedData.books); }
+      if (importedData.workshops) { await Models.workshops.deleteMany({}); if (importedData.workshops.length) await Models.workshops.insertMany(importedData.workshops); }
+      if (importedData.reports) { await Models.reports.deleteMany({}); if (importedData.reports.length) await Models.reports.insertMany(importedData.reports); }
+      if (importedData.samkalieen) { await Models.samkalieen.deleteMany({}); if (importedData.samkalieen.length) await Models.samkalieen.insertMany(importedData.samkalieen); }
+      if (importedData.gallery) { await Models.gallery.deleteMany({}); if (importedData.gallery.length) await Models.gallery.insertMany(importedData.gallery); }
+      if (importedData.submissions) { await Models.submissions.deleteMany({}); if (importedData.submissions.length) await Models.submissions.insertMany(importedData.submissions); }
+      if (importedData.inquiries) { await Models.inquiries.deleteMany({}); if (importedData.inquiries.length) await Models.inquiries.insertMany(importedData.inquiries); }
       return importedData;
     }
     writeDbAtomically(importedData);
@@ -518,17 +500,23 @@ export const db = {
         await Models.authors.create({ ...authorData, id: key });
       }
       await Models.poems.deleteMany({});
-      await Models.poems.insertMany(defaultDatabase.poems);
+      if (defaultDatabase.poems.length) await Models.poems.insertMany(defaultDatabase.poems);
       await Models.quotes.deleteMany({});
-      await Models.quotes.insertMany(defaultDatabase.quotes);
+      if (defaultDatabase.quotes.length) await Models.quotes.insertMany(defaultDatabase.quotes);
       await Models.books.deleteMany({});
-      await Models.books.insertMany(defaultDatabase.books);
+      if (defaultDatabase.books.length) await Models.books.insertMany(defaultDatabase.books);
+      await Models.workshops.deleteMany({});
+      if (defaultDatabase.workshops.length) await Models.workshops.insertMany(defaultDatabase.workshops);
+      await Models.reports.deleteMany({});
+      if (defaultDatabase.reports.length) await Models.reports.insertMany(defaultDatabase.reports);
+      await Models.samkalieen.deleteMany({});
+      if (defaultDatabase.samkalieen.length) await Models.samkalieen.insertMany(defaultDatabase.samkalieen);
       await Models.gallery.deleteMany({});
-      await Models.gallery.insertMany(defaultDatabase.gallery);
+      if (defaultDatabase.gallery.length) await Models.gallery.insertMany(defaultDatabase.gallery);
       await Models.submissions.deleteMany({});
-      await Models.submissions.insertMany(defaultDatabase.submissions);
+      if (defaultDatabase.submissions.length) await Models.submissions.insertMany(defaultDatabase.submissions);
       await Models.inquiries.deleteMany({});
-      await Models.inquiries.insertMany(defaultDatabase.inquiries);
+      if (defaultDatabase.inquiries.length) await Models.inquiries.insertMany(defaultDatabase.inquiries);
       return defaultDatabase;
     }
     writeDbAtomically(defaultDatabase);
