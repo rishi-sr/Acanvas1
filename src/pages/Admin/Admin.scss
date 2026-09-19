@@ -3,15 +3,20 @@
 
 .admin-page-wrap {
   min-height: 100vh;
-  padding-top: 6.5rem;
+  padding-top: 2.5rem;
   padding-bottom: 5.5rem;
   background: radial-gradient(circle at 10% 10%, rgba(139, 0, 0, 0.05) 0%, transparent 50%),
               $bg-alabaster;
 
+  @include respond-to('md') {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+  }
+
   // Login Card
   .admin-login-card {
     max-width: 480px;
-    margin: 4.5rem auto;
+    margin: 2rem auto;
     background: #FFFFFF;
     border-radius: $radius-lg;
     padding: 3.2rem 2.5rem;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Lock,
   Unlock,
@@ -28,7 +29,9 @@ import {
   X,
   ChevronDown,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Globe,
+  ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
@@ -651,6 +654,13 @@ const Admin = () => {
             <div className="demo-credentials-hint">
               🛡️ <strong>Encrypted JWT Authorization</strong> & Cloud Database Sync Active
             </div>
+
+            <div style={{ marginTop: '1.2rem', textAlign: 'center' }}>
+              <Link to="/" style={{ color: '#8B0000', fontSize: '0.88rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
+                <ArrowLeft size={15} />
+                <span>मुख्य वेबसाइट पर जाएँ (Back to Website)</span>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -669,6 +679,10 @@ const Admin = () => {
           </div>
 
           <div className="dash-actions">
+            <Link to="/" className="btn-royal-outline" title="मुख्य वेबसाइट देखें" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Globe size={15} />
+              <span>वेबसाइट देखें</span>
+            </Link>
             <button className="btn-royal-outline" onClick={exportDatabase} title="Export JSON Database">
               <Download size={15} />
               <span>Export Backup</span>

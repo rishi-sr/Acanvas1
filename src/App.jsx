@@ -30,7 +30,7 @@ const AppContent = () => {
     <div className="app-layout">
       <ParticleCanvas />
       <ScrollToTop />
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main className="main-content-flow">
         <Routes>
           <Route path="/" element={<Home />} />
