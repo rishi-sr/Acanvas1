@@ -123,21 +123,16 @@ const PoetsSpotlight = () => {
                 </div>
               </div>
 
-              {/* Bio Paragraph if available */}
-              {/* Bio Paragraphs if available */}
+              {/* Bio Paragraphs */}
               {(() => {
-                const bio = Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
-                  ? (isHindi ? currentPoet.fullBioHindi[0] : currentPoet.fullBio[0])
-                  : (isHindi ? currentPoet.shortBioHindi || currentPoet.shortBio : currentPoet.shortBio || currentPoet.shortBioHindi);
-                return bio ? <p className="parichay-bio-text">{bio}</p> : null;
                 const bioList = Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
                   ? (isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
                   : (isHindi ? [currentPoet.shortBioHindi || currentPoet.shortBio] : [currentPoet.shortBio || currentPoet.shortBioHindi]);
                 const validBio = bioList.filter(Boolean);
                 return validBio.length > 0 ? (
-                  <div className="parichay-bio-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <div className="parichay-bio-wrap">
                     {validBio.map((paragraph, idx) => (
-                      <p key={idx} className="parichay-bio-text" style={{ marginBottom: 0 }}>{paragraph}</p>
+                      <p key={idx} className="parichay-bio-text">{paragraph}</p>
                     ))}
                   </div>
                 ) : null;

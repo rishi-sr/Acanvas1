@@ -18,18 +18,12 @@ const defaultDatabase = {
   authors: {
     kanchan: {
       id: "kanchan",
-      name: "Kanchan Lata Jaiswal",
-      nameHindi: "कंचन लता जायसवाल",
       name: "Dr. Kanchan Jaiswal",
       nameHindi: "डॉ. कंचन जायसवाल",
       title: "Senior Poetess, Author & Cultural Thinker",
       titleHindi: "वरिष्ठ कवयित्री, लेखिका एवं सांस्कृतिक चिंतक",
       signatureQuote: "When words arise from the sanctum of silence, they transcend mere poetry to become the music of the heart.",
       signatureQuoteHindi: "जब शब्द मौन के गर्भ से उठते हैं, तो वे केवल कविता नहीं रहते — हृदय का संगीत बन जाते हैं।",
-      shortBio: "",
-      shortBioHindi: "",
-      fullBio: [],
-      fullBioHindi: [],
       shortBio: "डॉ. कंचन जायसवाल समकालीन भारतीय साहित्य की सशक्त, संवेदनशील और सर्वस्पर्शी आवाज़ों में से एक हैं। उनकी रचनाओं में भारतीय परंपरागत मूल्यों की कालातीत सुगंध और आधुनिक जीवन के अस्तित्ववादी चिंतन का अद्भुत समन्वय प्रस्तुत होता है। उनका रचनात्मक संसार मानवीय भावनाओं, सामाजिक चेतना और आत्मसजगता के विस्तृत क्षितिज को समेटे हुए है।",
       shortBioHindi: "डॉ. कंचन जायसवाल समकालीन भारतीय साहित्य की सशक्त, संवेदनशील और सर्वस्पर्शी आवाज़ों में से एक हैं। उनकी रचनाओं में भारतीय परंपरागत मूल्यों की कालातीत सुगंध और आधुनिक जीवन के अस्तित्ववादी चिंतन का अद्भुत समन्वय प्रस्तुत होता है। उनका रचनात्मक संसार मानवीय भावनाओं, सामाजिक चेतना और आत्मसजगता के विस्तृत क्षितिज को समेटे हुए है।",
       fullBio: [
