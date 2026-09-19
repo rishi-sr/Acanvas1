@@ -8,7 +8,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import './About.scss';
 
 const About = () => {
-  const { authors } = useContent();
+  const { authors, books } = useContent();
   const { t, lang } = useLanguage();
   const isHindi = lang === 'hi';
 
@@ -18,6 +18,29 @@ const About = () => {
 
   const kanchanPortrait = kanchan.avatarUrl || '/assets/kanchan-portrait.png';
   const garimaPortrait = garima.avatarUrl || '/assets/garima-portrait.png';
+
+  // Dynamic real count fetched from backend books collection or author profile stats
+  const kanchanPublishedBooks = (books || []).filter(b =>
+    b.status === 'published' &&
+    (b.authorId === 'kanchan' ||
+     b.author?.toLowerCase().includes('kanchan') ||
+     b.authorHindi?.includes('कंचन'))
+  );
+
+  const garimaPublishedBooks = (books || []).filter(b =>
+    b.status === 'published' &&
+    (b.authorId === 'garima' ||
+     b.author?.toLowerCase().includes('garima') ||
+     b.authorHindi?.includes('गरिमा'))
+  );
+
+  const kanchanBookCount = kanchanPublishedBooks.length > 0
+    ? kanchanPublishedBooks.length
+    : (kanchan?.stats?.publishedBooks ?? kanchan?.publishedBooks?.length ?? 0);
+
+  const garimaBookCount = garimaPublishedBooks.length > 0
+    ? garimaPublishedBooks.length
+    : (garima?.stats?.publishedBooks ?? garima?.publishedBooks?.length ?? 0);
 
   return (
     <div className="about-page">
@@ -76,7 +99,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* Right Column: Name, Tagline Quote, Bio, Book Count & Honors */}
+          {/* Right Column: Name, Tagline Quote, Bio, Dynamic Backend Book Count & Honors */}
           <div className="bio-content-pane">
             <div className="bio-header-info">
               <div className="bio-role-badge">
@@ -106,13 +129,13 @@ const About = () => {
               ))}
             </div>
 
-            {/* Book Count Bar */}
+            {/* Dynamic Book Count Bar from Backend */}
             <div className="bio-book-count-bar">
               <div className="book-count-left">
                 <BookOpen size={20} className="book-count-icon" />
                 <span className="book-count-label">{isHindi ? 'प्रकाशित पुस्तकें:' : 'Published Books:'}</span>
                 <span className="book-count-badge">
-                  {kanchan.stats?.publishedBooks || '2+'}
+                  {kanchanBookCount}
                 </span>
               </div>
               <Link to="/books" className="bio-explore-books-btn">
@@ -169,7 +192,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* Right Column: Name, Tagline Quote, Bio, Book Count & Honors */}
+          {/* Right Column: Name, Tagline Quote, Bio, Dynamic Backend Book Count & Honors */}
           <div className="bio-content-pane">
             <div className="bio-header-info">
               <div className="bio-role-badge">
@@ -199,13 +222,13 @@ const About = () => {
               ))}
             </div>
 
-            {/* Book Count Bar */}
+            {/* Dynamic Book Count Bar from Backend */}
             <div className="bio-book-count-bar">
               <div className="book-count-left">
                 <BookOpen size={20} className="book-count-icon" />
                 <span className="book-count-label">{isHindi ? 'प्रकाशित पुस्तकें:' : 'Published Books:'}</span>
                 <span className="book-count-badge">
-                  {garima.stats?.publishedBooks || '3'}
+                  {garimaBookCount}
                 </span>
               </div>
               <Link to="/books" className="bio-explore-books-btn">
