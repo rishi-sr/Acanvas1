@@ -99,7 +99,9 @@ const Gallery = () => {
           {/* Pure Image Masonry Grid - NO TEXT BLOCKS BELOW */}
           {filteredItems.length === 0 ? (
             <div className="no-gallery-items">
-              <p>इस श्रेणी में अभी कोई चित्र उपलब्ध नहीं है।</p>
+              <Feather size={36} className="empty-icon" />
+              <h3>जल्द ही चित्र दीर्घा में साहित्यिक स्मृतियाँ प्रकाशित की जाएँगी</h3>
+              <p>इस अनुभाग में नई तस्वीरें और मंच प्रस्तुतियाँ शीघ्र जोड़ी जाएँगी।</p>
             </div>
           ) : (
             <div className="gallery-masonry-grid">
