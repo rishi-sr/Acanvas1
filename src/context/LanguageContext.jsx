@@ -457,24 +457,20 @@ const translations = {
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 export const LanguageProvider = ({ children }) => {
-  const [lang, setLangState] = useState(() => {
+  const lang = 'hi';
+
+  useEffect(() => {
     try {
-      return localStorage.getItem('akshar_lang') || 'hi';
-    } catch {
-      return 'hi';
-    }
-  });
+      localStorage.removeItem('akshar_lang');
+    } catch {}
+  }, []);
 
-  const setLang = (newLang) => {
-    setLangState(newLang);
-    try { localStorage.setItem('akshar_lang', newLang); } catch {}
-  };
-
-  const toggleLang = () => setLang(lang === 'hi' ? 'en' : 'hi');
+  const setLang = () => {};
+  const toggleLang = () => {};
 
   const t = useCallback((key) => {
-    return translations[lang]?.[key] ?? translations['en']?.[key] ?? key;
-  }, [lang]);
+    return translations['hi']?.[key] ?? translations['en']?.[key] ?? key;
+  }, []);
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, toggleLang, t }}>

@@ -50,49 +50,49 @@ const Navbar = () => {
       path: '/', 
       label: t('nav.home'), 
       num: '01', 
-      sub: lang === 'hi' ? 'मुख्य पृष्ठ' : 'Sanctuary Home',
+      sub: 'मुख्य पृष्ठ',
       icon: Home 
     },
     { 
       path: '/about', 
       label: t('nav.about'), 
       num: '02', 
-      sub: lang === 'hi' ? 'कवयित्री परिचय' : 'Meet the Poets',
+      sub: 'कवयित्री परिचय',
       icon: Info 
     },
     { 
       path: '/poems', 
       label: t('nav.poems'), 
       num: '03', 
-      sub: lang === 'hi' ? 'काव्य संग्रह' : 'Poetic River',
+      sub: 'काव्य संग्रह',
       icon: Feather 
     },
     { 
       path: '/books', 
       label: t('nav.books'), 
       num: '04', 
-      sub: lang === 'hi' ? 'साहित्यिक कृतियाँ' : 'Published Books',
+      sub: 'साहित्यिक कृतियाँ',
       icon: BookOpen 
     },
     { 
       path: '/quotes', 
       label: t('nav.quotes'), 
       num: '05', 
-      sub: lang === 'hi' ? 'प्रेरणा एवं विचार' : 'Literary Musings',
+      sub: 'प्रेरणा एवं विचार',
       icon: Quote 
     },
     { 
       path: '/submit-poem', 
       label: t('nav.submitPoem'), 
       num: '06', 
-      sub: lang === 'hi' ? 'काव्य रचना भेजें' : 'Share Your Verse',
+      sub: 'काव्य रचना भेजें',
       icon: PenTool 
     },
     { 
       path: '/contact', 
       label: t('nav.contact'), 
       num: '07', 
-      sub: lang === 'hi' ? 'संवाद एवं आमंत्रण' : 'Letters & Bookings',
+      sub: 'संवाद एवं आमंत्रण',
       icon: Mail 
     }
   ];
@@ -103,43 +103,41 @@ const Navbar = () => {
       opacity: 0,
       clipPath: 'circle(0% at calc(100% - 35px) 35px)',
       transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 35,
-        when: 'afterChildren',
-        staggerChildren: 0.03,
-        staggerDirection: -1
+        duration: 0.35,
+        ease: [0.76, 0, 0.24, 1]
       }
     },
     open: {
       opacity: 1,
       clipPath: 'circle(150% at calc(100% - 35px) 35px)',
       transition: {
-        type: 'spring',
-        stiffness: 180,
-        damping: 24,
-        when: 'beforeChildren',
-        staggerChildren: 0.05,
-        delayChildren: 0.1
+        duration: 0.55,
+        ease: [0.16, 1, 0.3, 1]
       }
+    }
+  };
+
+  const navContainerVariants = {
+    closed: {
+      transition: { staggerChildren: 0.03, staggerDirection: -1 }
+    },
+    open: {
+      transition: { staggerChildren: 0.05, delayChildren: 0.15 }
     }
   };
 
   const navItemVariants = {
     closed: {
       opacity: 0,
-      y: 22,
-      scale: 0.96,
-      transition: { duration: 0.2, ease: 'easeInOut' }
+      x: 30,
+      transition: { duration: 0.2 }
     },
     open: {
       opacity: 1,
-      y: 0,
-      scale: 1,
+      x: 0,
       transition: {
-        type: 'spring',
-        stiffness: 240,
-        damping: 22
+        duration: 0.4,
+        ease: [0.16, 1, 0.3, 1]
       }
     }
   };
@@ -190,17 +188,6 @@ const Navbar = () => {
 
             {/* Right Action CTA & Mobile Trigger */}
             <div className="nav-actions">
-              {/* Language Toggle */}
-              <button
-                className="lang-toggle-btn"
-                onClick={toggleLang}
-                aria-label="Toggle Language"
-                title={lang === 'hi' ? 'Switch to English' : 'हिंदी में देखें'}
-              >
-                <span className="lang-flag">{lang === 'hi' ? '🇬🇧' : '🇮🇳'}</span>
-                <span className="lang-label">{t('lang.toggle')}</span>
-              </button>
-
               <Link to="/contact" className="btn-royal nav-cta-btn">
                 <Feather size={15} />
                 <span>{t('nav.invitePoets')}</span>
@@ -334,9 +321,7 @@ const Navbar = () => {
                   <div className="poet-tribute">
                     <p className="poet-names">{t('nav.poets')}</p>
                     <p className="poet-tagline">
-                      {lang === 'hi'
-                        ? 'अक्षर कैनवास • शब्द • कला • आत्मा का संगीत'
-                        : 'Akshar Canvas • Words • Art • Music of the Soul'}
+                      अक्षर कैनवास • शब्द • कला • आत्मा का संगीत
                     </p>
                   </div>
                 </motion.div>
