@@ -44,7 +44,7 @@ const Footer = () => {
                 <polygon points="10 15 15 12 10 9 10 15" fill="currentColor"/>
               </svg>
             </a>
-            <a href="mailto:contact@aksharcanvas.com" className="social-icon-btn" aria-label="Email">
+            <a href="mailto:aksharcanvas@gmail.com" className="social-icon-btn" aria-label="Email">
               <Mail size={17} />
             </a>
           </div>

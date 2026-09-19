@@ -102,7 +102,7 @@ const Contact = () => {
                   <div className="item-text">
                     <div className="lbl">{t('contact.info.email.lbl')}</div>
                     <div className="val">
-                      <a href="mailto:contact@aksharcanvas.com">contact@aksharcanvas.com</a>
+                      <a href="mailto:aksharcanvas@gmail.com">aksharcanvas@gmail.com</a>
                     </div>
                   </div>
                 </div>

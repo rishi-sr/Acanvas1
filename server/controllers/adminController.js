@@ -66,7 +66,7 @@ export const getSystemStatus = async (req, res) => {
       emailService: {
         mode: emailConfigured ? 'live_smtp' : 'simulated_logger',
         host: process.env.SMTP_HOST || 'Not Configured (Console Log Fallback)',
-        adminTarget: process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@aksharcanvas.com'
+        adminTarget: process.env.ADMIN_NOTIFICATION_EMAIL || 'aksharcanvas@gmail.com'
       },
       security: {
         jwtEnabled: true,

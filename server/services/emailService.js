@@ -111,7 +111,7 @@ export const notifyPoemSubmission = async (submissionData) => {
   const transporter = getSmtpTransporter();
   if (transporter) {
     try {
-      const fromEmail = process.env.EMAIL_FROM || '"Akshar Canvas Literary Portal" <notifications@aksharcanvas.com>';
+      const fromEmail = process.env.EMAIL_FROM || '"Akshar Canvas Literary Portal" <aksharcanvas@gmail.com>';
       await transporter.sendMail({
         from: fromEmail,
         to: adminEmail,
@@ -197,7 +197,7 @@ export const notifyContactInquiry = async (inquiryData) => {
   const transporter = getSmtpTransporter();
   if (transporter) {
     try {
-      const fromEmail = process.env.EMAIL_FROM || '"Akshar Canvas Portal" <notifications@aksharcanvas.com>';
+      const fromEmail = process.env.EMAIL_FROM || '"Akshar Canvas Portal" <aksharcanvas@gmail.com>';
       await transporter.sendMail({
         from: fromEmail,
         to: adminEmail,

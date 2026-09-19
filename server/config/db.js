@@ -112,7 +112,7 @@ const defaultDatabase = {
       password: "Canvas@0022",
       role: "admin",
       name: "Akshar Canvas Administrator",
-      email: "admin@aksharcanvas.com"
+      email: "aksharcanvas@gmail.com"
     }
   ]
 };
@@ -281,7 +281,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, default: 'admin' },
   name: { type: String, default: 'Administrator' },
-  email: { type: String, default: 'admin@aksharcanvas.com' },
+  email: { type: String, default: 'aksharcanvas@gmail.com' },
   createdAt: { type: String, default: () => new Date().toISOString() }
 }, { strict: false });
 
@@ -319,7 +319,7 @@ export const connectMongoIfConfigured = async () => {
           password: process.env.ADMIN_PASSWORD || 'Canvas@0022',
           role: 'admin',
           name: 'Akshar Canvas Administrator',
-          email: 'admin@aksharcanvas.com'
+          email: 'aksharcanvas@gmail.com'
         },
         { upsert: true, new: true }
       );
@@ -435,7 +435,7 @@ export const db = {
         password: newPassword,
         role: 'admin',
         name: 'Akshar Canvas Administrator',
-        email: 'admin@aksharcanvas.com',
+        email: 'aksharcanvas@gmail.com',
         updatedAt: new Date().toISOString()
       });
     }
