@@ -76,13 +76,6 @@ const Books = () => {
             <Feather size={15} />
             <span>डॉ. कंचन लता जायसवाल</span>
           </button>
-          <button
-            type="button"
-            className={`author-tab-pill ${selectedAuthor === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedAuthor('all')}
-          >
-            <span>सभी पुस्तकें ({books.length})</span>
-          </button>
         </div>
 
         {/* Published Books Section */}
