@@ -20,12 +20,7 @@ const ASPECT_RATIO_LABELS = {
 
 const Gallery = () => {
   const { gallery = [] } = useContent();
-  const [activeFilter, setActiveFilter] = useState('all');
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-
-  const filteredItems = activeFilter === 'all'
-    ? gallery
-    : gallery.filter(item => item.category === activeFilter);
 
   return (
     <div className="gallery-page">
@@ -48,56 +43,11 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* Filter Tabs */}
+      {/* Gallery Content */}
       <section className="gallery-content">
         <div className="container">
-          <div className="gallery-filters">
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('all')}
-            >
-              सभी स्मृतियाँ ({gallery.length})
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'stage' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('stage')}
-            >
-              मंच प्रस्तुतियाँ
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'launch' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('launch')}
-            >
-              पुस्तक विमोचन
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'meet' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('meet')}
-            >
-              साहित्यिक गोष्ठी
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'awards' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('awards')}
-            >
-              सम्मान
-            </button>
-            <button
-              type="button"
-              className={`filter-btn ${activeFilter === 'workshop' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('workshop')}
-            >
-              कार्यशाला
-            </button>
-          </div>
-
           {/* Pure Image Masonry Grid - NO TEXT BLOCKS BELOW */}
-          {filteredItems.length === 0 ? (
+          {gallery.length === 0 ? (
             <div className="no-gallery-items">
               <Feather size={36} className="empty-icon" />
               <h3>जल्द ही चित्र दीर्घा में साहित्यिक स्मृतियाँ प्रकाशित की जाएँगी</h3>
@@ -106,7 +56,7 @@ const Gallery = () => {
           ) : (
             <div className="gallery-masonry-grid">
               <AnimatePresence mode="popLayout">
-                {filteredItems.map(item => {
+                {gallery.map(item => {
                   const ratio = item.aspectRatio || '1:1';
                   const ratioClass = ratio === '16:9' ? 'aspect-16-9' : ratio === '9:16' ? 'aspect-9-16' : 'aspect-1-1';
 
