@@ -103,7 +103,20 @@
   "samkalieen": [],
   "gallery": [],
   "submissions": [],
-  "inquiries": [],
+  "inquiries": [
+    {
+      "id": "inq-1789849043766",
+      "name": "Test Visitor",
+      "email": "visitor@example.com",
+      "phone": "+91 9876543210",
+      "city": "Varanasi",
+      "eventType": "पुस्तक विमोचन (Book Launch)",
+      "date": "2026-10-15",
+      "message": "We would love to invite the authors for an upcoming literary symposium.",
+      "submittedAt": "2026-09-19T20:17:23.766Z",
+      "status": "pending"
+    }
+  ],
   "users": [
     {
       "id": "admin",

@@ -105,6 +105,8 @@ app.use('/api/submissions', submissionRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/contact', inquiryRoutes);
+app.use('/api/inquiry', inquiryRoutes);
+app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/workshops', workshopRoutes);

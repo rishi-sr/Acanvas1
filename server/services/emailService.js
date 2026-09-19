@@ -50,11 +50,26 @@ const sendViaEmailJs = async (templateParams) => {
 };
 
 const getSmtpTransporter = () => {
-  const host = process.env.SMTP_HOST;
+  // 1. Direct Gmail Service Support
+  const gmailUser = (process.env.GMAIL_USER || (process.env.SMTP_USER && process.env.SMTP_USER.includes('@gmail.com') ? process.env.SMTP_USER : '')).trim();
+  const gmailPass = (process.env.GMAIL_APP_PASSWORD || process.env.SMTP_PASS || '').trim();
+
+  if (gmailUser && gmailPass) {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: gmailUser,
+        pass: gmailPass.replace(/\s+/g, '') // remove any spaces in Google App Password
+      }
+    });
+  }
+
+  // 2. Standard SMTP Host Configuration
+  const host = (process.env.SMTP_HOST || '').trim();
   const port = parseInt(process.env.SMTP_PORT, 10) || 587;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const secure = process.env.SMTP_SECURE === 'true';
+  const user = (process.env.SMTP_USER || '').trim();
+  const pass = (process.env.SMTP_PASS || '').trim();
+  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
 
   if (!host || !user || !pass) {
     return null;
@@ -107,7 +122,7 @@ export const notifyPoemSubmission = async (submissionData) => {
     }
   }
 
-  // 2. Try SMTP
+  // 2. Try SMTP / Direct Gmail
   const transporter = getSmtpTransporter();
   if (transporter) {
     try {
@@ -115,16 +130,29 @@ export const notifyPoemSubmission = async (submissionData) => {
       await transporter.sendMail({
         from: fromEmail,
         to: adminEmail,
-        subject: `📜 New Poem Submission: "${title}" by ${poetName}`,
+        replyTo: email || undefined,
+        subject: `📜 नवीन कविता प्रविष्टि: "${title}" — ${poetName}`,
         html: `
-          <div style="font-family: Georgia, serif; max-width: 600px; padding: 20px; border: 1px solid #C5A059; background: #FAF8F5;">
-            <h2 style="color: #8B0000;">New Reader Poem: "${title}"</h2>
-            <p><strong>Poet:</strong> ${poetName} (${city || 'N/A'})</p>
-            <p><strong>Email:</strong> ${email || 'N/A'}</p>
-            <p><strong>Category:</strong> ${category}</p>
-            <hr/>
-            <pre style="white-space: pre-wrap; font-family: Georgia, serif; line-height: 1.8;">${poemText}</pre>
-            ${reflection ? `<p><em>Poet Note: ${reflection}</em></p>` : ''}
+          <div style="font-family: 'Segoe UI', Georgia, serif; max-width: 620px; margin: 0 auto; padding: 24px; border: 2px solid #C5A059; border-radius: 12px; background: #FAF8F5; color: #2C1810;">
+            <div style="text-align: center; border-bottom: 2px solid #8B0000; padding-bottom: 12px; margin-bottom: 18px;">
+              <h1 style="color: #8B0000; margin: 0; font-size: 24px;">अक्षर कैनवास (Akshar Canvas)</h1>
+              <p style="color: #C5A059; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;">नवीन पाठक रचना प्रविष्टि (Reader Poem Submission)</p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px;">
+              <tr><td style="padding: 6px 0; color: #7D6B6E; width: 110px;"><strong>कवि / रचनाकार:</strong></td><td><strong>${poetName}</strong> (${city || 'N/A'})</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>ईमेल:</strong></td><td><a href="mailto:${email}" style="color: #8B0000; text-decoration: none;">${email || 'N/A'}</a></td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>रचना शीर्षक:</strong></td><td style="color: #8B0000; font-weight: bold;">"${title}"</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>विधा / श्रेणी:</strong></td><td>${category}</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>समय:</strong></td><td>${currentTime}</td></tr>
+            </table>
+            <div style="background: #FFF9F2; border-left: 4px solid #8B0000; padding: 16px; border-radius: 6px; margin: 16px 0;">
+              <h3 style="color: #8B0000; margin: 0 0 10px 0; font-size: 16px;">काव्य पंक्तियाँ:</h3>
+              <pre style="white-space: pre-wrap; font-family: 'Segoe UI', Georgia, serif; font-size: 15px; line-height: 1.8; color: #1a1a1a; margin: 0;">${poemText}</pre>
+            </div>
+            ${reflection ? `<p style="margin: 12px 0; font-style: italic; color: #555;"><strong>रचनाकार का विचार:</strong> "${reflection}"</p>` : ''}
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed #C5A059; text-align: center;">
+              <a href="mailto:${email}?subject=Re: Your poem '${encodeURIComponent(title)}' on Akshar Canvas" style="background: #8B0000; color: #FFFFFF; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">कवि को सीधे ईमेल उत्तर दें (Reply to Poet)</a>
+            </div>
           </div>
         `
       });
@@ -143,8 +171,7 @@ export const notifyPoemSubmission = async (submissionData) => {
   console.log('\n📧 [EMAIL SERVICE - MOCK DISPATCH: POEM SUBMISSION]');
   console.log(`To: ${adminEmail}`);
   console.log(`Subject: 📜 New Poem Submission: "${title}" by ${poetName}`);
-  console.log(`Details: ${poetName} (${city || 'N/A'}) - ${email || 'N/A'}`);
-  console.log(`Excerpt: ${poemText.slice(0, 80)}...`);
+  console.log(`Details: Poet: ${poetName} | Category: ${category} | Email: ${email}`);
   console.log('---------------------------------------------------\n');
   return { success: true, simulated: true };
 };
@@ -193,7 +220,7 @@ export const notifyContactInquiry = async (inquiryData) => {
     }
   }
 
-  // 2. Try SMTP
+  // 2. Try SMTP / Direct Gmail
   const transporter = getSmtpTransporter();
   if (transporter) {
     try {
@@ -201,18 +228,30 @@ export const notifyContactInquiry = async (inquiryData) => {
       await transporter.sendMail({
         from: fromEmail,
         to: adminEmail,
-        subject: `💌 New Contact Inquiry from ${name} (${eventType})`,
+        replyTo: email || undefined,
+        subject: `💌 नवीन संपर्क पूछताछ: ${name} (${eventType || 'आमंत्रण'})`,
         html: `
-          <div style="font-family: Georgia, serif; max-width: 600px; padding: 20px; border: 1px solid #C5A059; background: #FAF8F5;">
-            <h2 style="color: #8B0000;">New Contact Inquiry</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>City:</strong> ${city || 'N/A'}</p>
-            <p><strong>Event:</strong> ${eventType}</p>
-            <p><strong>Date:</strong> ${date || 'Flexible'}</p>
-            <hr/>
-            <p style="white-space: pre-wrap;">${message}</p>
+          <div style="font-family: 'Segoe UI', Georgia, serif; max-width: 620px; margin: 0 auto; padding: 24px; border: 2px solid #C5A059; border-radius: 12px; background: #FAF8F5; color: #2C1810;">
+            <div style="text-align: center; border-bottom: 2px solid #8B0000; padding-bottom: 12px; margin-bottom: 18px;">
+              <h1 style="color: #8B0000; margin: 0; font-size: 24px;">अक्षर कैनवास (Akshar Canvas)</h1>
+              <p style="color: #C5A059; margin: 4px 0 0 0; font-size: 14px; font-weight: bold;">नवीन संपर्क एवं आमंत्रण संदेश (Contact & Literary Inquiry)</p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px;">
+              <tr><td style="padding: 6px 0; color: #7D6B6E; width: 110px;"><strong>प्रेषक (Name):</strong></td><td><strong>${name}</strong></td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>ईमेल (Email):</strong></td><td><a href="mailto:${email}" style="color: #8B0000; text-decoration: none;">${email}</a></td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>फोन / मोबाइल:</strong></td><td><a href="tel:${phone}" style="color: #8B0000; text-decoration: none;">${phone || 'N/A'}</a></td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>स्थान / शहर:</strong></td><td>${city || 'N/A'}</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>उद्देश्य / प्रसंग:</strong></td><td style="color: #8B0000; font-weight: bold;">${eventType}</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>प्रस्तावित तिथि:</strong></td><td>${date || 'Flexible / विचारणीय'}</td></tr>
+              <tr><td style="padding: 6px 0; color: #7D6B6E;"><strong>प्राप्ति समय:</strong></td><td>${currentTime}</td></tr>
+            </table>
+            <div style="background: #FFF9F2; border-left: 4px solid #8B0000; padding: 16px; border-radius: 6px; margin: 16px 0;">
+              <h3 style="color: #8B0000; margin: 0 0 10px 0; font-size: 16px;">संदेश विवरण:</h3>
+              <p style="white-space: pre-wrap; font-size: 15px; line-height: 1.8; color: #1a1a1a; margin: 0;">${message}</p>
+            </div>
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed #C5A059; text-align: center;">
+              <a href="mailto:${email}?subject=Re: ${encodeURIComponent(eventType || 'Your Inquiry to Akshar Canvas')}" style="background: #8B0000; color: #FFFFFF; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">सीधे ईमेल उत्तर भेजें (Reply to ${name})</a>
+            </div>
           </div>
         `
       });
