@@ -59,58 +59,163 @@
       border: 1px solid rgba(197, 160, 89, 0.3);
       overflow: hidden;
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 320px 1fr;
 
       @include respond-to('lg') {
         grid-template-columns: 1fr;
       }
 
       .bio-sidebar {
-        background: linear-gradient(180deg, #8B0000 0%, #4D0000 100%);
+        background: linear-gradient(180deg, #7A0000 0%, #3D0000 100%);
         color: #ffffff;
-        padding: 3rem 1.5rem;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
+        justify-content: flex-start;
+        border-right: 1px solid rgba(197, 160, 89, 0.25);
+        overflow: hidden;
 
         &.dark-variant {
-          background: linear-gradient(180deg, #1C191A 0%, #5C0000 100%);
+          background: linear-gradient(180deg, #1C191A 0%, #450000 100%);
         }
 
-        .bio-avatar-frame {
+        .bio-photo-hero {
           position: relative;
-          @include flex-center;
-        }
+          width: 100%;
+          height: 320px;
+          overflow: hidden;
+          background: rgba(0, 0, 0, 0.25);
 
-        .bio-monogram {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 3px solid $gold-primary;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-          background: rgba(255, 255, 255, 0.08);
-          transition: transform 0.3s ease;
+          .bio-photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+            transition: transform 0.5s ease;
 
-          &:hover {
-            transform: scale(1.03);
+            &:hover {
+              transform: scale(1.03);
+            }
+          }
+
+          .bio-photo-fallback {
+            width: 100%;
+            height: 100%;
+            @include flex-center;
+            font-family: $font-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.3), rgba(0, 0, 0, 0.6));
+          }
+
+          .bio-photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(to top, rgba(61, 0, 0, 0.95), transparent);
+            pointer-events: none;
           }
         }
 
-        .bio-monogram-fallback {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.12);
-          border: 3px solid $gold-primary;
-          color: #ffffff;
-          font-family: $font-serif;
-          font-size: 3.5rem;
-          font-weight: 800;
-          @include flex-center;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        &.dark-variant .bio-photo-overlay {
+          background: linear-gradient(to top, rgba(28, 25, 26, 0.95), transparent);
+        }
+
+        .bio-sidebar-footer {
+          padding: 1.5rem 1.4rem 1.8rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          flex-grow: 1;
+          background: rgba(0, 0, 0, 0.16);
+          backdrop-filter: blur(4px);
+
+          .bio-sidebar-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: $gold-light;
+            font-family: $font-serif;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 0.6rem;
+
+            .icon {
+              color: $gold-primary;
+            }
+          }
+
+          .bio-sidebar-books-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+
+            .bio-sidebar-book-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.55rem;
+              font-size: 0.88rem;
+              line-height: 1.4;
+
+              .book-dot {
+                color: $gold-primary;
+                font-size: 0.75rem;
+                margin-top: 0.15rem;
+              }
+
+              .book-details {
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+
+                .book-title {
+                  color: #ffffff;
+                  font-weight: 600;
+                  font-family: $font-serif;
+                  font-size: 0.92rem;
+                }
+
+                .book-type-tag {
+                  display: inline-block;
+                  align-self: flex-start;
+                  font-size: 0.72rem;
+                  color: $gold-light;
+                  background: rgba(197, 160, 89, 0.15);
+                  border: 1px solid rgba(197, 160, 89, 0.3);
+                  padding: 0.1rem 0.45rem;
+                  border-radius: 4px;
+                  margin-top: 0.2rem;
+                }
+              }
+            }
+          }
+
+          .bio-books-link-btn {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.45rem 0.9rem;
+            border-radius: $radius-pill;
+            text-decoration: none;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: $gold-primary;
+              border-color: $gold-primary;
+              color: #1a1617;
+            }
+          }
         }
       }
 
