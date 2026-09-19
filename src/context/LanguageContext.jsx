@@ -44,7 +44,7 @@ const translations = {
     'spotlight.subtitle':    'साहित्य के स्तंभ',
     'spotlight.title1':      'कवयित्री',
     'spotlight.title2':      'परिचय',
-    'spotlight.desc':        'दो पीढ़ियों का अद्भुत समन्वय — शाश्वत सांस्कृतिक गहराई और सजीव आधुनिक संवेदनशीलता का अनूठा संगम।',
+    'spotlight.desc':        '',
     'spotlight.books':       'पुस्तकें',
     'spotlight.service':     'साहित्य सेवा',
     'spotlight.journey':     'सृजन यात्रा',

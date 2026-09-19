@@ -32,7 +32,6 @@ const PoetsSpotlight = () => {
           <h2 className="main-title">
             {t('spotlight.title1')} <span className="highlight">{t('spotlight.title2')}</span>
           </h2>
-          <p className="desc">{t('spotlight.desc')}</p>
           <div className="ornament-divider">
             <span className="line" /><span className="diamond" /><span className="line" />
           </div>
