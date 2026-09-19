@@ -19,7 +19,7 @@ const translations = {
     'lang.current':    'हिंदी',
 
     // ── Hero ──
-    'hero.badge':        'अक्षर कैनवास • कविता, कला एवं आत्मा का धाम',
+    'hero.badge':        'अक्षर कैनवास • कला एवं संस्कृति की त्रिवेणी',
     'hero.title1':       'जहाँ विचार रंग बनते हैं,',
     'hero.title2':       'और शब्द साहित्य में ढलते हैं।',
     'hero.subtitle':     'कवयित्री कंचन लता जायसवाल एवं गरिमा सिंह',
@@ -244,7 +244,7 @@ const translations = {
     'lang.current':    'EN',
 
     // ── Hero ──
-    'hero.badge':        'Akshar Canvas • Words • Art • Soul',
+    'hero.badge':        'Akshar Canvas • Confluence of Art & Culture',
     'hero.title1':       'Where Thoughts Become Colors,',
     'hero.title2':       'And Words Shape into Literature.',
     'hero.subtitle':     'Poetesses Kanchan Lata Jaiswal & Garima Singh',
