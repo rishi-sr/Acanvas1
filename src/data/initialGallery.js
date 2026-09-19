@@ -60,3 +60,4 @@ export const initialGallery = [
     caption: "छंद और रचनात्मक लेखन सत्र में नए रचनाकारों का मार्गदर्शन।"
   }
 ];
+

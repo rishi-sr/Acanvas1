@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, ZoomIn, Calendar, MapPin, Tag } from 'lucide-react';
+import { X, ZoomIn, Calendar, MapPin, Sparkles, Tag, Feather } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import './Gallery.scss';
 
@@ -14,7 +14,7 @@ const CATEGORY_MAP = {
 
 const ASPECT_RATIO_LABELS = {
   '1:1': '1:1 Square',
-  '16:9': '16:9 Wide',
+  '16:9': '16:9 Landscape',
   '9:16': '9:16 Portrait'
 };
 
@@ -96,7 +96,7 @@ const Gallery = () => {
             </button>
           </div>
 
-          {/* Dynamic Masonry Grid */}
+          {/* Pure Image Masonry Grid - NO TEXT BLOCKS BELOW */}
           {filteredItems.length === 0 ? (
             <div className="no-gallery-items">
               <p>इस श्रेणी में अभी कोई चित्र उपलब्ध नहीं है।</p>
@@ -113,39 +113,23 @@ const Gallery = () => {
                       key={item.id}
                       layout
                       className={`gallery-masonry-item ${ratioClass}`}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: 0.3 }}
                       onClick={() => setSelectedPhoto(item)}
                     >
-                      <div className="gallery-card">
-                        <div className={`img-container ${ratioClass}`}>
+                      <div className="pure-gallery-card">
+                        <div className={`img-wrapper ${ratioClass}`}>
                           <img src={item.image} alt={item.title} loading="lazy" />
-                          <div className="ratio-tag-badge">
-                            {ratio}
-                          </div>
-                          <div className="img-overlay">
-                            <ZoomIn size={26} className="zoom-icon" />
-                            <span className="zoom-text">बड़ा करके देखें</span>
-                          </div>
-                        </div>
-
-                        <div className="card-info">
-                          {item.category && (
-                            <span className="card-cat-badge">
-                              {CATEGORY_MAP[item.category] || item.category}
-                            </span>
-                          )}
-                          <h3 className="card-title">{item.title}</h3>
-                          {(item.date || item.location) && (
-                            <div className="card-meta">
-                              {item.date && <span><Calendar size={12} /> {item.date}</span>}
-                              {item.date && item.location && <span>•</span>}
-                              {item.location && <span><MapPin size={12} /> {item.location}</span>}
+                          
+                          {/* Subtle overlay on hover */}
+                          <div className="img-hover-overlay">
+                            <div className="overlay-content">
+                              <ZoomIn size={28} className="zoom-icon" />
+                              <span className="view-text">विवरण देखें</span>
                             </div>
-                          )}
-                          {item.caption && <p className="card-caption">{item.caption}</p>}
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -157,47 +141,84 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* Lightbox Modal */}
+      {/* 2-COLUMN SIDE-BY-SIDE LIGHTBOX MODAL */}
       <AnimatePresence>
         {selectedPhoto && (
-          <div className="gallery-lightbox" onClick={() => setSelectedPhoto(null)}>
+          <div className="gallery-lightbox-backdrop" onClick={() => setSelectedPhoto(null)}>
             <motion.div
-              className="lightbox-content"
-              initial={{ opacity: 0, scale: 0.92 }}
+              className="gallery-lightbox-modal"
+              initial={{ opacity: 0, scale: 0.94 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
+              exit={{ opacity: 0, scale: 0.94 }}
+              transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button */}
               <button
                 type="button"
                 className="lightbox-close-btn"
                 onClick={() => setSelectedPhoto(null)}
-                aria-label="Close"
+                aria-label="Close modal"
               >
-                <X size={22} />
+                <X size={20} />
               </button>
 
-              <div className="lightbox-image-wrap">
+              {/* Left Column: Full Image Display */}
+              <div className="lightbox-media-pane">
                 <img src={selectedPhoto.image} alt={selectedPhoto.title} />
               </div>
 
-              <div className="lightbox-details">
-                <div className="lightbox-header-row">
-                  <h3>{selectedPhoto.title}</h3>
-                  {selectedPhoto.aspectRatio && (
+              {/* Right Column: Image Details Pane */}
+              <div className="lightbox-info-pane">
+                <div className="info-top-tags">
+                  {selectedPhoto.category && (
                     <span className="royal-tag">
+                      {CATEGORY_MAP[selectedPhoto.category] || selectedPhoto.category}
+                    </span>
+                  )}
+                  {selectedPhoto.aspectRatio && (
+                    <span className="royal-tag gold">
                       {ASPECT_RATIO_LABELS[selectedPhoto.aspectRatio] || selectedPhoto.aspectRatio}
                     </span>
                   )}
                 </div>
+
+                <h2 className="modal-photo-title">
+                  {selectedPhoto.title}
+                </h2>
+
                 {(selectedPhoto.date || selectedPhoto.location) && (
-                  <div className="lightbox-meta">
-                    {selectedPhoto.date && <span><Calendar size={13} /> {selectedPhoto.date}</span>}
-                    {selectedPhoto.date && selectedPhoto.location && <span>•</span>}
-                    {selectedPhoto.location && <span><MapPin size={13} /> {selectedPhoto.location}</span>}
+                  <div className="modal-photo-meta">
+                    {selectedPhoto.date && (
+                      <span className="meta-item">
+                        <Calendar size={14} />
+                        <span>{selectedPhoto.date}</span>
+                      </span>
+                    )}
+                    {selectedPhoto.date && selectedPhoto.location && <span className="meta-sep">•</span>}
+                    {selectedPhoto.location && (
+                      <span className="meta-item">
+                        <MapPin size={14} />
+                        <span>{selectedPhoto.location}</span>
+                      </span>
+                    )}
                   </div>
                 )}
-                {selectedPhoto.caption && <p>{selectedPhoto.caption}</p>}
+
+                <div className="modal-divider" />
+
+                <div className="modal-photo-caption">
+                  {selectedPhoto.caption ? (
+                    <p>{selectedPhoto.caption}</p>
+                  ) : (
+                    <p className="no-caption">अक्षर कैनवास साहित्यिक दीर्घा का अविस्मरणीय क्षण।</p>
+                  )}
+                </div>
+
+                <div className="modal-footer-brand">
+                  <Feather size={14} />
+                  <span>अक्षर कैनवास • कला एवं संस्कृति की त्रिवेणी</span>
+                </div>
               </div>
             </motion.div>
           </div>

@@ -18,3 +18,4 @@ router.delete('/:id', authenticateToken, requireAdmin, deleteGalleryItem);
 router.post('/upload', authenticateToken, requireAdmin, uploadImage.single('image'), uploadGalleryImage);
 
 export default router;
+
