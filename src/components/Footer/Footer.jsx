@@ -11,15 +11,17 @@ const Footer = () => {
     <footer className="site-footer">
       <div className="footer-watercolor" />
       <div className="container">
-        {/* Brand & Socials Section */}
-        <div className="footer-brand-section">
+        {/* Horizontal Brand Row */}
+        <div className="footer-brand-horizontal">
           <div className="brand-wrap">
             <img src="/assets/logo.png" alt="Akshar Canvas" className="footer-logo" />
             <div className="title">AKSHAR CANVAS</div>
           </div>
+
           <p className="brand-desc">
             {t('footer.brand.desc')}
           </p>
+
           <div className="social-links">
             {/* Instagram */}
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Instagram">
