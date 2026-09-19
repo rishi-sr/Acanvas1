@@ -197,18 +197,6 @@ const Books = () => {
             </div>
           </div>
         )}
-
-        {/* Pre-Order VIP Banner */}
-        <div className="preorder-vip-banner">
-          <h2 className="vip-title">{t('booksPage.vip.title')}</h2>
-          <p className="vip-desc">
-            {t('booksPage.vip.desc')}
-          </p>
-          <a href="#/contact?subject=signed_copy" className="btn-royal">
-            <Feather size={16} />
-            <span>{t('booksPage.vip.btn')}</span>
-          </a>
-        </div>
       </section>
 
       {selectedBook && (
