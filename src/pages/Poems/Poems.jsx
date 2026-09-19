@@ -1,63 +1,77 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Feather, BookOpen, Heart, ArrowRight, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, Feather, BookOpen, Heart, ArrowRight, Sparkles, Quote } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
-import { useLanguage } from '../../context/LanguageContext';
 import PoemReaderModal from '../../components/PoemReaderModal/PoemReaderModal';
 import './Poems.scss';
 
+const RACHNAYE_TABS = [
+  { id: 'anamika', label: 'अनामिका', icon: '✦' },
+  { id: 'bioscope', label: 'बायोस्कोप', icon: '✦' },
+  { id: 'kalam_ka_karwan', label: 'कलम का कारवां', icon: '✦' },
+  { id: 'kshitiz_ki_aor', label: 'क्षितिज की ओर', icon: '✦' },
+  { id: 'udharan', label: 'उद्धरण', icon: '✦' }
+];
+
 const Poems = () => {
-  const { poems, toggleLike, likedItems } = useContent();
-  const { t } = useLanguage();
+  const { poems = [], quotes = [], toggleLike, likedItems = {} } = useContent();
+  const [activeTab, setActiveTab] = useState('anamika');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPoet, setSelectedPoet] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [activeModalPoem, setActiveModalPoem] = useState(null);
 
-  // Extract unique categories
-  const categories = useMemo(() => {
-    const set = new Set(poems.map(p => p.category));
-    return ['all', ...Array.from(set)];
-  }, [poems]);
+  // Filter items based on active tab
+  const tabItems = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
 
-  // Filter poems
-  const filteredPoems = useMemo(() => {
-    return poems.filter(poem => {
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch = !q ||
-        poem.title.toLowerCase().includes(q) ||
-        (poem.titleHindi && poem.titleHindi.includes(q)) ||
-        poem.poet.toLowerCase().includes(q) ||
-        poem.stanzas.some(s => s.toLowerCase().includes(q)) ||
-        (poem.book && poem.book.toLowerCase().includes(q));
+    if (activeTab === 'udharan') {
+      return (quotes || []).filter(item => {
+        if (!q) return true;
+        return (
+          item.quote?.toLowerCase().includes(q) ||
+          item.author?.toLowerCase().includes(q) ||
+          item.authorHindi?.includes(q) ||
+          item.sourceBook?.toLowerCase().includes(q)
+        );
+      });
+    }
 
-      const poetStr = (poem.poet || '').toLowerCase();
-      const isKanchan = poetStr.includes('kanchan') || poetStr.includes('कंचन');
-      const isGarima = poetStr.includes('garima') || poetStr.includes('गरिमा');
-      const isJoint = poetStr.includes('&') || poetStr.includes('joint') || poetStr.includes('collab') || (isKanchan && isGarima);
+    // For other tabs (Anamika, Bioscope, Kalam Ka Karwan, Kshitiz Ki Aor)
+    return (poems || []).filter(item => {
+      const cat = (item.category || '').toLowerCase();
+      const tabKey = activeTab.toLowerCase();
 
-      const matchesPoet = selectedPoet === 'all' ||
-        (selectedPoet === 'kanchan' && isKanchan && !isJoint) ||
-        (selectedPoet === 'garima' && isGarima && !isJoint) ||
-        (selectedPoet === 'joint' && isJoint);
+      // Check if poem matches this specific tab category
+      const matchesTab =
+        cat.includes(tabKey) ||
+        (activeTab === 'anamika' && (cat.includes('anamika') || cat.includes('अनामिका'))) ||
+        (activeTab === 'bioscope' && (cat.includes('bioscope') || cat.includes('bicescope') || cat.includes('बायोस्कोप') || cat.includes('बाइस्कोप'))) ||
+        (activeTab === 'kalam_ka_karwan' && (cat.includes('kalam') || cat.includes('karwan') || cat.includes('कलम') || cat.includes('कारवां'))) ||
+        (activeTab === 'kshitiz_ki_aor' && (cat.includes('kshitiz') || cat.includes('क्षितिज')));
 
-      const matchesCategory = selectedCategory === 'all' || poem.category === selectedCategory;
+      if (!matchesTab) return false;
 
-      return matchesSearch && matchesPoet && matchesCategory;
+      if (!q) return true;
+      return (
+        item.title?.toLowerCase().includes(q) ||
+        item.titleHindi?.includes(q) ||
+        item.poet?.toLowerCase().includes(q) ||
+        (item.stanzas && item.stanzas.some(s => s.toLowerCase().includes(q))) ||
+        (item.book && item.book.toLowerCase().includes(q))
+      );
     });
-  }, [poems, searchQuery, selectedPoet, selectedCategory]);
+  }, [poems, quotes, activeTab, searchQuery]);
 
   return (
     <div className="poems-page">
-      <section className="poems-header">
+      {/* Hero Header */}
+      <section className="poems-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">{t('poems.subtitle')}</span>
             <h1 className="main-title">
-              {t('poems.title1')} <span className="highlight">{t('poems.title2')}</span>
+              रचनाएँ
             </h1>
             <p className="desc">
-              {t('poems.desc')}
+              अस्तित्वगत सत्य, कोमल प्रेम और सांस्कृतिक अनुगूँज को समेटे चुनिंदा रचनाएँ।
             </p>
             <div className="ornament-divider">
               <span className="line" />
@@ -68,129 +82,164 @@ const Poems = () => {
         </div>
       </section>
 
-      <section className="container">
-        {/* Filter Toolbar */}
-        <div className="poems-filter-bar">
-          <div className="search-input-wrap">
-            <Search className="search-icon" size={20} />
+      {/* Main Tabs and Content Section */}
+      <section className="container rachnaye-container">
+        {/* Category Tabs Bar */}
+        <div className="rachnaye-tabs-nav">
+          {RACHNAYE_TABS.map(tab => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`rachnaye-tab-pill ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setSearchQuery('');
+              }}
+            >
+              <span className="tab-icon">{tab.icon}</span>
+              <span className="tab-text">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Search Bar */}
+        <div className="rachnaye-search-wrap">
+          <div className="search-input-box">
+            <Search className="search-icon" size={18} />
             <input
               type="text"
-              placeholder={t('poems.searchPlaceholder')}
+              placeholder="रचना, शीर्षक या पंक्ति खोजें..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
-
-          <div className="filters-row">
-            <div className="poet-tabs">
+            {searchQuery && (
               <button
-                className={`tab-btn ${selectedPoet === 'all' ? 'active' : ''}`}
-                onClick={() => setSelectedPoet('all')}
+                type="button"
+                className="clear-search-btn"
+                onClick={() => setSearchQuery('')}
               >
-                {t('poems.filter.all')} ({poems.length})
+                ✕
               </button>
-              <button
-                className={`tab-btn ${selectedPoet === 'kanchan' ? 'active' : ''}`}
-                onClick={() => setSelectedPoet('kanchan')}
-              >
-                {t('poems.filter.kanchan')}
-              </button>
-              <button
-                className={`tab-btn ${selectedPoet === 'garima' ? 'active' : ''}`}
-                onClick={() => setSelectedPoet('garima')}
-              >
-                {t('poems.filter.garima')}
-              </button>
-              <button
-                className={`tab-btn ${selectedPoet === 'joint' ? 'active' : ''}`}
-                onClick={() => setSelectedPoet('joint')}
-              >
-                {t('poems.filter.joint')}
-              </button>
-            </div>
-
-            <div className="category-select-wrap">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="all">{t('poems.filter.allCats')}</option>
-                {categories.filter(c => c !== 'all').map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Poems Grid */}
-        {filteredPoems.length === 0 ? (
-          <div className="no-poems-found">
-            <h3>{t('poems.notFound')}</h3>
-            <p>{t('poems.notFoundDesc')}</p>
-            <button
-              className="btn-royal-outline reset-filter-btn"
-              onClick={() => { setSearchQuery(''); setSelectedPoet('all'); setSelectedCategory('all'); }}
+        {/* Tab Content Display */}
+        <AnimatePresence mode="wait">
+          {tabItems.length === 0 ? (
+            <motion.div
+              key={`empty-${activeTab}`}
+              className="rachnaye-empty-state"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35 }}
             >
-              {t('poems.resetFilters')}
-            </button>
-          </div>
-        ) : (
-          <div className="poems-list-grid">
-            {filteredPoems.map((poem, index) => {
-              const isLiked = !!likedItems[`poem_${poem.id}`];
-
-              return (
-                <motion.div
-                  key={poem.id}
-                  className="poem-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                >
-                  <div className="poem-card-top">
-                    <div className="poem-category">
-                      <span className="royal-tag">{poem.category}</span>
-                    </div>
-                    <h3 className="poem-title">{poem.title}</h3>
-                    <div className="poem-poet">
-                      {t('poems.by')} {poem.poet}
-                    </div>
-                    {poem.book && (
-                      <div className="poem-book-tag">
-                        <BookOpen size={14} />
-                        <span>{t('poems.publishedIn')} {poem.book}</span>
+              <div className="empty-icon-wrap">
+                <Feather size={38} className="empty-icon" />
+              </div>
+              <h3 className="empty-title">जल्द ही रचनाएँ यहाँ प्रकाशित की जाएँगी</h3>
+              <p className="empty-subtitle">
+                इस अनुभाग में नवीन रचनाओं का संकलन शीघ्र उपलब्ध होगा।
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`grid-${activeTab}`}
+              className="rachnaye-content-grid"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35 }}
+            >
+              {activeTab === 'udharan' ? (
+                // Quotes Layout
+                tabItems.map((quoteItem, idx) => {
+                  const isLiked = !!likedItems[`quote_${quoteItem.id}`];
+                  return (
+                    <div key={quoteItem.id || idx} className="quote-rachna-card">
+                      <div className="quote-mark-icon">
+                        <Quote size={28} />
                       </div>
-                    )}
-                    <div className="poem-snippet">
-                      "{poem.excerpt || poem.stanzas[0]}"
+                      <p className="quote-body-text">
+                        "{quoteItem.quote}"
+                      </p>
+                      <div className="quote-author-info">
+                        <span className="quote-author-name">
+                          — {quoteItem.authorHindi || quoteItem.author}
+                        </span>
+                        {quoteItem.sourceBook && (
+                          <span className="quote-source">({quoteItem.sourceBook})</span>
+                        )}
+                      </div>
+                      <div className="quote-card-footer">
+                        <button
+                          type="button"
+                          className={`like-pill-btn ${isLiked ? 'active' : ''}`}
+                          onClick={() => toggleLike('quote', quoteItem.id)}
+                        >
+                          <Heart size={14} fill={isLiked ? '#C41E3A' : 'none'} />
+                          <span>{quoteItem.likes || 0}</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  );
+                })
+              ) : (
+                // Poems Layout
+                tabItems.map((poem, index) => {
+                  const isLiked = !!likedItems[`poem_${poem.id}`];
 
-                  <div className="poem-card-bottom">
-                    <button
-                      className="read-btn"
-                      onClick={() => setActiveModalPoem(poem)}
-                    >
-                      <span>{t('poems.readFull')}</span>
-                      <ArrowRight size={14} />
-                    </button>
+                  return (
+                    <div key={poem.id || index} className="poem-rachna-card">
+                      <div className="poem-card-top">
+                        <div className="poem-category-badge">
+                          <span>{poem.category}</span>
+                        </div>
+                        <h3 className="poem-card-title">{poem.title}</h3>
+                        <div className="poem-card-author">
+                          द्वारा: {poem.poet}
+                        </div>
+                        {poem.book && (
+                          <div className="poem-book-tag">
+                            <BookOpen size={13} />
+                            <span>{poem.book}</span>
+                          </div>
+                        )}
+                        <div className="poem-snippet-text">
+                          "{poem.excerpt || (poem.stanzas && poem.stanzas[0])}"
+                        </div>
+                      </div>
 
-                    <button
-                      className={`like-btn ${isLiked ? 'active' : ''}`}
-                      onClick={() => toggleLike('poem', poem.id)}
-                    >
-                      <Heart size={15} fill={isLiked ? '#C41E3A' : 'none'} />
-                      <span>{poem.likes || 0}</span>
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+                      <div className="poem-card-bottom">
+                        <button
+                          type="button"
+                          className="read-modal-btn"
+                          onClick={() => setActiveModalPoem(poem)}
+                        >
+                          <span>पूरा पढ़ें</span>
+                          <ArrowRight size={14} />
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`like-pill-btn ${isLiked ? 'active' : ''}`}
+                          onClick={() => toggleLike('poem', poem.id)}
+                        >
+                          <Heart size={14} fill={isLiked ? '#C41E3A' : 'none'} />
+                          <span>{poem.likes || 0}</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
+      {/* Reader Modal */}
       {activeModalPoem && (
         <PoemReaderModal
           poem={activeModalPoem}

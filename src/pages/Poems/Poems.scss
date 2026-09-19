@@ -4,247 +4,386 @@
 .poems-page {
   padding-top: 6.5rem;
 
-  .poems-header {
-    padding: 3.5rem 0 2rem;
+  .poems-hero {
+    padding: 4rem 0 2rem;
     text-align: center;
-  }
 
-  .poems-filter-bar {
-    margin-bottom: 3.5rem;
-    background: #FFFFFF;
-    padding: 2rem;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
-    border: 1px solid rgba(196, 30, 58, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-
-    .search-input-wrap {
-      position: relative;
-      width: 100%;
-
-      .search-icon {
-        position: absolute;
-        left: 1.2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: $primary-cherry-light;
-      }
-
-      input {
-        width: 100%;
-        padding: 0.95rem 1.2rem 0.95rem 3.4rem;
-        border-radius: $radius-pill;
-        border: 1.5px solid $border-light;
-        background: $bg-parchment;
-        font-size: 1rem;
-        color: $text-primary;
-        outline: none;
-        transition: $transition-smooth;
-
-        &:focus {
-          border-color: $primary-cherry;
-          background: #ffffff;
-          box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.08);
-        }
-      }
+    .main-title {
+      font-family: $font-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: $primary-cherry;
+      margin-bottom: 0.8rem;
     }
 
-    .filters-row {
+    .desc {
+      font-family: $font-body;
+      font-size: 1.15rem;
+      color: $text-secondary;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+  }
+
+  .rachnaye-container {
+    padding-bottom: 6rem;
+
+    // Tabs Navigation Bar
+    .rachnaye-tabs-nav {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 0.85rem;
       flex-wrap: wrap;
-      gap: 1.2rem;
+      margin-bottom: 2.2rem;
 
-      .poet-tabs {
-        display: flex;
+      .rachnaye-tab-pill {
+        display: inline-flex;
         align-items: center;
-        gap: 0.6rem;
-        flex-wrap: wrap;
-
-        .tab-btn {
-          padding: 0.55rem 1.3rem;
-          border-radius: $radius-pill;
-          border: 1px solid $border-light;
-          background: $bg-parchment;
-          color: $text-secondary;
-          font-size: 0.88rem;
-          font-weight: 600;
-          cursor: pointer;
-          white-space: nowrap;
-          transition: $transition-smooth;
-
-          &:hover {
-            border-color: $primary-cherry;
-            color: $primary-cherry;
-          }
-
-          &.active {
-            background: $cherry-gradient;
-            color: #ffffff;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
-          }
-        }
-      }
-
-      .category-select-wrap {
-        select {
-          padding: 0.55rem 1.3rem;
-          border-radius: $radius-pill;
-          border: 1px solid $border-light;
-          background: $bg-parchment;
-          color: $text-primary;
-          font-size: 0.88rem;
-          font-weight: 600;
-          cursor: pointer;
-          outline: none;
-          white-space: nowrap;
-
-          &:focus {
-            border-color: $primary-cherry;
-          }
-        }
-      }
-    }
-  }
-
-  .poems-list-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2.2rem;
-    margin-bottom: 5.5rem;
-  }
-
-  // Complete Poem Card Luxury Styling
-  .poem-card {
-    @include royal-card;
-    padding: 2.4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 340px;
-    background: #FFFFFF;
-    border: 1px solid rgba(139, 0, 0, 0.1);
-    box-shadow: $shadow-md;
-
-    .poem-card-top {
-      .poem-category {
-        margin-bottom: 1.1rem;
-      }
-
-      .poem-title {
+        gap: 0.5rem;
+        padding: 0.75rem 1.6rem;
+        border-radius: $radius-pill;
         font-family: $font-serif;
-        font-size: 1.5rem;
+        font-size: 1.02rem;
         font-weight: 700;
+        cursor: pointer;
+        border: 1px solid rgba(197, 160, 89, 0.35);
+        background: #FFFFFF;
         color: $text-primary;
-        line-height: 1.3;
-        margin-bottom: 0.35rem;
-      }
+        box-shadow: $shadow-sm;
+        transition: all 0.25s ease;
 
-      .poem-poet {
-        font-size: 0.88rem;
-        color: $primary-cherry;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-
-      .poem-book-tag {
-        font-size: 0.82rem;
-        color: $primary-cherry-dark;
-        margin-bottom: 1.2rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-      }
-
-      .poem-snippet {
-        font-family: $font-serif;
-        font-style: italic;
-        color: $text-secondary;
-        line-height: 1.85;
-        font-size: 0.98rem;
-        white-space: pre-line;
-      }
-    }
-
-    .poem-card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid $border-light;
-      padding-top: 1.2rem;
-      margin-top: 1.6rem;
-
-      .read-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        color: $primary-cherry;
-        font-family: $font-body;
-        font-weight: 700;
-        font-size: 0.9rem;
-        background: rgba(196, 30, 58, 0.05);
-        border: 1px solid rgba(196, 30, 58, 0.15);
-        padding: 0.45rem 1rem;
-        border-radius: $radius-pill;
-        cursor: pointer;
-        transition: $transition-smooth;
-
-        &:hover {
-          background: $cherry-gradient;
-          color: #ffffff;
-          border-color: transparent;
-          transform: translateX(3px);
-          box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+        .tab-icon {
+          color: $gold-dark;
+          font-size: 0.75rem;
+          transition: color 0.25s ease;
         }
-      }
-
-      .like-btn {
-        background: rgba(196, 30, 58, 0.04);
-        border: 1px solid rgba(196, 30, 58, 0.12);
-        padding: 0.45rem 0.85rem;
-        border-radius: $radius-pill;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: 0.85rem;
-        color: $text-muted;
-        font-weight: 600;
-        transition: $transition-smooth;
 
         &:hover {
-          border-color: $primary-cherry-light;
+          border-color: $primary-cherry;
           color: $primary-cherry;
+          transform: translateY(-2px);
+          box-shadow: $shadow-md;
         }
 
         &.active {
-          color: $primary-cherry-vibrant;
-          border-color: $primary-cherry-vibrant;
-          background: rgba(196, 30, 58, 0.1);
+          background: $cherry-gradient;
+          color: #FFFFFF;
+          border-color: transparent;
+          box-shadow: 0 6px 20px rgba(196, 30, 58, 0.32);
+          transform: translateY(-2px);
+
+          .tab-icon {
+            color: $gold-light;
+          }
         }
       }
     }
-  }
 
-  .no-poems-found {
-    text-align: center;
-    padding: 4.5rem 1rem;
-    color: $text-muted;
+    // Search Bar
+    .rachnaye-search-wrap {
+      max-width: 620px;
+      margin: 0 auto 3rem;
 
-    h3 {
-      font-family: $font-serif;
-      font-size: 1.5rem;
-      color: $text-primary;
-      margin-bottom: 0.5rem;
+      .search-input-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: #FFFFFF;
+        border: 1.5px solid rgba(197, 160, 89, 0.3);
+        border-radius: $radius-pill;
+        padding: 0.3rem 0.5rem 0.3rem 1.3rem;
+        box-shadow: $shadow-sm;
+        transition: all 0.25s ease;
+
+        &:focus-within {
+          border-color: $primary-cherry;
+          box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.08);
+        }
+
+        .search-icon {
+          color: $primary-cherry;
+          flex-shrink: 0;
+          margin-right: 0.6rem;
+        }
+
+        input {
+          flex: 1;
+          border: none;
+          background: transparent;
+          font-size: 0.98rem;
+          color: $text-primary;
+          padding: 0.6rem 0;
+          outline: none;
+
+          &::placeholder {
+            color: $text-muted;
+          }
+        }
+
+        .clear-search-btn {
+          border: none;
+          background: rgba(0, 0, 0, 0.06);
+          color: $text-muted;
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          cursor: pointer;
+          @include flex-center;
+          font-size: 0.75rem;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: $primary-cherry;
+            color: #FFFFFF;
+          }
+        }
+      }
     }
 
-    .reset-filter-btn {
-      margin-top: 1.2rem;
+    // Empty State
+    .rachnaye-empty-state {
+      background: #FFFFFF;
+      border: 1px dashed rgba(197, 160, 89, 0.5);
+      border-radius: $radius-lg;
+      padding: 4.5rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: $shadow-sm;
+
+      .empty-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        background: $bg-parchment;
+        border: 2px solid $gold-primary;
+        color: $primary-cherry;
+        @include flex-center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 6px 18px rgba(197, 160, 89, 0.25);
+      }
+
+      .empty-title {
+        font-family: $font-serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+        color: $primary-cherry;
+        margin-bottom: 0.6rem;
+      }
+
+      .empty-subtitle {
+        font-size: 1.02rem;
+        color: $text-muted;
+        line-height: 1.6;
+      }
+    }
+
+    // Content Grid
+    .rachnaye-content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+
+      // Poem Card
+      .poem-rachna-card {
+        @include royal-card;
+        padding: 2.2rem 1.8rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 320px;
+        background: #FFFFFF;
+        border: 1px solid rgba(139, 0, 0, 0.1);
+        box-shadow: $shadow-md;
+
+        .poem-card-top {
+          .poem-category-badge {
+            margin-bottom: 1rem;
+
+            span {
+              font-size: 0.78rem;
+              font-weight: 600;
+              color: $primary-cherry;
+              background: rgba(196, 30, 58, 0.08);
+              border: 1px solid rgba(196, 30, 58, 0.2);
+              padding: 0.25rem 0.75rem;
+              border-radius: $radius-pill;
+            }
+          }
+
+          .poem-card-title {
+            font-family: $font-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: $text-primary;
+            line-height: 1.3;
+            margin-bottom: 0.35rem;
+          }
+
+          .poem-card-author {
+            font-size: 0.88rem;
+            color: $primary-cherry;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+          }
+
+          .poem-book-tag {
+            font-size: 0.82rem;
+            color: $text-muted;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+          }
+
+          .poem-snippet-text {
+            font-family: $font-serif;
+            font-style: italic;
+            color: $text-secondary;
+            line-height: 1.8;
+            font-size: 0.98rem;
+          }
+        }
+
+        .poem-card-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: 1px solid $border-light;
+          padding-top: 1.2rem;
+          margin-top: 1.5rem;
+
+          .read-modal-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: $primary-cherry;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: rgba(196, 30, 58, 0.05);
+            border: 1px solid rgba(196, 30, 58, 0.15);
+            padding: 0.45rem 1rem;
+            border-radius: $radius-pill;
+            cursor: pointer;
+            transition: $transition-smooth;
+
+            &:hover {
+              background: $cherry-gradient;
+              color: #FFFFFF;
+              border-color: transparent;
+              transform: translateX(3px);
+            }
+          }
+
+          .like-pill-btn {
+            background: rgba(196, 30, 58, 0.04);
+            border: 1px solid rgba(196, 30, 58, 0.12);
+            padding: 0.45rem 0.85rem;
+            border-radius: $radius-pill;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: $text-muted;
+            font-weight: 600;
+            transition: $transition-smooth;
+
+            &:hover {
+              border-color: $primary-cherry-light;
+              color: $primary-cherry;
+            }
+
+            &.active {
+              color: $primary-cherry;
+              border-color: $primary-cherry;
+              background: rgba(196, 30, 58, 0.1);
+            }
+          }
+        }
+      }
+
+      // Quote Card
+      .quote-rachna-card {
+        @include royal-card;
+        padding: 2.2rem 1.8rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #FFFFFF;
+        border: 1px solid rgba(197, 160, 89, 0.3);
+        border-left: 4px solid $gold-primary;
+        box-shadow: $shadow-md;
+        position: relative;
+
+        .quote-mark-icon {
+          color: rgba(196, 30, 58, 0.2);
+          margin-bottom: 0.8rem;
+        }
+
+        .quote-body-text {
+          font-family: $font-serif;
+          font-size: 1.1rem;
+          font-style: italic;
+          color: $primary-cherry-dark;
+          line-height: 1.8;
+          margin-bottom: 1.2rem;
+        }
+
+        .quote-author-info {
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+          margin-bottom: 1.4rem;
+
+          .quote-author-name {
+            font-family: $font-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: $text-primary;
+          }
+
+          .quote-source {
+            font-size: 0.82rem;
+            color: $text-muted;
+          }
+        }
+
+        .quote-card-footer {
+          border-top: 1px solid $border-light;
+          padding-top: 1rem;
+          display: flex;
+          justify-content: flex-end;
+
+          .like-pill-btn {
+            background: rgba(196, 30, 58, 0.04);
+            border: 1px solid rgba(196, 30, 58, 0.12);
+            padding: 0.45rem 0.85rem;
+            border-radius: $radius-pill;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: $text-muted;
+            font-weight: 600;
+            transition: $transition-smooth;
+
+            &:hover {
+              border-color: $primary-cherry-light;
+              color: $primary-cherry;
+            }
+
+            &.active {
+              color: $primary-cherry;
+              border-color: $primary-cherry;
+              background: rgba(196, 30, 58, 0.1);
+            }
+          }
+        }
+      }
     }
   }
 }
