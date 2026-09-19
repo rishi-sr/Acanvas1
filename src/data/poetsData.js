@@ -24,7 +24,9 @@ export const poetsData = {
     philosophy: "",
     philosophyHindi: "",
     awards: [],
-    stats: {},
+    stats: {
+      publishedBooks: "2+"
+    },
     social: {
       instagram: "https://instagram.com",
       facebook: "https://facebook.com",
@@ -58,7 +60,9 @@ export const poetsData = {
     philosophy: "",
     philosophyHindi: "",
     awards: [],
-    stats: {},
+    stats: {
+      publishedBooks: "3"
+    },
     social: {
       instagram: "https://instagram.com",
       facebook: "https://facebook.com",
