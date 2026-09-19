@@ -11,3 +11,4 @@ router.get('/', getSettings);
 router.put('/', authenticateToken, requireAdmin, updateSettings);
 
 export default router;
+

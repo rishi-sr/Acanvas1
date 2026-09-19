@@ -799,7 +799,7 @@ const Admin = () => {
             <AnimatePresence>
               {isSectionDropdownOpen && (
                 <motion.div
-                  className="custom-dropdown-menu"
+                  className="dropdown-menu-list"
                   initial={{ opacity: 0, y: -10, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.98 }}
