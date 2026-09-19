@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useContent } from '../../context/ContentContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -23,7 +23,6 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [activeFaq, setActiveFaq] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,13 +57,6 @@ const Contact = () => {
       setErrorMessage(res.message || 'Failed to submit inquiry. Please try again.');
     }
   };
-
-  const faqs = [
-    { q: t('contact.faq.q1'), a: t('contact.faq.a1') },
-    { q: t('contact.faq.q2'), a: t('contact.faq.a2') },
-    { q: t('contact.faq.q3'), a: t('contact.faq.a3') },
-    { q: t('contact.faq.q4'), a: t('contact.faq.a4') },
-  ];
 
   return (
     <div className="contact-page">
@@ -276,47 +268,6 @@ const Contact = () => {
               </>
             )}
           </motion.div>
-        </div>
-      </section>
-
-      {/* FAQs */}
-      <section className="faq-section">
-        <div className="container">
-          <div className="section-title-wrap">
-            <span className="subtitle">{t('contact.faq.subtitle')}</span>
-            <h2 className="main-title">
-              {t('contact.faq.title1')} <span className="highlight">{t('contact.faq.title2')}</span>
-            </h2>
-            <p className="desc">
-              {t('contact.faq.desc')}
-            </p>
-          </div>
-
-          <div className="faq-list">
-            {faqs.map((faq, i) => (
-              <div key={i} className="faq-item">
-                <button
-                  className="faq-question"
-                  onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-                >
-                  <span>{faq.q}</span>
-                  {activeFaq === i ? <ChevronUp size={20} color="#8B0000" /> : <ChevronDown size={20} />}
-                </button>
-                <AnimatePresence>
-                  {activeFaq === i && (
-                    <motion.div
-                      className="faq-answer"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
-                      <p>{faq.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </div>
