@@ -15,3 +15,4 @@ router.put('/:id', authenticateToken, requireAdmin, updateWorkshop);
 router.delete('/:id', authenticateToken, requireAdmin, deleteWorkshop);
 
 export default router;
+

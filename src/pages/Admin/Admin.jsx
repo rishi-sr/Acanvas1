@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Lock,
   Unlock,
@@ -25,7 +25,10 @@ import {
   GraduationCap,
   FileText,
   Check,
-  X
+  X,
+  ChevronDown,
+  Layers,
+  ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
@@ -84,6 +87,95 @@ const Admin = () => {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState('authors');
+  const [isSectionDropdownOpen, setIsSectionDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsSectionDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Section list with metadata for dropdown
+  const sections = [
+    {
+      id: 'authors',
+      label: 'लेखक प्रोफाइल (Authors Profile)',
+      shortLabel: 'लेखक प्रोफाइल',
+      icon: <Users size={18} />,
+      badge: `${Object.keys(authors || {}).filter(k => k !== 'synergy').length} प्रोफाइल`
+    },
+    {
+      id: 'books',
+      label: `पुस्तकें (Books Catalog)`,
+      shortLabel: 'पुस्तकें',
+      icon: <BookOpen size={18} />,
+      badge: `${books?.length || 0} पुस्तकें`
+    },
+    {
+      id: 'workshops',
+      label: `कार्यशाला (Workshops)`,
+      shortLabel: 'कार्यशाला',
+      icon: <GraduationCap size={18} />,
+      badge: `${workshops?.length || 0} सत्र`
+    },
+    {
+      id: 'reports',
+      label: `साहित्यिक रिपोर्टिंग (Press & Media)`,
+      shortLabel: 'रिपोर्टिंग',
+      icon: <Newspaper size={18} />,
+      badge: `${reports?.length || 0} कवरेज`
+    },
+    {
+      id: 'samkalieen',
+      label: `समकालीन आलेख (Contemporary Articles)`,
+      shortLabel: 'समकालीन आलेख',
+      icon: <FileText size={18} />,
+      badge: `${samkalieen?.length || 0} आलेख`
+    },
+    {
+      id: 'poems',
+      label: `कविता संग्रह (Poetry Catalog)`,
+      shortLabel: 'कविता संग्रह',
+      icon: <Feather size={18} />,
+      badge: `${poems?.length || 0} कविताएँ`
+    },
+    {
+      id: 'quotes',
+      label: `सूक्तियां (Master Quotes)`,
+      shortLabel: 'सूक्तियां',
+      icon: <Quote size={18} />,
+      badge: `${quotes?.length || 0} सूक्तियां`
+    },
+    {
+      id: 'gallery',
+      label: `चित्र दीर्घा (Gallery Management)`,
+      shortLabel: 'चित्र दीर्घा',
+      icon: <ImageIcon size={18} />,
+      badge: `${gallery?.length || 0} चित्र`
+    },
+    {
+      id: 'submissions',
+      label: `पाठक रचनाएँ (Reader Submissions)`,
+      shortLabel: 'पाठक रचनाएँ',
+      icon: <Sparkles size={18} />,
+      badge: `${submissions?.length || 0} प्रविष्टियाँ`
+    },
+    {
+      id: 'inquiries',
+      label: `संदेश इनबॉक्स (Inquiries & Letters)`,
+      shortLabel: 'संदेश ইনबॉक्स',
+      icon: <Inbox size={18} />,
+      badge: `${inquiries?.length || 0} संदेश`
+    }
+  ];
+
+  const currentSection = sections.find(s => s.id === activeTab) || sections[0];
 
   // Author Management State
   const [selectedAuthorId, setSelectedAuthorId] = useState('kanchan');
@@ -235,7 +327,7 @@ const Admin = () => {
     setAuthorSaveMsg('');
     const res = await updateAuthorProfile(selectedAuthorId, authorForm);
     if (res.success) {
-      setAuthorSaveMsg('✅ Author profile saved and updated live across the platform!');
+      setAuthorSaveMsg('✅ लेखक प्रोफाइल सफलतापूर्वक सहेजी गई!');
       setTimeout(() => setAuthorSaveMsg(''), 4000);
     } else {
       setAuthorSaveMsg(`❌ ${res.message}`);
@@ -251,7 +343,7 @@ const Admin = () => {
     setUploadingAvatar(false);
 
     if (res.success) {
-      setAuthorSaveMsg('✅ Author photo uploaded successfully!');
+      setAuthorSaveMsg('✅ फोटो सफलतापूर्वक अपलोड की गई!');
       setTimeout(() => setAuthorSaveMsg(''), 4000);
     } else {
       setAuthorSaveMsg(`❌ ${res.message}`);
@@ -573,7 +665,7 @@ const Admin = () => {
         <div className="dashboard-header-bar">
           <div className="dash-title-wrap">
             <h1 className="dash-title">Akshar Canvas Administration</h1>
-            <span className="dash-subtitle">पुस्तकें, कार्यशाला, रिपोर्टिंग, समकालीन आलेख एवं संपूर्ण साहित्यिक प्रबंधन</span>
+            <span className="dash-subtitle">साहित्यिक सामग्री, आलेख, पुस्तकें एवं संपूर्ण पोर्टल प्रबंधन</span>
           </div>
 
           <div className="dash-actions">
@@ -609,78 +701,79 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="admin-tabs-nav">
-          <button
-            className={`admin-tab-btn ${activeTab === 'authors' ? 'active' : ''}`}
-            onClick={() => setActiveTab('authors')}
-          >
-            <Users size={16} />
-            <span>लेखक प्रोफाइल / Authors</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'books' ? 'active' : ''}`}
-            onClick={() => setActiveTab('books')}
-          >
-            <BookOpen size={16} />
-            <span>पुस्तकें / Books ({books.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'workshops' ? 'active' : ''}`}
-            onClick={() => setActiveTab('workshops')}
-          >
-            <GraduationCap size={16} />
-            <span>कार्यशाला / Workshops ({workshops.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'reports' ? 'active' : ''}`}
-            onClick={() => setActiveTab('reports')}
-          >
-            <Newspaper size={16} />
-            <span>रिपोर्टिंग / Press ({reports.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'samkalieen' ? 'active' : ''}`}
-            onClick={() => setActiveTab('samkalieen')}
-          >
-            <FileText size={16} />
-            <span>समकालीन आलेख / Articles ({samkalieen.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'poems' ? 'active' : ''}`}
-            onClick={() => setActiveTab('poems')}
-          >
-            <Feather size={16} />
-            <span>कविता संग्रह / Poems ({poems.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'quotes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('quotes')}
-          >
-            <Quote size={16} />
-            <span>सूक्तियां / Quotes ({quotes.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
-            onClick={() => setActiveTab('gallery')}
-          >
-            <ImageIcon size={16} />
-            <span>चित्र दीर्घा / Gallery ({gallery.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'submissions' ? 'active' : ''}`}
-            onClick={() => setActiveTab('submissions')}
-          >
-            <Sparkles size={16} />
-            <span>पाठक रचनाएँ ({submissions.length})</span>
-          </button>
-          <button
-            className={`admin-tab-btn ${activeTab === 'inquiries' ? 'active' : ''}`}
-            onClick={() => setActiveTab('inquiries')}
-          >
-            <Inbox size={16} />
-            <span>संदेश / Inquiries ({inquiries.length})</span>
-          </button>
+        {/* ==========================================
+            LUXURY SECTION SELECTOR DROPDOWN
+        ========================================== */}
+        <div className="admin-section-dropdown-wrapper" ref={dropdownRef}>
+          <div className="dropdown-label-bar">
+            <span className="dropdown-title">
+              <Layers size={17} color="#8B0000" />
+              <span>प्रबंधन अनुभाग चुनें (Select Admin Section):</span>
+            </span>
+            <span className="dropdown-active-pill">
+              सक्रिय: <strong>{currentSection.shortLabel}</strong>
+            </span>
+          </div>
+
+          <div className="custom-dropdown-container">
+            <button
+              type="button"
+              className={`dropdown-trigger-btn ${isSectionDropdownOpen ? 'open' : ''}`}
+              onClick={() => setIsSectionDropdownOpen(!isSectionDropdownOpen)}
+            >
+              <div className="trigger-current-item">
+                <span className="trigger-icon">{currentSection.icon}</span>
+                <span className="trigger-label">{currentSection.label}</span>
+              </div>
+              <div className="trigger-right">
+                <span className="trigger-badge">{currentSection.badge}</span>
+                <ChevronDown size={19} className={`chevron-icon ${isSectionDropdownOpen ? 'rotated' : ''}`} />
+              </div>
+            </button>
+
+            <AnimatePresence>
+              {isSectionDropdownOpen && (
+                <motion.div
+                  className="dropdown-menu-list"
+                  initial={{ opacity: 0, y: -10, scaleY: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                  exit={{ opacity: 0, y: -10, scaleY: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="dropdown-menu-header">
+                    <span>अनुभाग सूची (All Modules)</span>
+                    <span className="menu-count">10 Sections</span>
+                  </div>
+                  <div className="dropdown-menu-items-grid">
+                    {sections.map(section => (
+                      <button
+                        key={section.id}
+                        type="button"
+                        className={`dropdown-menu-item ${activeTab === section.id ? 'active' : ''}`}
+                        onClick={() => {
+                          setActiveTab(section.id);
+                          setIsSectionDropdownOpen(false);
+                        }}
+                      >
+                        <div className="item-icon-wrap">
+                          {section.icon}
+                        </div>
+                        <div className="item-text-wrap">
+                          <span className="item-title">{section.label}</span>
+                          <span className="item-badge-text">{section.badge}</span>
+                        </div>
+                        {activeTab === section.id && (
+                          <div className="item-check-icon">
+                            <Check size={16} />
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* ==========================================
@@ -689,7 +782,7 @@ const Admin = () => {
         {activeTab === 'authors' && (
           <div className="admin-panel-content">
             <div className="panel-top-bar">
-              <h2 className="panel-heading">Authors & Literary Bios Profile Manager</h2>
+              <h2 className="panel-heading">लेखक प्रोफाइल एवं साहित्यिक परिचय (Authors Bio Manager)</h2>
             </div>
 
             {/* Author Switcher */}
@@ -711,7 +804,7 @@ const Admin = () => {
             </div>
 
             {authorSaveMsg && (
-              <div style={{ padding: '0.8rem 1.2rem', marginBottom: '1.5rem', borderRadius: '6px', background: '#E8F5E9', color: '#2E7D32', fontWeight: 600 }}>
+              <div className="alert-box-success">
                 {authorSaveMsg}
               </div>
             )}
@@ -742,7 +835,7 @@ const Admin = () => {
 
                 <div className="author-name-inputs">
                   <div className="form-group-split">
-                    <div>
+                    <div className="form-field">
                       <label>English Name</label>
                       <input
                         type="text"
@@ -750,7 +843,7 @@ const Admin = () => {
                         onChange={(e) => setAuthorForm({ ...authorForm, name: e.target.value })}
                       />
                     </div>
-                    <div>
+                    <div className="form-field">
                       <label>हिंदी नाम</label>
                       <input
                         type="text"
@@ -760,8 +853,8 @@ const Admin = () => {
                     </div>
                   </div>
 
-                  <div className="form-group-split" style={{ marginTop: '0.8rem' }}>
-                    <div>
+                  <div className="form-group-split">
+                    <div className="form-field">
                       <label>Title / Literary Designation (English)</label>
                       <input
                         type="text"
@@ -769,7 +862,7 @@ const Admin = () => {
                         onChange={(e) => setAuthorForm({ ...authorForm, title: e.target.value })}
                       />
                     </div>
-                    <div>
+                    <div className="form-field">
                       <label>उपाधि / साहित्यिक पद (हिंदी)</label>
                       <input
                         type="text"
@@ -781,7 +874,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="form-row-full" style={{ marginTop: '1.2rem' }}>
+              <div className="form-row-full">
                 <label>Signature Quote (हस्ताक्षर पंक्ति - हिंदी)</label>
                 <input
                   type="text"
@@ -793,7 +886,7 @@ const Admin = () => {
               <div className="form-row-full">
                 <label>Short Bio (संक्षिप्त परिचय - हिंदी)</label>
                 <textarea
-                  rows={3}
+                  rows={4}
                   value={authorForm.shortBioHindi || ''}
                   onChange={(e) => setAuthorForm({ ...authorForm, shortBioHindi: e.target.value })}
                 />
@@ -1832,23 +1925,23 @@ const Admin = () => {
         {activeTab === 'poems' && (
           <div className="admin-panel-content">
             <div className="panel-top-bar">
-              <h2 className="panel-heading">Poetry Catalog Management</h2>
+              <h2 className="panel-heading">कविता संग्रह प्रबंधन (Poetry Catalog)</h2>
               <button className="btn-royal" onClick={() => setShowAddPoem(!showAddPoem)}>
                 <Plus size={16} />
-                <span>{showAddPoem ? 'Close Form' : 'Add New Poem'}</span>
+                <span>{showAddPoem ? 'Close Form' : 'नई कविता जोड़ें / Add Poem'}</span>
               </button>
             </div>
 
             {showAddPoem && (
               <form onSubmit={handleCreatePoem} className="admin-form-modal">
-                <h3 className="modal-title">Enter New Poem Details</h3>
+                <h3 className="modal-title">नई कविता दर्ज करें (Enter Poem Details)</h3>
                 <div className="modal-grid">
                   <div className="form-row-full">
                     <label>Poem Title *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Whispers of Horizon"
+                      placeholder="उदा. Whispers of Horizon"
                       value={newPoem.title}
                       onChange={(e) => setNewPoem({ ...newPoem, title: e.target.value })}
                     />
@@ -1868,7 +1961,7 @@ const Admin = () => {
                     <label>Published Book Name</label>
                     <input
                       type="text"
-                      placeholder="e.g. Echoes of the Inner Mind"
+                      placeholder="उदा. Echoes of the Inner Mind"
                       value={newPoem.book}
                       onChange={(e) => setNewPoem({ ...newPoem, book: e.target.value })}
                     />
@@ -1957,7 +2050,7 @@ const Admin = () => {
         {activeTab === 'quotes' && (
           <div className="admin-panel-content">
             <div className="panel-top-bar">
-              <h2 className="panel-heading">Curated Master Quotes</h2>
+              <h2 className="panel-heading">सूक्तियां व उद्धरण (Curated Master Quotes)</h2>
               <button className="btn-royal" onClick={() => setShowAddQuote(!showAddQuote)}>
                 <Plus size={16} />
                 <span>{showAddQuote ? 'Close Form' : 'Add New Quote'}</span>

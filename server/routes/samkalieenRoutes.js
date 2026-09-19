@@ -15,3 +15,4 @@ router.put('/:id', authenticateToken, requireAdmin, updateSamkalieen);
 router.delete('/:id', authenticateToken, requireAdmin, deleteSamkalieen);
 
 export default router;
+

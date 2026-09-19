@@ -15,3 +15,4 @@ router.put('/:id', authenticateToken, requireAdmin, updateReport);
 router.delete('/:id', authenticateToken, requireAdmin, deleteReport);
 
 export default router;
+
