@@ -97,27 +97,14 @@ const About = () => {
             <div className="bio-poet-role">
               {isHindi ? kanchan.titleHindi : kanchan.title}
             </div>
-
-            <div className="sidebar-stats-list">
-              <div className="side-stat-row">
-                <span>{t('about.stat.volumes')}</span>
-                <strong>{kanchan.stats?.publishedBooks || 4} {isHindi ? 'पुस्तकें' : 'Books'}</strong>
-              </div>
-              <div className="side-stat-row">
-                <span>{t('about.stat.verses')}</span>
-                <strong>{kanchan.stats?.poemsCount || '350+'}</strong>
-              </div>
-              <div className="side-stat-row">
-                <span>{t('about.stat.dedication')}</span>
-                <strong>{kanchan.stats?.experience || '25+ Years'}</strong>
-              </div>
-            </div>
           </div>
 
           <div className="bio-content-pane">
-            <div className="quote-quote-box">
-              "{isHindi ? kanchan.philosophyHindi || kanchan.philosophy : kanchan.philosophy || kanchan.philosophyHindi}"
-            </div>
+            {(isHindi ? (kanchan.philosophyHindi || kanchan.signatureQuoteHindi) : (kanchan.philosophy || kanchan.signatureQuote)) && (
+              <div className="quote-quote-box">
+                "{isHindi ? kanchan.philosophyHindi || kanchan.signatureQuoteHindi : kanchan.philosophy || kanchan.signatureQuote}"
+              </div>
+            )}
 
             <div className="bio-paragraphs">
               {(Array.isArray(isHindi ? kanchan.fullBioHindi : kanchan.fullBio)
@@ -173,27 +160,14 @@ const About = () => {
             <div className="bio-poet-role">
               {isHindi ? garima.titleHindi : garima.title}
             </div>
-
-            <div className="sidebar-stats-list">
-              <div className="side-stat-row">
-                <span>{t('about.stat.volumes')}</span>
-                <strong>{garima.stats?.publishedBooks || 3} {isHindi ? 'पुस्तकें' : 'Books'}</strong>
-              </div>
-              <div className="side-stat-row">
-                <span>{t('about.stat.ghazals')}</span>
-                <strong>{garima.stats?.poemsCount || '200+'}</strong>
-              </div>
-              <div className="side-stat-row">
-                <span>{t('about.stat.journey')}</span>
-                <strong>{garima.stats?.experience || '12+ Years'}</strong>
-              </div>
-            </div>
           </div>
 
           <div className="bio-content-pane">
-            <div className="quote-quote-box">
-              "{isHindi ? garima.philosophyHindi || garima.philosophy : garima.philosophy || garima.philosophyHindi}"
-            </div>
+            {(isHindi ? (garima.philosophyHindi || garima.signatureQuoteHindi) : (garima.philosophy || garima.signatureQuote)) && (
+              <div className="quote-quote-box">
+                "{isHindi ? garima.philosophyHindi || garima.signatureQuoteHindi : garima.philosophy || garima.signatureQuote}"
+              </div>
+            )}
 
             <div className="bio-paragraphs">
               {(Array.isArray(isHindi ? garima.fullBioHindi : garima.fullBio)
