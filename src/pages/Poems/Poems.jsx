@@ -7,7 +7,7 @@ import './Poems.scss';
 
 const RACHNAYE_TABS = [
   { id: 'anamika', label: 'अनामिका', icon: '✦' },
-  { id: 'bioscope', label: 'बायोस्कोप', icon: '✦' },
+  { id: 'bioscope', label: 'बाइस्कोप', icon: '✦' },
   { id: 'kalam_ka_karwan', label: 'कलम का कारवां', icon: '✦' },
   { id: 'kshitiz_ki_aor', label: 'क्षितिज की ओर', icon: '✦' },
   { id: 'udharan', label: 'उद्धरण', icon: '✦' }
