@@ -59,7 +59,7 @@
       border: 1px solid rgba(197, 160, 89, 0.3);
       overflow: hidden;
       display: grid;
-      grid-template-columns: 330px 1fr;
+      grid-template-columns: 260px 1fr;
 
       @include respond-to('lg') {
         grid-template-columns: 1fr;
@@ -68,80 +68,93 @@
       .bio-sidebar {
         background: linear-gradient(180deg, #8B0000 0%, #4D0000 100%);
         color: #ffffff;
-        padding: 3.2rem 2.2rem;
+        padding: 3rem 1.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         text-align: center;
 
         &.dark-variant {
           background: linear-gradient(180deg, #1C191A 0%, #5C0000 100%);
         }
 
+        .bio-avatar-frame {
+          position: relative;
+          @include flex-center;
+        }
+
         .bio-monogram {
-          width: 90px;
-          height: 90px;
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid $gold-primary;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+          background: rgba(255, 255, 255, 0.08);
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.03);
+          }
+        }
+
+        .bio-monogram-fallback {
+          width: 140px;
+          height: 140px;
           border-radius: 50%;
           background: rgba(255, 255, 255, 0.12);
-          border: 2px solid $gold-primary;
+          border: 3px solid $gold-primary;
           color: #ffffff;
           font-family: $font-serif;
-          font-size: 2.4rem;
+          font-size: 3.5rem;
           font-weight: 800;
           @include flex-center;
-          margin-bottom: 1.5rem;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .bio-poet-name {
-          font-family: $font-serif;
-          font-size: 1.75rem;
-          font-weight: 800;
-          line-height: 1.2;
-          margin-bottom: 0.3rem;
-        }
-
-        .bio-poet-eng {
-          font-size: 0.9rem;
-          color: $gold-light;
-          font-weight: 600;
-          margin-bottom: 1.2rem;
-        }
-
-        .bio-poet-role {
-          font-size: 0.85rem;
-          background: rgba(255, 255, 255, 0.1);
-          padding: 0.35rem 0.85rem;
-          border-radius: $radius-pill;
-          margin-bottom: 2rem;
-        }
-
-        .sidebar-stats-list {
-          width: 100%;
-          border-top: 1px solid rgba(255, 255, 255, 0.15);
-          padding-top: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-
-          .side-stat-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.88);
-
-            strong {
-              color: $gold-light;
-            }
-          }
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
       }
 
       .bio-content-pane {
-        padding: 3.5rem 3rem;
+        padding: 3.2rem 3rem;
 
         @include respond-to('sm') {
           padding: 2rem 1.5rem;
+        }
+
+        .bio-header-info {
+          margin-bottom: 1.5rem;
+          padding-bottom: 1.2rem;
+          border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+
+          .bio-role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(196, 30, 58, 0.08);
+            color: $primary-cherry;
+            border: 1px solid rgba(196, 30, 58, 0.22);
+            padding: 0.35rem 0.95rem;
+            border-radius: $radius-pill;
+            margin-bottom: 0.75rem;
+          }
+
+          .bio-poet-name {
+            font-family: $font-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: $primary-cherry-dark;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+          }
+
+          .bio-poet-eng {
+            font-family: $font-serif;
+            font-size: 1.02rem;
+            color: $text-secondary;
+            font-weight: 600;
+          }
         }
 
         .quote-quote-box {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Award, BookOpen, Feather, Sparkles } from 'lucide-react';
+import { Award, Feather } from 'lucide-react';
 import { poetsData as defaultPoetsData } from '../../data/poetsData';
 import { useContent } from '../../context/ContentContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -14,6 +14,9 @@ const About = () => {
   const kanchan = authors?.kanchan || defaultPoetsData.kanchan;
   const garima = authors?.garima || defaultPoetsData.garima;
   const synergy = authors?.synergy || defaultPoetsData.synergy;
+
+  const kanchanPortrait = kanchan.avatarUrl || '/assets/kanchan-portrait.png';
+  const garimaPortrait = garima.avatarUrl || '/assets/garima-portrait.png';
 
   return (
     <div className="about-page">
@@ -55,23 +58,35 @@ const About = () => {
           transition={{ duration: 0.65 }}
         >
           <div className="bio-sidebar">
-            {kanchan.avatarUrl ? (
-              <img src={kanchan.avatarUrl} alt={kanchan.name} className="bio-monogram" style={{ objectFit: 'cover' }} />
-            ) : (
-              <div className="bio-monogram">K</div>
-            )}
-            <h2 className="bio-poet-name">
-              {isHindi ? kanchan.nameHindi : kanchan.name}
-            </h2>
-            <div className="bio-poet-eng">
-              {isHindi ? kanchan.name : kanchan.nameHindi}
-            </div>
-            <div className="bio-poet-role">
-              {isHindi ? kanchan.titleHindi : kanchan.title}
+            <div className="bio-avatar-frame">
+              <img
+                src={kanchanPortrait}
+                alt={kanchan.name}
+                className="bio-monogram"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="bio-monogram-fallback" style={{ display: 'none' }}>K</div>
             </div>
           </div>
 
           <div className="bio-content-pane">
+            {/* Poet Name and Role placed above the tagline quote */}
+            <div className="bio-header-info">
+              <div className="bio-role-badge">
+                <Feather size={14} />
+                <span>{isHindi ? (kanchan.titleHindi || kanchan.title) : (kanchan.title || kanchan.titleHindi)}</span>
+              </div>
+              <h2 className="bio-poet-name">
+                {isHindi ? kanchan.nameHindi : kanchan.name}
+              </h2>
+              <div className="bio-poet-eng">
+                {isHindi ? kanchan.name : kanchan.nameHindi}
+              </div>
+            </div>
+
             {(isHindi ? (kanchan.philosophyHindi || kanchan.signatureQuoteHindi) : (kanchan.philosophy || kanchan.signatureQuote)) && (
               <div className="quote-quote-box">
                 "{isHindi ? kanchan.philosophyHindi || kanchan.signatureQuoteHindi : kanchan.philosophy || kanchan.signatureQuote}"
@@ -118,23 +133,35 @@ const About = () => {
           transition={{ duration: 0.65 }}
         >
           <div className="bio-sidebar dark-variant">
-            {garima.avatarUrl ? (
-              <img src={garima.avatarUrl} alt={garima.name} className="bio-monogram" style={{ objectFit: 'cover' }} />
-            ) : (
-              <div className="bio-monogram">G</div>
-            )}
-            <h2 className="bio-poet-name">
-              {isHindi ? garima.nameHindi : garima.name}
-            </h2>
-            <div className="bio-poet-eng">
-              {isHindi ? garima.name : garima.nameHindi}
-            </div>
-            <div className="bio-poet-role">
-              {isHindi ? garima.titleHindi : garima.title}
+            <div className="bio-avatar-frame">
+              <img
+                src={garimaPortrait}
+                alt={garima.name}
+                className="bio-monogram"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="bio-monogram-fallback" style={{ display: 'none' }}>G</div>
             </div>
           </div>
 
           <div className="bio-content-pane">
+            {/* Poet Name and Role placed above the tagline quote */}
+            <div className="bio-header-info">
+              <div className="bio-role-badge">
+                <Feather size={14} />
+                <span>{isHindi ? (garima.titleHindi || garima.title) : (garima.title || garima.titleHindi)}</span>
+              </div>
+              <h2 className="bio-poet-name">
+                {isHindi ? garima.nameHindi : garima.name}
+              </h2>
+              <div className="bio-poet-eng">
+                {isHindi ? garima.name : garima.nameHindi}
+              </div>
+            </div>
+
             {(isHindi ? (garima.philosophyHindi || garima.signatureQuoteHindi) : (garima.philosophy || garima.signatureQuote)) && (
               <div className="quote-quote-box">
                 "{isHindi ? garima.philosophyHindi || garima.signatureQuoteHindi : garima.philosophy || garima.signatureQuote}"
