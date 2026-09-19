@@ -49,13 +49,9 @@ const About = () => {
       <section className="about-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">{t('about.subtitle')}</span>
             <h1 className="main-title">
               {t('about.title1')} <span className="highlight">{t('about.title2')}</span>
             </h1>
-            <p className="desc">
-              {t('about.desc')}
-            </p>
             <div className="ornament-divider">
               <span className="line" />
               <span className="diamond" />
@@ -63,16 +59,13 @@ const About = () => {
             </div>
           </div>
 
-          {/* Synergy Box */}
+          {/* Mission & Vision Box */}
           <motion.div
             className="synergy-box"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h2 className="synergy-title">
-              {isHindi ? synergy.titleHindi : synergy.title}
-            </h2>
             <p className="synergy-desc">
               {isHindi ? synergy.descHindi : synergy.desc}
             </p>
