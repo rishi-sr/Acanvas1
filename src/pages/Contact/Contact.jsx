@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useContent } from '../../context/ContentContext';
@@ -114,16 +114,6 @@ const Contact = () => {
                   <div className="item-text">
                     <div className="lbl">{t('contact.info.phone.lbl')}</div>
                     <div className="val">+91 98765 43210 / +91 94512 34567</div>
-                  </div>
-                </div>
-
-                <div className="contact-item-row">
-                  <div className="icon-box">
-                    <MapPin size={20} />
-                  </div>
-                  <div className="item-text">
-                    <div className="lbl">{t('contact.info.loc.lbl')}</div>
-                    <div className="val">Varanasi • Lucknow • New Delhi (India)</div>
                   </div>
                 </div>
               </div>
