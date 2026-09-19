@@ -123,8 +123,13 @@ const PoetsSpotlight = () => {
                 </div>
               </div>
 
+              {/* Bio Paragraph if available */}
               {/* Bio Paragraphs if available */}
               {(() => {
+                const bio = Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
+                  ? (isHindi ? currentPoet.fullBioHindi[0] : currentPoet.fullBio[0])
+                  : (isHindi ? currentPoet.shortBioHindi || currentPoet.shortBio : currentPoet.shortBio || currentPoet.shortBioHindi);
+                return bio ? <p className="parichay-bio-text">{bio}</p> : null;
                 const bioList = Array.isArray(isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
                   ? (isHindi ? currentPoet.fullBioHindi : currentPoet.fullBio)
                   : (isHindi ? [currentPoet.shortBioHindi || currentPoet.shortBio] : [currentPoet.shortBio || currentPoet.shortBioHindi]);

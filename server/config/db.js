@@ -18,12 +18,18 @@ const defaultDatabase = {
   authors: {
     kanchan: {
       id: "kanchan",
+      name: "Kanchan Lata Jaiswal",
+      nameHindi: "कंचन लता जायसवाल",
       name: "Dr. Kanchan Jaiswal",
       nameHindi: "डॉ. कंचन जायसवाल",
       title: "Senior Poetess, Author & Cultural Thinker",
       titleHindi: "वरिष्ठ कवयित्री, लेखिका एवं सांस्कृतिक चिंतक",
       signatureQuote: "When words arise from the sanctum of silence, they transcend mere poetry to become the music of the heart.",
       signatureQuoteHindi: "जब शब्द मौन के गर्भ से उठते हैं, तो वे केवल कविता नहीं रहते — हृदय का संगीत बन जाते हैं।",
+      shortBio: "",
+      shortBioHindi: "",
+      fullBio: [],
+      fullBioHindi: [],
       shortBio: "डॉ. कंचन जायसवाल समकालीन भारतीय साहित्य की सशक्त, संवेदनशील और सर्वस्पर्शी आवाज़ों में से एक हैं। उनकी रचनाओं में भारतीय परंपरागत मूल्यों की कालातीत सुगंध और आधुनिक जीवन के अस्तित्ववादी चिंतन का अद्भुत समन्वय प्रस्तुत होता है। उनका रचनात्मक संसार मानवीय भावनाओं, सामाजिक चेतना और आत्मसजगता के विस्तृत क्षितिज को समेटे हुए है।",
       shortBioHindi: "डॉ. कंचन जायसवाल समकालीन भारतीय साहित्य की सशक्त, संवेदनशील और सर्वस्पर्शी आवाज़ों में से एक हैं। उनकी रचनाओं में भारतीय परंपरागत मूल्यों की कालातीत सुगंध और आधुनिक जीवन के अस्तित्ववादी चिंतन का अद्भुत समन्वय प्रस्तुत होता है। उनका रचनात्मक संसार मानवीय भावनाओं, सामाजिक चेतना और आत्मसजगता के विस्तृत क्षितिज को समेटे हुए है।",
       fullBio: [
@@ -54,32 +60,21 @@ const defaultDatabase = {
       titleHindi: "युवा कवयित्री, ग़ज़लकार एवं शोधार्थी",
       signatureQuote: "Whatever remained unspoken in the heartbeat, descended upon paper and blossomed into a Ghazal.",
       signatureQuoteHindi: "जो धड़कन में अनकहा रह गया, वही कागज़ पर उतरकर ग़ज़ल बन गया।",
-      shortBio: "Born in Jaunpur district of Uttar Pradesh, Garima Singh is one of the most promising contemporary literary voices. Her published works include 'Chaak Pe Maati Sa Man' and the joint collection 'Tripath'.",
-      shortBioHindi: "उत्तर प्रदेश के जौनपुर जिले में जन्मी गरिमा सिंह आज की संभावनाशील रचनाकार हैं। देश की प्रतिष्ठित पत्रिकाओं में आपकी रचनाएं निरंतर प्रकाशित हो रही हैं।",
+      shortBio: "उत्तर प्रदेश के जौनपुर जिले में जन्मी गरिमा सिंह आज की संभावनाशील रचनाकार हैं। देश की प्रतिष्ठित पत्रिकाओं में आपकी रचनाएं निरंतर प्रकाशित हो रही हैं। कविता संग्रह \"चाक पे माटी सा मन\" और साँझा काव्य संग्रह \"त्रिपथ\" व अन्य साँझा संग्रह प्रकाशित, एक कविता संग्रह अभी प्रकाशाधीन है।",
+      shortBioHindi: "उत्तर प्रदेश के जौनपुर जिले में जन्मी गरिमा सिंह आज की संभावनाशील रचनाकार हैं। देश की प्रतिष्ठित पत्रिकाओं में आपकी रचनाएं निरंतर प्रकाशित हो रही हैं। कविता संग्रह \"चाक पे माटी सा मन\" और साँझा काव्य संग्रह \"त्रिपथ\" व अन्य साँझा संग्रह प्रकाशित, एक कविता संग्रह अभी प्रकाशाधीन है।",
       fullBio: [
-        "Born in Jaunpur district of Uttar Pradesh, Garima Singh is a dynamic and promising contemporary literary voice. Her poetry, ghazals, and prose are regularly featured in prestigious national literary journals and anthologies.",
-        "Her published works include the acclaimed poetry collection \"Chaak Pe Maati Sa Man\" (चाक पे माटी सा मन), the joint anthology \"Tripath\" (त्रिपथ), and several collaborative volumes, with another major poetry collection currently in publication.",
-        "Renowned for her expressive cadence, vibrant imagery, and fresh poetic idioms, she actively participates in national literature festivals, youth poetry forums, and digital literary circles."
+        "उत्तर प्रदेश के जौनपुर जिले में जन्मी गरिमा सिंह आज की संभावनाशील रचनाकार हैं। देश की प्रतिष्ठित पत्रिकाओं में आपकी रचनाएं निरंतर प्रकाशित हो रही हैं।",
+        "कविता संग्रह \"चाक पे माटी सा मन\" और साँझा काव्य संग्रह \"त्रिपथ\" व अन्य साँझा संग्रह प्रकाशित, एक कविता संग्रह अभी प्रकाशाधीन है।"
       ],
       fullBioHindi: [
         "उत्तर प्रदेश के जौनपुर जिले में जन्मी गरिमा सिंह आज की संभावनाशील रचनाकार हैं। देश की प्रतिष्ठित पत्रिकाओं में आपकी रचनाएं निरंतर प्रकाशित हो रही हैं।",
-        "कविता संग्रह \"चाक पे माटी सा मन\" और साँझा काव्य संग्रह \"त्रिपथ\" व अन्य साँझा संग्रह प्रकाशित, एक कविता संग्रह अभी प्रकाशाधीन है।",
-        "अपनी विशिष्ट शैली, जीवंत बिम्बावली और तीक्ष्ण काव्य-संवेदनशीलता के साथ उन्होंने समकालीन साहित्यिक परिदृश्य में एक सशक्त और प्रेरक स्थान बनाया है।"
+        "कविता संग्रह \"चाक पे माटी सा मन\" और साँझा काव्य संग्रह \"त्रिपथ\" व अन्य साँझा संग्रह प्रकाशित, एक कविता संग्रह अभी प्रकाशाधीन है।"
       ],
-      philosophy: "A poem is a mirror in which the soul gazes upon its truest, most unfiltered reflection.",
-      philosophyHindi: "कविता वह दर्पण है जिसमें आत्मा अपना सबसे सच्चा, सबसे निर्मल प्रतिबिंब देखती है।",
+      philosophy: "",
+      philosophyHindi: "",
       avatarUrl: "",
-      awards: [
-        { year: "2025", title: "Yuva Kavya Pratibha Puraskar", organization: "Bharatiya Jnanpith Stage" },
-        { year: "2023", title: "Kalamshree Youth Honor", organization: "Academy of Contemporary Arts" },
-        { year: "2021", title: "National Poetry Fellowship", organization: "Sahitya Sansad" }
-      ],
-      stats: {
-        publishedBooks: 3,
-        poemsCount: "200+",
-        stageEvents: "90+",
-        experience: "12+ Years"
-      },
+      awards: [],
+      stats: {},
       social: {
         instagram: "https://instagram.com",
         facebook: "https://facebook.com",
