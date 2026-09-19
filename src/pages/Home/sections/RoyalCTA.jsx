@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { Calendar, Sparkles, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useContent } from '../../../context/ContentContext';
 
 const RoyalCTA = () => {
   const { t } = useLanguage();
+  const { siteSettings } = useContent();
+  const cta = siteSettings?.cta || {};
 
   return (
     <section className="royal-cta-section">
@@ -20,26 +23,26 @@ const RoyalCTA = () => {
         >
           <span className="royal-tag gold" style={{ marginBottom: '1.2rem' }}>
             <Sparkles size={14} />
-            {t('cta.tag')}
+            {cta.tag || t('cta.tag')}
           </span>
 
           <h2 className="cta-heading">
-            {t('cta.heading1')} <br />
-            {t('cta.heading2')}
+            {cta.heading1 || t('cta.heading1')} <br />
+            {cta.heading2 || t('cta.heading2')}
           </h2>
 
           <p className="cta-subtext">
-            {t('cta.sub')}
+            {cta.sub || t('cta.sub')}
           </p>
 
           <div className="cta-btn-group">
-            <Link to="/contact" className="btn-royal-gold" style={{ padding: '1rem 2.2rem', fontSize: '1rem' }}>
+            <Link to={cta.inviteBtnLink || "/contact"} className="btn-royal-gold" style={{ padding: '1rem 2.2rem', fontSize: '1rem' }}>
               <Calendar size={18} />
-              <span>{t('cta.invite')}</span>
+              <span>{cta.inviteBtnText || t('cta.invite')}</span>
             </Link>
-            <Link to="/contact?type=letter" className="btn-royal-outline" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#FFFFFF', borderColor: 'rgba(255, 255, 255, 0.3)', padding: '1rem 2rem', fontSize: '1rem' }}>
+            <Link to={cta.writeBtnLink || "/contact?type=letter"} className="btn-royal-outline" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#FFFFFF', borderColor: 'rgba(255, 255, 255, 0.3)', padding: '1rem 2rem', fontSize: '1rem' }}>
               <Mail size={18} />
-              <span>{t('cta.write')}</span>
+              <span>{cta.writeBtnText || t('cta.write')}</span>
             </Link>
           </div>
         </motion.div>

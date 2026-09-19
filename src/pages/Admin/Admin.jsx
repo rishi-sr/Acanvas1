@@ -8,7 +8,6 @@ import {
   Trash2,
   Edit2,
   Download,
-  RefreshCw,
   Feather,
   BookOpen,
   Quote,
@@ -31,7 +30,12 @@ import {
   Layers,
   ChevronRight,
   Globe,
-  ArrowLeft
+  ArrowLeft,
+  Sliders,
+  Settings,
+  Phone,
+  Share2,
+  ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
@@ -50,6 +54,8 @@ const Admin = () => {
     submissions,
     inquiries,
     systemStatus,
+    siteSettings,
+    updateSiteSettings,
     isAdminLoggedIn,
     adminLogin,
     adminLogout,
@@ -82,8 +88,7 @@ const Admin = () => {
     deleteSubmission,
     updateInquiryStatus,
     deleteInquiry,
-    exportDatabase,
-    resetToDefaults
+    exportDatabase
   } = useContent();
 
   const [username, setUsername] = useState('');
@@ -106,6 +111,13 @@ const Admin = () => {
 
   // Section list with metadata for dropdown
   const sections = [
+    {
+      id: 'site_settings',
+      label: 'वेबसाइट सेटिंग्स एवं होमपेज (Site Settings & Home Content)',
+      shortLabel: 'वेबसाइट सेटिंग्स',
+      icon: <Sliders size={18} />,
+      badge: 'होमपेज व ब्रांडिंग'
+    },
     {
       id: 'authors',
       label: 'लेखक प्रोफाइल (Authors Profile)',
@@ -172,13 +184,56 @@ const Admin = () => {
     {
       id: 'inquiries',
       label: `संदेश इनबॉक्स (Inquiries & Letters)`,
-      shortLabel: 'संदेश ইনबॉक्स',
+      shortLabel: 'संदेश इनबॉक्स',
       icon: <Inbox size={18} />,
       badge: `${inquiries?.length || 0} संदेश`
     }
   ];
 
   const currentSection = sections.find(s => s.id === activeTab) || sections[0];
+
+  // ==========================================
+  // SITE SETTINGS STATE & HANDLERS
+  // ==========================================
+  const [settingsForm, setSettingsForm] = useState(siteSettings || {});
+  const [settingsSaveMsg, setSettingsSaveMsg] = useState('');
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [activeSettingsTab, setActiveSettingsTab] = useState('hero'); // 'hero' | 'cta' | 'contact' | 'social' | 'footer'
+
+  useEffect(() => {
+    if (siteSettings) {
+      setSettingsForm(siteSettings);
+    }
+  }, [siteSettings]);
+
+  const handleNestedSettingChange = (section, field, value) => {
+    setSettingsForm(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [field]: value
+      }
+    }));
+  };
+
+  const handleSaveSiteSettings = async (e) => {
+    e?.preventDefault?.();
+    setSavingSettings(true);
+    setSettingsSaveMsg('');
+    try {
+      const res = await updateSiteSettings(settingsForm);
+      if (res?.success) {
+        setSettingsSaveMsg('✓ वेबसाइट सेटिंग्स सफलतापूर्वक सहेजी गईं (Site settings saved successfully)!');
+      } else {
+        setSettingsSaveMsg(`⚠️ त्रुटि: ${res?.message || 'अपडेट विफल'}`);
+      }
+    } catch (err) {
+      setSettingsSaveMsg('⚠️ सेटिंग्स अपडेट करने में समस्या आई।');
+    } finally {
+      setSavingSettings(false);
+      setTimeout(() => setSettingsSaveMsg(''), 4500);
+    }
+  };
 
   // Author Management State
   const [selectedAuthorId, setSelectedAuthorId] = useState('kanchan');
@@ -687,10 +742,6 @@ const Admin = () => {
               <Download size={15} />
               <span>Export Backup</span>
             </button>
-            <button className="btn-royal-outline" onClick={resetToDefaults} title="Reset to default seed dataset">
-              <RefreshCw size={15} />
-              <span>Reset</span>
-            </button>
             <button className="btn-royal" onClick={adminLogout} style={{ padding: '0.55rem 1.1rem' }}>
               <LogOut size={15} />
               <span>Log Out</span>
@@ -748,15 +799,15 @@ const Admin = () => {
             <AnimatePresence>
               {isSectionDropdownOpen && (
                 <motion.div
-                  className="dropdown-menu-list"
-                  initial={{ opacity: 0, y: -10, scaleY: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scaleY: 1 }}
-                  exit={{ opacity: 0, y: -10, scaleY: 0.95 }}
+                  className="custom-dropdown-menu"
+                  initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="dropdown-menu-header">
-                    <span>अनुभाग सूची (All Modules)</span>
-                    <span className="menu-count">10 Sections</span>
+                    <span>अनुभाग सूची (All Admin Modules)</span>
+                    <span className="menu-count">{sections.length} Modules</span>
                   </div>
                   <div className="dropdown-menu-items-grid">
                     {sections.map(section => (
@@ -789,6 +840,405 @@ const Admin = () => {
             </AnimatePresence>
           </div>
         </div>
+
+        {/* ==========================================
+            TAB: SITE SETTINGS & HOMEPAGE CONTENT
+        ========================================== */}
+        {activeTab === 'site_settings' && (
+          <div className="admin-panel-content">
+            <div className="panel-top-bar">
+              <div>
+                <h2 className="panel-heading">वेबसाइट सेटिंग्स एवं होमपेज सामग्री (Site Settings & Home Content)</h2>
+                <p style={{ color: '#7D6B6E', fontSize: '0.88rem', marginTop: '0.25rem' }}>
+                  होमपेज बैनर, साहित्यिक आमंत्रण (CTA), वैश्विक संपर्क सूत्र, सोशल मीडिया एवं फुटर मोटो को सीधे बदलें।
+                </p>
+              </div>
+            </div>
+
+            {/* Sub-tabs for Settings */}
+            <div className="author-select-pills" style={{ marginBottom: '1.8rem' }}>
+              <button
+                type="button"
+                className={`author-pill-btn ${activeSettingsTab === 'hero' ? 'active' : ''}`}
+                onClick={() => setActiveSettingsTab('hero')}
+              >
+                ✨ होमपेज बैनर (Hero)
+              </button>
+              <button
+                type="button"
+                className={`author-pill-btn ${activeSettingsTab === 'cta' ? 'active' : ''}`}
+                onClick={() => setActiveSettingsTab('cta')}
+              >
+                📜 साहित्यिक आमंत्रण (Royal CTA)
+              </button>
+              <button
+                type="button"
+                className={`author-pill-btn ${activeSettingsTab === 'contact' ? 'active' : ''}`}
+                onClick={() => setActiveSettingsTab('contact')}
+              >
+                📞 संपर्क जानकारी (Contact Info)
+              </button>
+              <button
+                type="button"
+                className={`author-pill-btn ${activeSettingsTab === 'social' ? 'active' : ''}`}
+                onClick={() => setActiveSettingsTab('social')}
+              >
+                🌐 सोशल मीडिया (Social Links)
+              </button>
+              <button
+                type="button"
+                className={`author-pill-btn ${activeSettingsTab === 'footer' ? 'active' : ''}`}
+                onClick={() => setActiveSettingsTab('footer')}
+              >
+                🏛️ फुटर एवं ब्रांड मोटो (Footer)
+              </button>
+            </div>
+
+            {settingsSaveMsg && (
+              <div className="alert-box-success" style={{ marginBottom: '1.5rem' }}>
+                <CheckCircle size={18} />
+                <span>{settingsSaveMsg}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveSiteSettings} className="author-editor-card">
+              {/* SUBTAB 1: HERO */}
+              {activeSettingsTab === 'hero' && (
+                <div className="settings-tab-pane">
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#8B0000', fontSize: '1.2rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(197, 160, 89, 0.3)', paddingBottom: '0.6rem' }}>
+                    होमपेज मुख्य बैनर सेटिंग्स (Hero Showcase)
+                  </h3>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>शीर्ष बैज (Top Badge / Monogram Text)</label>
+                      <input
+                        type="text"
+                        placeholder="साहित्यिक त्रिवेणी"
+                        value={settingsForm?.hero?.badge || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'badge', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>उपशीर्षक (Main Subtitle / Tagline)</label>
+                      <input
+                        type="text"
+                        placeholder="साहित्य, संस्कृति एवं मानवीय संवेदनाओं का डिजिटल संगम"
+                        value={settingsForm?.hero?.subtitle || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'subtitle', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>मुख्य शीर्षक - भाग १ (Title Line 1)</label>
+                      <input
+                        type="text"
+                        placeholder="अक्षर"
+                        value={settingsForm?.hero?.title1 || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'title1', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>मुख्य शीर्षक - भाग २ (Title Line 2 - Gold Highlight)</label>
+                      <input
+                        type="text"
+                        placeholder="कैनवास"
+                        value={settingsForm?.hero?.title2 || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'title2', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>परिचय गद्यांश (Lead Introduction Paragraph)</label>
+                    <textarea
+                      rows={4}
+                      placeholder="हिंदी साहित्य, काव्यशास्त्र और समकालीन विमर्श का एक अनूठा डिजिटल उपक्रम..."
+                      value={settingsForm?.hero?.lead || ''}
+                      onChange={(e) => handleNestedSettingChange('hero', 'lead', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>प्राथमिक बटन लेबल (Primary Button Text)</label>
+                      <input
+                        type="text"
+                        placeholder="कविताएँ पढ़ें"
+                        value={settingsForm?.hero?.explorePoemsText || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'explorePoemsText', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>प्राथमिक बटन लिंक (Primary Button Link)</label>
+                      <input
+                        type="text"
+                        placeholder="/poems"
+                        value={settingsForm?.hero?.explorePoemsLink || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'explorePoemsLink', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>द्वितीयक बटन लेबल (Secondary Button Text)</label>
+                      <input
+                        type="text"
+                        placeholder="पुस्तकें देखें"
+                        value={settingsForm?.hero?.discoverBooksText || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'discoverBooksText', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>द्वितीयक बटन लिंक (Secondary Button Link)</label>
+                      <input
+                        type="text"
+                        placeholder="/books"
+                        value={settingsForm?.hero?.discoverBooksLink || ''}
+                        onChange={(e) => handleNestedSettingChange('hero', 'discoverBooksLink', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SUBTAB 2: CTA */}
+              {activeSettingsTab === 'cta' && (
+                <div className="settings-tab-pane">
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#8B0000', fontSize: '1.2rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(197, 160, 89, 0.3)', paddingBottom: '0.6rem' }}>
+                    रॉयल आमंत्रण अनुभाग (Royal Invitation CTA)
+                  </h3>
+
+                  <div className="form-row-full">
+                    <label>आमंत्रण बैज / टैग (Tag Badge)</label>
+                    <input
+                      type="text"
+                      placeholder="साहित्यिक आमंत्रण"
+                      value={settingsForm?.cta?.tag || ''}
+                      onChange={(e) => handleNestedSettingChange('cta', 'tag', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>मुख्य आमंत्रण शीर्षक - पंक्ति १ (Heading Line 1)</label>
+                      <input
+                        type="text"
+                        placeholder="साहित्यिक आयोजनों, उत्सवों एवं गोष्ठियों में"
+                        value={settingsForm?.cta?.heading1 || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'heading1', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>मुख्य आमंत्रण शीर्षक - पंक्ति २ (Heading Line 2)</label>
+                      <input
+                        type="text"
+                        placeholder="कवयित्रियों को आमंत्रित करें"
+                        value={settingsForm?.cta?.heading2 || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'heading2', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>आमंत्रण विवरण (CTA Description / Subtext)</label>
+                    <textarea
+                      rows={3}
+                      placeholder="काव्य पाठ, विचार गोष्ठी, पुस्तक विमोचन अथवा रचनात्मक कार्यशालाओं के लिए सीधे संपर्क करें।"
+                      value={settingsForm?.cta?.sub || ''}
+                      onChange={(e) => handleNestedSettingChange('cta', 'sub', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>आमंत्रण बटन टेक्स्ट (Invite Button Text)</label>
+                      <input
+                        type="text"
+                        placeholder="आमंत्रित करें"
+                        value={settingsForm?.cta?.inviteBtnText || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'inviteBtnText', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>आमंत्रण बटन लिंक (Invite Button Link)</label>
+                      <input
+                        type="text"
+                        placeholder="/contact"
+                        value={settingsForm?.cta?.inviteBtnLink || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'inviteBtnLink', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>पत्र लेखन बटन टेक्स्ट (Write Letter Button Text)</label>
+                      <input
+                        type="text"
+                        placeholder="पत्र लिखें"
+                        value={settingsForm?.cta?.writeBtnText || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'writeBtnText', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>पत्र लेखन बटन लिंक (Write Letter Button Link)</label>
+                      <input
+                        type="text"
+                        placeholder="/contact?type=letter"
+                        value={settingsForm?.cta?.writeBtnLink || ''}
+                        onChange={(e) => handleNestedSettingChange('cta', 'writeBtnLink', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SUBTAB 3: CONTACT */}
+              {activeSettingsTab === 'contact' && (
+                <div className="settings-tab-pane">
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#8B0000', fontSize: '1.2rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(197, 160, 89, 0.3)', paddingBottom: '0.6rem' }}>
+                    वैश्विक संपर्क सूत्र (Global Contact Information)
+                  </h3>
+
+                  <div className="form-row-full">
+                    <label>आधिकारिक ईमेल पता (Official Contact Email)</label>
+                    <input
+                      type="email"
+                      placeholder="contact@aksharcanvas.com"
+                      value={settingsForm?.contact?.email || ''}
+                      onChange={(e) => handleNestedSettingChange('contact', 'email', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>संपर्क फोन / हेल्पलाइन नंबर (Contact Phone Numbers)</label>
+                    <input
+                      type="text"
+                      placeholder="+91 98765 43210 / +91 94512 34567"
+                      value={settingsForm?.contact?.phone || ''}
+                      onChange={(e) => handleNestedSettingChange('contact', 'phone', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>साहित्यिक केंद्र / पता (Literary Base / Location)</label>
+                    <input
+                      type="text"
+                      placeholder="वाराणसी • लखनऊ • नई दिल्ली (भारत)"
+                      value={settingsForm?.contact?.location || ''}
+                      onChange={(e) => handleNestedSettingChange('contact', 'location', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* SUBTAB 4: SOCIAL */}
+              {activeSettingsTab === 'social' && (
+                <div className="settings-tab-pane">
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#8B0000', fontSize: '1.2rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(197, 160, 89, 0.3)', paddingBottom: '0.6rem' }}>
+                    सोशल मीडिया प्रोफाइल लिंक्स (Social Media Channels)
+                  </h3>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>इंस्टाग्राम प्रोफाइल लिंक (Instagram URL)</label>
+                      <input
+                        type="url"
+                        placeholder="https://instagram.com/aksharcanvas"
+                        value={settingsForm?.social?.instagram || ''}
+                        onChange={(e) => handleNestedSettingChange('social', 'instagram', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>फेसबुक पेज लिंक (Facebook Page URL)</label>
+                      <input
+                        type="url"
+                        placeholder="https://facebook.com/aksharcanvas"
+                        value={settingsForm?.social?.facebook || ''}
+                        onChange={(e) => handleNestedSettingChange('social', 'facebook', e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group-split">
+                    <div className="form-field">
+                      <label>यूट्यूब चैनल लिंक (YouTube Channel URL)</label>
+                      <input
+                        type="url"
+                        placeholder="https://youtube.com/@aksharcanvas"
+                        value={settingsForm?.social?.youtube || ''}
+                        onChange={(e) => handleNestedSettingChange('social', 'youtube', e.target.value)}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>ट्विटर / X प्रोफाइल लिंक (Twitter / X URL)</label>
+                      <input
+                        type="url"
+                        placeholder="https://twitter.com/aksharcanvas"
+                        value={settingsForm?.social?.twitter || ''}
+                        onChange={(e) => handleNestedSettingChange('social', 'twitter', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SUBTAB 5: FOOTER */}
+              {activeSettingsTab === 'footer' && (
+                <div className="settings-tab-pane">
+                  <h3 style={{ fontFamily: "'Cinzel', serif", color: '#8B0000', fontSize: '1.2rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(197, 160, 89, 0.3)', paddingBottom: '0.6rem' }}>
+                    फुटर एवं साहित्यिक मोटो (Footer Branding & Motto)
+                  </h3>
+
+                  <div className="form-row-full">
+                    <label>फुटर ब्रांड विवरण (Footer Brand Description)</label>
+                    <textarea
+                      rows={3}
+                      placeholder="हिंदी साहित्य को समर्पित एक डिजिटल उपक्रम — जहाँ काव्य, विचार और संस्कृति का संगम होता है।"
+                      value={settingsForm?.footer?.brandDesc || ''}
+                      onChange={(e) => handleNestedSettingChange('footer', 'brandDesc', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>साहित्यिक मोटो / संस्कृत श्लोक (Literary Motto)</label>
+                    <input
+                      type="text"
+                      placeholder="काव्यं करोति साहित्यम् • संस्कृतेः संवर्धनम्"
+                      value={settingsForm?.footer?.motto || ''}
+                      onChange={(e) => handleNestedSettingChange('footer', 'motto', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-row-full">
+                    <label>कॉपीराइट अधिकार सूचना (Copyright Notice Text)</label>
+                    <input
+                      type="text"
+                      placeholder="सर्वाधिकार सुरक्षित।"
+                      value={settingsForm?.footer?.rights || ''}
+                      onChange={(e) => handleNestedSettingChange('footer', 'rights', e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(197, 160, 89, 0.25)', flexWrap: 'wrap' }}>
+                <button type="submit" className="btn-royal" disabled={savingSettings} style={{ padding: '0.85rem 2rem' }}>
+                  <Save size={16} />
+                  <span>{savingSettings ? 'सेटिंग्स सहेजी जा रही हैं...' : 'वेबसाइट सेटिंग्स सहेजें (Save All Settings)'}</span>
+                </button>
+                <Link to="/" target="_blank" className="btn-royal-outline" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.85rem 1.4rem' }}>
+                  <ExternalLink size={15} />
+                  <span>लाइव वेबसाइट पर देखें (Preview Live Site)</span>
+                </Link>
+              </div>
+            </form>
+          </div>
+        )}
 
         {/* ==========================================
             TAB 0: AUTHORS MANAGEMENT

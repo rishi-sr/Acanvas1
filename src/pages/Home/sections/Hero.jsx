@@ -2,10 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Feather, BookOpen, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useContent } from '../../../context/ContentContext';
 import { useLanguage } from '../../../context/LanguageContext';
 
 const Hero = () => {
+  const { siteSettings } = useContent();
   const { t } = useLanguage();
+
+  const heroData = siteSettings?.hero || {};
+
+  const badgeText = heroData.badge || t('hero.badge');
+  const title1 = heroData.title1 || t('hero.title1');
+  const title2 = heroData.title2 || t('hero.title2');
+  const subtitle = heroData.subtitle || t('hero.subtitle');
+  const leadText = heroData.lead || t('hero.lead');
+  const exploreText = heroData.explorePoemsText || t('hero.explorePoems');
+  const exploreLink = heroData.explorePoemsLink || '/poems';
+  const discoverText = heroData.discoverBooksText || t('hero.discoverBooks');
+  const discoverLink = heroData.discoverBooksLink || '/books';
 
   return (
     <section className="hero-section">
@@ -21,31 +35,31 @@ const Hero = () => {
             <div className="hero-badge-wrap">
               <span className="royal-tag">
                 <Sparkles size={13} />
-                {t('hero.badge')}
+                {badgeText}
               </span>
             </div>
 
             <h1 className="hero-main-title">
-              {t('hero.title1')} <br />
-              <span className="title-highlight">{t('hero.title2')}</span>
+              {title1} <br />
+              <span className="title-highlight">{title2}</span>
             </h1>
 
             <div className="hero-subtitle">
-              {t('hero.subtitle')}
+              {subtitle}
             </div>
 
             <p className="hero-lead-text">
-              {t('hero.lead')}
+              {leadText}
             </p>
 
             <div className="hero-actions-row">
-              <Link to="/poems" className="btn-royal">
+              <Link to={exploreLink} className="btn-royal">
                 <Feather size={17} />
-                <span>{t('hero.explorePoems')}</span>
+                <span>{exploreText}</span>
               </Link>
-              <Link to="/books" className="btn-royal-outline">
+              <Link to={discoverLink} className="btn-royal-outline">
                 <BookOpen size={17} />
-                <span>{t('hero.discoverBooks')}</span>
+                <span>{discoverText}</span>
               </Link>
             </div>
           </motion.div>
