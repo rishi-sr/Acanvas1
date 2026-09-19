@@ -7,13 +7,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import './Contact.scss';
 
 const Contact = () => {
-  const { submitInquiry, siteSettings } = useContent();
+  const { submitInquiry } = useContent();
   const { t } = useLanguage();
-  const contactInfo = siteSettings?.contact || {};
-  const contactEmail = contactInfo.email || 'contact@aksharcanvas.com';
-  const contactPhone = contactInfo.phone || '+91 98765 43210';
-  const contactLoc = contactInfo.location || 'Varanasi • Lucknow • New Delhi (India)';
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -107,7 +102,7 @@ const Contact = () => {
                   <div className="item-text">
                     <div className="lbl">{t('contact.info.email.lbl')}</div>
                     <div className="val">
-                      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+                      <a href="mailto:contact@aksharcanvas.com">contact@aksharcanvas.com</a>
                     </div>
                   </div>
                 </div>
@@ -118,7 +113,7 @@ const Contact = () => {
                   </div>
                   <div className="item-text">
                     <div className="lbl">{t('contact.info.phone.lbl')}</div>
-                    <div className="val">{contactPhone}</div>
+                    <div className="val">+91 98765 43210 / +91 94512 34567</div>
                   </div>
                 </div>
 
@@ -128,7 +123,7 @@ const Contact = () => {
                   </div>
                   <div className="item-text">
                     <div className="lbl">{t('contact.info.loc.lbl')}</div>
-                    <div className="val">{contactLoc}</div>
+                    <div className="val">Varanasi • Lucknow • New Delhi (India)</div>
                   </div>
                 </div>
               </div>

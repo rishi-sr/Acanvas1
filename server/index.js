@@ -23,7 +23,6 @@ import galleryRoutes from './routes/galleryRoutes.js';
 import workshopRoutes from './routes/workshopRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import samkalieenRoutes from './routes/samkalieenRoutes.js';
-import settingsRoutes from './routes/settingsRoutes.js';
 
 // Middleware
 import { globalLimiter } from './middleware/rateLimiter.js';
@@ -111,7 +110,6 @@ app.use('/api/gallery', galleryRoutes);
 app.use('/api/workshops', workshopRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/samkalieen', samkalieenRoutes);
-app.use('/api/settings', settingsRoutes);
 
 // Root Welcome / Ping
 app.get('/', (req, res) => {

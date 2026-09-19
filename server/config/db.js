@@ -114,46 +114,7 @@ const defaultDatabase = {
       name: "Akshar Canvas Administrator",
       email: "admin@aksharcanvas.com"
     }
-  ],
-  siteSettings: {
-    hero: {
-      badge: "साहित्यिक त्रिवेणी",
-      title1: "अक्षर",
-      title2: "कैनवास",
-      subtitle: "साहित्य, संस्कृति एवं मानवीय संवेदनाओं का डिजिटल संगम",
-      lead: "हिंदी साहित्य, काव्यशास्त्र और समकालीन विमर्श का एक अनूठा डिजिटल उपक्रम। यहाँ शब्द केवल भाव नहीं, आत्मा का उद्घोष हैं।",
-      explorePoemsText: "कविताएँ पढ़ें",
-      explorePoemsLink: "/poems",
-      discoverBooksText: "पुस्तकें देखें",
-      discoverBooksLink: "/books"
-    },
-    cta: {
-      tag: "साहित्यिक आमंत्रण",
-      heading1: "साहित्यिक आयोजनों, उत्सवों एवं गोष्ठियों में",
-      heading2: "कवयित्रियों को आमंत्रित करें",
-      sub: "काव्य पाठ, विचार गोष्ठी, पुस्तक विमोचन अथवा रचनात्मक कार्यशालाओं के लिए सीधे संपर्क करें।",
-      inviteBtnText: "आमंत्रित करें",
-      inviteBtnLink: "/contact",
-      writeBtnText: "पत्र लिखें",
-      writeBtnLink: "/contact?type=letter"
-    },
-    contact: {
-      email: "contact@aksharcanvas.com",
-      phone: "+91 98765 43210",
-      location: "वाराणसी / लखनऊ, उत्तर प्रदेश"
-    },
-    social: {
-      instagram: "https://instagram.com",
-      facebook: "https://facebook.com",
-      youtube: "https://youtube.com",
-      twitter: "https://twitter.com"
-    },
-    footer: {
-      brandDesc: "हिंदी साहित्य को समर्पित एक डिजिटल उपक्रम — जहाँ काव्य, विचार और संस्कृति का संगम होता है।",
-      motto: "काव्यं करोति साहित्यम् • संस्कृतेः संवर्धनम्",
-      rights: "सर्वाधिकार सुरक्षित।"
-    }
-  }
+  ]
 };
 
 // ==========================================
@@ -324,16 +285,6 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: String, default: () => new Date().toISOString() }
 }, { strict: false });
 
-const SiteSettingsSchema = new mongoose.Schema({
-  id: { type: String, default: 'main_settings', unique: true },
-  hero: mongoose.Schema.Types.Mixed,
-  cta: mongoose.Schema.Types.Mixed,
-  contact: mongoose.Schema.Types.Mixed,
-  social: mongoose.Schema.Types.Mixed,
-  footer: mongoose.Schema.Types.Mixed,
-  updatedAt: { type: String, default: () => new Date().toISOString() }
-}, { strict: false });
-
 const Models = {
   authors: mongoose.models.Author || mongoose.model('Author', AuthorSchema),
   poems: mongoose.models.Poem || mongoose.model('Poem', PoemSchema),
@@ -345,8 +296,7 @@ const Models = {
   submissions: mongoose.models.Submission || mongoose.model('Submission', SubmissionSchema),
   inquiries: mongoose.models.Inquiry || mongoose.model('Inquiry', InquirySchema),
   gallery: mongoose.models.Gallery || mongoose.model('Gallery', GallerySchema),
-  users: mongoose.models.User || mongoose.model('User', UserSchema),
-  siteSettings: mongoose.models.SiteSettings || mongoose.model('SiteSettings', SiteSettingsSchema)
+  users: mongoose.models.User || mongoose.model('User', UserSchema)
 };
 
 // Connect to MongoDB if URI is configured
@@ -462,41 +412,35 @@ export const db = {
     return Array.isArray(data.users) ? data.users : (defaultDatabase.users || []);
   },
 
-  // Site Settings & Homepage Content
-  getSiteSettings: async () => {
-    if (isMongoConnected && Models.siteSettings) {
-      const settings = await Models.siteSettings.findOne({ id: 'main_settings' }).lean();
-      if (settings) return settings;
-    }
-    const data = readDb();
-    return data.siteSettings || defaultDatabase.siteSettings;
-  },
-
-  updateSiteSettings: async (updates) => {
-    if (isMongoConnected && Models.siteSettings) {
-      const existing = await Models.siteSettings.findOne({ id: 'main_settings' }).lean();
-      const merged = {
-        ...(existing || defaultDatabase.siteSettings),
-        ...updates,
-        id: 'main_settings',
-        updatedAt: new Date().toISOString()
-      };
-      const updated = await Models.siteSettings.findOneAndUpdate(
-        { id: 'main_settings' },
-        { $set: merged },
+  updateUserPassword: async (username, newPassword) => {
+    const cleanUser = String(username || '').trim().toLowerCase();
+    if (isMongoConnected && Models.users) {
+      const updated = await Models.users.findOneAndUpdate(
+        { username: cleanUser },
+        { $set: { password: newPassword, updatedAt: new Date().toISOString() } },
         { new: true, upsert: true }
       ).lean();
       return updated;
     }
     const data = readDb();
-    const current = data.siteSettings || defaultDatabase.siteSettings;
-    data.siteSettings = {
-      ...current,
-      ...updates,
-      updatedAt: new Date().toISOString()
-    };
+    if (!Array.isArray(data.users)) data.users = [...(defaultDatabase.users || [])];
+    const index = data.users.findIndex(u => String(u.username || '').toLowerCase() === cleanUser);
+    if (index !== -1) {
+      data.users[index].password = newPassword;
+      data.users[index].updatedAt = new Date().toISOString();
+    } else {
+      data.users.push({
+        id: cleanUser,
+        username: cleanUser,
+        password: newPassword,
+        role: 'admin',
+        name: 'Akshar Canvas Administrator',
+        email: 'admin@aksharcanvas.com',
+        updatedAt: new Date().toISOString()
+      });
+    }
     writeDbAtomically(data);
-    return data.siteSettings;
+    return data.users.find(u => String(u.username || '').toLowerCase() === cleanUser);
   },
 
   // Authors

@@ -35,7 +35,10 @@ import {
   Settings,
   Phone,
   Share2,
-  ExternalLink
+  ExternalLink,
+  Key,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
@@ -88,7 +91,8 @@ const Admin = () => {
     deleteSubmission,
     updateInquiryStatus,
     deleteInquiry,
-    exportDatabase
+    exportDatabase,
+    changeAdminPassword
   } = useContent();
 
   const [username, setUsername] = useState('');
@@ -97,6 +101,18 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('authors');
   const [isSectionDropdownOpen, setIsSectionDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Change Password State
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrentPass, setShowCurrentPass] = useState(false);
+  const [showNewPass, setShowNewPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [passChangeLoading, setPassChangeLoading] = useState(false);
+  const [passChangeError, setPassChangeError] = useState('');
+  const [passChangeSuccess, setPassChangeSuccess] = useState('');
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -659,6 +675,45 @@ const Admin = () => {
     });
   };
 
+  // --- PASSWORD CHANGE HANDLER ---
+  const handleChangePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPassChangeError('');
+    setPassChangeSuccess('');
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPassChangeError('कृपया सभी आवश्यक फ़ील्ड्स भरें।');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPassChangeError('नया पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPassChangeError('नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।');
+      return;
+    }
+
+    setPassChangeLoading(true);
+    const res = await changeAdminPassword(currentPassword, newPassword);
+    setPassChangeLoading(false);
+
+    if (res.success) {
+      setPassChangeSuccess('✅ ' + (res.message || 'पासवर्ड सफलतापूर्वक बदल दिया गया है!'));
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => {
+        setIsPasswordModalOpen(false);
+        setPassChangeSuccess('');
+      }, 2500);
+    } else {
+      setPassChangeError('❌ ' + (res.message || 'पासवर्ड बदलने में त्रुटि हुई।'));
+    }
+  };
+
   // Lock Screen
   if (!isAdminLoggedIn) {
     return (
@@ -738,6 +793,19 @@ const Admin = () => {
               <Globe size={15} />
               <span>वेबसाइट देखें</span>
             </Link>
+            <button
+              className="btn-royal-outline"
+              onClick={() => {
+                setIsPasswordModalOpen(true);
+                setPassChangeError('');
+                setPassChangeSuccess('');
+              }}
+              title="एडमिन पासवर्ड बदलें (Change Admin Password)"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Key size={15} />
+              <span>पासवर्ड बदलें</span>
+            </button>
             <button className="btn-royal-outline" onClick={exportDatabase} title="Export JSON Database">
               <Download size={15} />
               <span>Export Backup</span>
@@ -3010,6 +3078,136 @@ const Admin = () => {
             )}
           </div>
         )}
+
+        {/* Change Admin Password Modal */}
+        <AnimatePresence>
+          {isPasswordModalOpen && (
+            <div className="admin-modal-backdrop" onClick={() => setIsPasswordModalOpen(false)}>
+              <motion.div
+                className="admin-modal-card change-password-modal"
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="modal-header">
+                  <div className="modal-title-wrap">
+                    <div className="modal-icon-badge">
+                      <Key size={20} />
+                    </div>
+                    <div>
+                      <h3 className="modal-title">प्रशासक पासवर्ड बदलें</h3>
+                      <p className="modal-subtitle">Change Admin Password</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="modal-close-btn"
+                    onClick={() => setIsPasswordModalOpen(false)}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <form onSubmit={handleChangePasswordSubmit} className="change-password-form">
+                  {passChangeSuccess && (
+                    <div className="alert-box-success" style={{ marginBottom: '1rem' }}>
+                      {passChangeSuccess}
+                    </div>
+                  )}
+                  {passChangeError && (
+                    <div className="alert-box-error" style={{ marginBottom: '1rem' }}>
+                      {passChangeError}
+                    </div>
+                  )}
+
+                  <div className="form-field">
+                    <label>वर्तमान पासवर्ड (Current Password) *</label>
+                    <div className="password-input-wrap">
+                      <input
+                        type={showCurrentPass ? 'text' : 'password'}
+                        required
+                        placeholder="वर्तमान पासवर्ड दर्ज करें"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="toggle-pass-visibility"
+                        onClick={() => setShowCurrentPass(!showCurrentPass)}
+                        tabIndex={-1}
+                      >
+                        {showCurrentPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label>नया पासवर्ड (New Password) *</label>
+                    <div className="password-input-wrap">
+                      <input
+                        type={showNewPass ? 'text' : 'password'}
+                        required
+                        placeholder="नया पासवर्ड (न्यूनतम 6 अक्षर)"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="toggle-pass-visibility"
+                        onClick={() => setShowNewPass(!showNewPass)}
+                        tabIndex={-1}
+                      >
+                        {showNewPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label>नया पासवर्ड पुनः दर्ज करें (Confirm Password) *</label>
+                    <div className="password-input-wrap">
+                      <input
+                        type={showConfirmPass ? 'text' : 'password'}
+                        required
+                        placeholder="नया पासवर्ड पुनः दर्ज करें"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="toggle-pass-visibility"
+                        onClick={() => setShowConfirmPass(!showConfirmPass)}
+                        tabIndex={-1}
+                      >
+                        {showConfirmPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="modal-actions-footer">
+                    <button
+                      type="button"
+                      className="btn-royal-outline"
+                      onClick={() => setIsPasswordModalOpen(false)}
+                      disabled={passChangeLoading}
+                    >
+                      रद्द करें (Cancel)
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn-royal"
+                      disabled={passChangeLoading}
+                    >
+                      <Save size={16} />
+                      <span>{passChangeLoading ? 'अपडेट हो रहा है...' : 'पासवर्ड अपडेट करें'}</span>
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

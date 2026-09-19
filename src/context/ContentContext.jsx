@@ -24,50 +24,7 @@ const STORAGE_KEYS = {
   LIKED_ITEMS: 'akshar_liked_items_v3'
 };
 
-const defaultSiteSettings = {
-  hero: {
-    badge: "साहित्यिक त्रिवेणी",
-    title1: "अक्षर",
-    title2: "कैनवास",
-    subtitle: "साहित्य, संस्कृति एवं मानवीय संवेदनाओं का डिजिटल संगम",
-    lead: "हिंदी साहित्य, काव्यशास्त्र और समकालीन विमर्श का एक अनूठा डिजिटल उपक्रम। यहाँ शब्द केवल भाव नहीं, आत्मा का उद्घोष हैं।",
-    explorePoemsText: "कविताएँ पढ़ें",
-    explorePoemsLink: "/poems",
-    discoverBooksText: "पुस्तकें देखें",
-    discoverBooksLink: "/books"
-  },
-  cta: {
-    tag: "साहित्यिक आमंत्रण",
-    heading1: "साहित्यिक आयोजनों, उत्सवों एवं गोष्ठियों में",
-    heading2: "कवयित्रियों को आमंत्रित करें",
-    sub: "काव्य पाठ, विचार गोष्ठी, पुस्तक विमोचन अथवा रचनात्मक कार्यशालाओं के लिए सीधे संपर्क करें।",
-    inviteBtnText: "आमंत्रित करें",
-    inviteBtnLink: "/contact",
-    writeBtnText: "पत्र लिखें",
-    writeBtnLink: "/contact?type=letter"
-  },
-  contact: {
-    email: "contact@aksharcanvas.com",
-    phone: "+91 98765 43210",
-    location: "वाराणसी / लखनऊ, उत्तर प्रदेश"
-  },
-  social: {
-    instagram: "https://instagram.com",
-    facebook: "https://facebook.com",
-    youtube: "https://youtube.com",
-    twitter: "https://twitter.com"
-  },
-  footer: {
-    brandDesc: "हिंदी साहित्य को समर्पित एक डिजिटल उपक्रम — जहाँ काव्य, विचार और संस्कृति का संगम होता है।",
-    motto: "काव्यं करोति साहित्यम् • संस्कृतेः संवर्धनम्",
-    rights: "सर्वाधिकार सुरक्षित।"
-  }
-};
-
 export const ContentProvider = ({ children }) => {
-  // Site Settings & Homepage Content State
-  const [siteSettings, setSiteSettings] = useState(defaultSiteSettings);
-
   // Authors State
   const [authors, setAuthors] = useState(initialPoetsData);
 
@@ -257,12 +214,6 @@ export const ContentProvider = ({ children }) => {
       if (statusRes.ok && statusRes.data) {
         setSystemStatus(statusRes.data);
       }
-
-      // 10. Fetch Site Settings & Homepage Content
-      const settingsRes = await safeFetchJson(`${API_BASE}/settings`);
-      if (settingsRes.ok && settingsRes.data?.data) {
-        setSiteSettings(settingsRes.data.data);
-      }
     } catch (err) {
       console.warn('Backend API connection offline or pending; using initial datasets.', err);
     } finally {
@@ -357,6 +308,33 @@ export const ContentProvider = ({ children }) => {
       return { success: true };
     } catch (err) {
       return { success: false, message: 'Server connection error during login.' };
+    }
+  };
+
+  const changeAdminPassword = async (currentPassword, newPassword) => {
+    try {
+      const res = await fetch(`${API_BASE}/auth/change-password`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          currentPassword: String(currentPassword || '').trim(),
+          newPassword: String(newPassword || '').trim()
+        })
+      });
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return { success: false, message: 'सर्वर से संपर्क नहीं हो सका। कृपया बाद में प्रयास करें।' };
+      }
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, message: data.message || 'पासवर्ड बदलने में त्रुटि हुई।' };
+      }
+
+      return { success: true, message: data.message };
+    } catch (err) {
+      return { success: false, message: 'नेटवर्क कनेक्शन त्रुटि। कृपया पुनः प्रयास करें।' };
     }
   };
 
@@ -996,33 +974,9 @@ export const ContentProvider = ({ children }) => {
     } catch {}
   };
 
-  const updateSiteSettings = async (updates) => {
-    try {
-      const res = await fetch(`${API_BASE}/settings`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(updates)
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setSiteSettings(data.data);
-        return { success: true, data: data.data };
-      }
-      throw new Error(data.message || 'Failed to update site settings');
-    } catch (err) {
-      setSiteSettings(prev => ({
-        ...prev,
-        ...updates
-      }));
-      return { success: true, data: updates };
-    }
-  };
-
   return (
     <ContentContext.Provider
       value={{
-        siteSettings,
-        updateSiteSettings,
         authors,
         poems,
         books,
@@ -1039,6 +993,7 @@ export const ContentProvider = ({ children }) => {
         isLoading,
         adminLogin,
         adminLogout,
+        changeAdminPassword,
         updateAuthorProfile,
         uploadAuthorAvatar,
         toggleLike,
