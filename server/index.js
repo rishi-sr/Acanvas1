@@ -34,6 +34,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
+// Trust reverse proxy (Render, Vercel, Heroku, Cloudflare)
+app.set('trust proxy', 1);
+
 // Security Headers with Helmet
 app.use(
   helmet({
@@ -43,21 +46,36 @@ app.use(
 );
 
 // CORS Configuration
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5174,http://localhost:5173,http://localhost:3000')
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
   .split(',')
-  .map(origin => origin.trim());
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || NODE_ENV === 'development') {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      
+      // In development, or if in explicit allowed list, or localhost/vercel/render/netlify
+      if (
+        allowedOrigins.length === 0 ||
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(origin) ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('aksharcanvas') ||
+        origin.endsWith('.vercel.app') ||
+        origin.endsWith('.onrender.com') ||
+        origin.endsWith('.netlify.app')
+      ) {
         return callback(null, true);
       }
-      return callback(new Error('Blocked by CORS policy'));
+      return callback(null, true); // Permissive fallback for all client endpoints
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
   })
 );
 

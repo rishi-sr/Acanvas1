@@ -70,18 +70,71 @@ export const ContentProvider = ({ children }) => {
     return sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN) || null;
   });
 
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(!!authToken);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [systemStatus, setSystemStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Helper for authenticated fetch headers
   const getAuthHeaders = useCallback(() => {
     const headers = { 'Content-Type': 'application/json' };
-    if (authToken) {
-      headers['Authorization'] = `Bearer ${authToken}`;
+    const currentToken = authToken || sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN);
+    if (currentToken) {
+      headers['Authorization'] = `Bearer ${currentToken}`;
     }
     return headers;
   }, [authToken]);
+
+  const adminLogout = useCallback(() => {
+    setAuthToken(null);
+    setIsAdminLoggedIn(false);
+    sessionStorage.removeItem(STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
+  }, []);
+
+  // Verify JWT session on initial load
+  useEffect(() => {
+    const savedToken = sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN);
+    if (!savedToken) {
+      setIsAdminLoggedIn(false);
+      return;
+    }
+
+    let isMounted = true;
+    const verifyToken = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: {
+            'Authorization': `Bearer ${savedToken}`
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data.success) {
+            setAuthToken(savedToken);
+            setIsAdminLoggedIn(true);
+            return;
+          }
+        }
+        // If 401/403 or invalid response, wipe stale token
+        if (isMounted) {
+          adminLogout();
+        }
+      } catch (err) {
+        // If network issue, allow local state but set token
+        if (isMounted) {
+          setAuthToken(savedToken);
+          setIsAdminLoggedIn(true);
+        }
+      }
+    };
+
+    verifyToken();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [adminLogout]);
 
   // Sync liked items to local storage
   useEffect(() => {
@@ -170,12 +223,21 @@ export const ContentProvider = ({ children }) => {
 
   // Fetch Protected Data when Admin Logs In
   const refreshAdminData = useCallback(async () => {
-    if (!authToken) return;
+    const currentToken = authToken || sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN);
+    if (!currentToken) return;
+
     try {
       // Fetch Inquiries
       const inqRes = await fetch(`${API_BASE}/contact`, {
-        headers: getAuthHeaders()
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentToken}`
+        }
       });
+      if (inqRes.status === 401 || inqRes.status === 403) {
+        adminLogout();
+        return;
+      }
       if (inqRes.ok) {
         const inqData = await inqRes.json();
         if (Array.isArray(inqData.data)) setInquiries(inqData.data);
@@ -183,8 +245,15 @@ export const ContentProvider = ({ children }) => {
 
       // Fetch Submissions
       const subRes = await fetch(`${API_BASE}/submissions`, {
-        headers: getAuthHeaders()
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentToken}`
+        }
       });
+      if (subRes.status === 401 || subRes.status === 403) {
+        adminLogout();
+        return;
+      }
       if (subRes.ok) {
         const subData = await subRes.json();
         if (Array.isArray(subData.data)) setSubmissions(subData.data);
@@ -192,7 +261,7 @@ export const ContentProvider = ({ children }) => {
     } catch (err) {
       console.error('Failed to fetch admin dashboard datasets:', err);
     }
-  }, [authToken, getAuthHeaders]);
+  }, [authToken, adminLogout]);
 
   useEffect(() => {
     refreshAllData();
@@ -212,17 +281,17 @@ export const ContentProvider = ({ children }) => {
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: username.trim(), password: password.trim() })
       });
 
       const contentType = res.headers.get('content-type') || '';
       if (!contentType.includes('application/json')) {
-        return { success: false, message: 'Backend server is starting or unreachable. Please ensure the backend server is running via "npm run dev:all".' };
+        return { success: false, message: 'Backend server is starting or unreachable. Please try again in a few seconds.' };
       }
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        return { success: false, message: data.message || 'Invalid credentials' };
+        return { success: false, message: data.message || 'Invalid administrative credentials.' };
       }
 
       const token = data.token;
@@ -231,17 +300,15 @@ export const ContentProvider = ({ children }) => {
       sessionStorage.setItem(STORAGE_KEYS.TOKEN, token);
       localStorage.setItem(STORAGE_KEYS.TOKEN, token);
 
+      // Immediately fetch protected data
+      setTimeout(() => {
+        refreshAdminData();
+      }, 50);
+
       return { success: true };
     } catch (err) {
       return { success: false, message: 'Server connection error during login.' };
     }
-  };
-
-  const adminLogout = () => {
-    setAuthToken(null);
-    setIsAdminLoggedIn(false);
-    sessionStorage.removeItem(STORAGE_KEYS.TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.TOKEN);
   };
 
   // ==========================================
@@ -279,16 +346,27 @@ export const ContentProvider = ({ children }) => {
 
   const uploadAuthorAvatar = async (id, file) => {
     try {
+      const currentToken = authToken || sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN);
+      if (!currentToken) {
+        adminLogout();
+        return { success: false, message: 'कृपया पहले एडमिन लॉगिन करें।' };
+      }
+
       const formData = new FormData();
       formData.append('image', file);
 
       const res = await fetch(`${API_BASE}/authors/${id}/upload-image`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${authToken}`
+          'Authorization': `Bearer ${currentToken}`
         },
         body: formData
       });
+
+      if (res.status === 401 || res.status === 403) {
+        adminLogout();
+        return { success: false, message: 'सत्र समाप्त हो गया है। कृपया दोबारा लॉगिन करें।' };
+      }
 
       const data = await res.json();
       if (!res.ok || !data.success) {
@@ -532,16 +610,27 @@ export const ContentProvider = ({ children }) => {
 
   const uploadGalleryImage = async (file) => {
     try {
+      const currentToken = authToken || sessionStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem(STORAGE_KEYS.TOKEN);
+      if (!currentToken) {
+        adminLogout();
+        return { success: false, message: 'कृपया पहले एडमिन लॉगिन करें।' };
+      }
+
       const formData = new FormData();
       formData.append('image', file);
 
       const res = await fetch(`${API_BASE}/gallery/upload`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${authToken}`
+          'Authorization': `Bearer ${currentToken}`
         },
         body: formData
       });
+
+      if (res.status === 401 || res.status === 403) {
+        adminLogout();
+        return { success: false, message: 'सत्र समाप्त हो गया है। कृपया दोबारा लॉगिन करें।' };
+      }
 
       const data = await res.json();
       if (!res.ok || !data.success) {
