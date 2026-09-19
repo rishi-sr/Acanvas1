@@ -6,8 +6,11 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load Environment Variables
+dotenv.config({ path: path.join(__dirname, '.env') });
 dotenv.config();
 
 // Route Imports
@@ -26,9 +29,6 @@ import samkalieenRoutes from './routes/samkalieenRoutes.js';
 
 // Middleware
 import { globalLimiter } from './middleware/rateLimiter.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
