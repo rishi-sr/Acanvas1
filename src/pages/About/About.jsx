@@ -58,7 +58,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
         >
-          {/* Left Column: Full-height Photo with Published Books/Works Card */}
+          {/* Left Column: Full-height Photo */}
           <div className="bio-sidebar">
             <div className="bio-photo-hero">
               <img
@@ -73,39 +73,10 @@ const About = () => {
               <div className="bio-photo-fallback" style={{ display: 'none' }}>
                 <span>K</span>
               </div>
-              <div className="bio-photo-overlay" />
-            </div>
-
-            {/* Published Books & Works */}
-            <div className="bio-sidebar-footer">
-              <div className="bio-sidebar-section-title">
-                <BookOpen size={16} className="icon" />
-                <span>{isHindi ? 'प्रकाशित कृतियाँ / पुस्तकें' : 'Published Books & Works'}</span>
-              </div>
-
-              <div className="bio-sidebar-books-list">
-                {(kanchan.publishedBooks || [
-                  { title: isHindi ? 'काव्य संकलन एवं शोध प्रबंध' : 'Poetry & Research', type: isHindi ? 'शोध व काव्य' : 'Research' },
-                  { title: isHindi ? 'साहित्यिक आलेख संग्रह' : 'Literary Essays', type: isHindi ? 'समीक्षा' : 'Critique' }
-                ]).map((bookItem, bIdx) => (
-                  <div key={bIdx} className="bio-sidebar-book-item">
-                    <div className="book-dot">❖</div>
-                    <div className="book-details">
-                      <span className="book-title">{bookItem.title}</span>
-                      {bookItem.type && <span className="book-type-tag">{bookItem.type}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Link to="/books" className="bio-books-link-btn">
-                <span>{isHindi ? 'सभी पुस्तकें देखें' : 'View All Books'}</span>
-                <ArrowRight size={13} />
-              </Link>
             </div>
           </div>
 
-          {/* Right Column: Name, Tagline Quote, Bio & Honors */}
+          {/* Right Column: Name, Tagline Quote, Bio, Published Books & Honors */}
           <div className="bio-content-pane">
             <div className="bio-header-info">
               <div className="bio-role-badge">
@@ -133,6 +104,36 @@ const About = () => {
               ).map((paragraph, idx) => (
                 <p key={idx}>{paragraph}</p>
               ))}
+            </div>
+
+            {/* Published Books Section - Placed directly below the bio paragraphs */}
+            <div className="bio-published-books-section">
+              <div className="bio-section-heading">
+                <BookOpen size={18} className="heading-icon" />
+                <span>{isHindi ? 'प्रकाशित कृतियाँ / पुस्तकें' : 'Published Books & Works'}</span>
+              </div>
+
+              <div className="bio-books-cards-grid">
+                {(kanchan.publishedBooks || [
+                  { title: isHindi ? 'काव्य संकलन एवं शोध प्रबंध' : 'Poetry & Research', type: isHindi ? 'शोध व काव्य' : 'Research' },
+                  { title: isHindi ? 'साहित्यिक आलेख संग्रह' : 'Literary Essays', type: isHindi ? 'समीक्षा' : 'Critique' }
+                ]).map((bookItem, bIdx) => (
+                  <div key={bIdx} className="bio-book-card">
+                    <div className="book-card-accent" />
+                    <div className="book-card-content">
+                      <div className="book-card-title">{bookItem.title}</div>
+                      {bookItem.type && <span className="book-card-tag">{bookItem.type}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bio-books-action">
+                <Link to="/books" className="bio-explore-books-btn">
+                  <span>{isHindi ? 'सभी पुस्तकें देखें' : 'View All Books'}</span>
+                  <ArrowRight size={15} />
+                </Link>
+              </div>
             </div>
 
             {kanchan.awards && kanchan.awards.length > 0 && (
@@ -165,7 +166,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.65 }}
         >
-          {/* Left Column: Full-height Photo with Published Books/Works Card */}
+          {/* Left Column: Full-height Photo */}
           <div className="bio-sidebar dark-variant">
             <div className="bio-photo-hero">
               <img
@@ -180,40 +181,10 @@ const About = () => {
               <div className="bio-photo-fallback" style={{ display: 'none' }}>
                 <span>G</span>
               </div>
-              <div className="bio-photo-overlay" />
-            </div>
-
-            {/* Published Books & Works */}
-            <div className="bio-sidebar-footer">
-              <div className="bio-sidebar-section-title">
-                <BookOpen size={16} className="icon" />
-                <span>{isHindi ? 'प्रकाशित कृतियाँ / पुस्तकें' : 'Published Books & Works'}</span>
-              </div>
-
-              <div className="bio-sidebar-books-list">
-                {(garima.publishedBooks || [
-                  { title: isHindi ? 'चाक पे माटी सा मन' : 'Chaak Pe Maati Sa Man', type: isHindi ? 'कविता संग्रह' : 'Poetry Collection' },
-                  { title: isHindi ? 'त्रिपथ' : 'Tripath', type: isHindi ? 'साँझा काव्य संग्रह' : 'Anthology' },
-                  { title: isHindi ? 'नवीन काव्य संग्रह' : 'New Collection', type: isHindi ? 'प्रकाशाधीन' : 'Upcoming' }
-                ]).map((bookItem, bIdx) => (
-                  <div key={bIdx} className="bio-sidebar-book-item">
-                    <div className="book-dot">❖</div>
-                    <div className="book-details">
-                      <span className="book-title">{bookItem.title}</span>
-                      {bookItem.type && <span className="book-type-tag">{bookItem.type}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Link to="/books" className="bio-books-link-btn">
-                <span>{isHindi ? 'सभी पुस्तकें देखें' : 'View All Books'}</span>
-                <ArrowRight size={13} />
-              </Link>
             </div>
           </div>
 
-          {/* Right Column: Name, Tagline Quote, Bio & Honors */}
+          {/* Right Column: Name, Tagline Quote, Bio, Published Books & Honors */}
           <div className="bio-content-pane">
             <div className="bio-header-info">
               <div className="bio-role-badge">
@@ -241,6 +212,37 @@ const About = () => {
               ).map((paragraph, idx) => (
                 <p key={idx}>{paragraph}</p>
               ))}
+            </div>
+
+            {/* Published Books Section - Placed directly below the bio paragraphs */}
+            <div className="bio-published-books-section">
+              <div className="bio-section-heading">
+                <BookOpen size={18} className="heading-icon" />
+                <span>{isHindi ? 'प्रकाशित कृतियाँ / पुस्तकें' : 'Published Books & Works'}</span>
+              </div>
+
+              <div className="bio-books-cards-grid">
+                {(garima.publishedBooks || [
+                  { title: isHindi ? 'चाक पे माटी सा मन' : 'Chaak Pe Maati Sa Man', type: isHindi ? 'कविता संग्रह' : 'Poetry Collection' },
+                  { title: isHindi ? 'त्रिपथ' : 'Tripath', type: isHindi ? 'साँझा काव्य संग्रह' : 'Anthology' },
+                  { title: isHindi ? 'नवीन काव्य संग्रह' : 'New Collection', type: isHindi ? 'प्रकाशाधीन' : 'Upcoming' }
+                ]).map((bookItem, bIdx) => (
+                  <div key={bIdx} className="bio-book-card">
+                    <div className="book-card-accent" />
+                    <div className="book-card-content">
+                      <div className="book-card-title">{bookItem.title}</div>
+                      {bookItem.type && <span className="book-card-tag">{bookItem.type}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bio-books-action">
+                <Link to="/books" className="bio-explore-books-btn">
+                  <span>{isHindi ? 'सभी पुस्तकें देखें' : 'View All Books'}</span>
+                  <ArrowRight size={15} />
+                </Link>
+              </div>
             </div>
 
             {garima.awards && garima.awards.length > 0 && (
