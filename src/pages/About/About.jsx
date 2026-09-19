@@ -15,34 +15,6 @@ const About = () => {
   const garima = authors?.garima || defaultPoetsData.garima;
   const synergy = authors?.synergy || defaultPoetsData.synergy;
 
-  const milestones = [
-    {
-      year: "1998",
-      title: t('about.milestone.1.title') || "The Genesis of a Literary Odyssey",
-      desc: t('about.milestone.1.desc') || "Kanchan Lata Jaiswal's early classical verses received widespread recognition in leading national literary journals."
-    },
-    {
-      year: "2012",
-      title: t('about.milestone.2.title') || "Garima Singh's Poetic Emergence",
-      desc: t('about.milestone.2.desc') || "Young poetess Garima Singh achieved top honors across prestigious university poetry slams and regional literary gatherings."
-    },
-    {
-      year: "2021",
-      title: t('about.milestone.3.title') || "Publication of 'Alpana of Dreams'",
-      desc: t('about.milestone.3.desc') || "Kanchan Lata Ji's celebrated anthology was decorated with state-level literary honors for its exploration of cultural heritage."
-    },
-    {
-      year: "2023–2024",
-      title: t('about.milestone.4.title') || "Bestselling Anthologies & Ghazals",
-      desc: t('about.milestone.4.desc') || "'Echoes of the Inner Mind' and 'Ghazals on the Threshold' gained widespread acclaim among poetry lovers across India and abroad."
-    },
-    {
-      year: "2025–Present",
-      title: t('about.milestone.5.title') || "Establishment of Akshar Canvas",
-      desc: t('about.milestone.5.desc') || "Uniting the perspectives of two generations under 'Akshar Canvas' and announcing the forthcoming Grand Joint Anthology."
-    }
-  ];
-
   return (
     <div className="about-page">
       {/* Hero Banner */}
@@ -197,41 +169,6 @@ const About = () => {
             )}
           </div>
         </motion.div>
-      </section>
-
-      {/* Interactive Milestones Timeline */}
-      <section className="timeline-section">
-        <div className="container">
-          <div className="section-title-wrap">
-            <span className="subtitle">{t('about.timeline.subtitle')}</span>
-            <h2 className="main-title">
-              {t('about.timeline.title1')} <span className="highlight">{t('about.timeline.title2')}</span>
-            </h2>
-            <p className="desc">
-              {t('about.timeline.desc')}
-            </p>
-          </div>
-
-          <div className="timeline-track">
-            {milestones.map((item, idx) => (
-              <motion.div
-                key={idx}
-                className="timeline-node"
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
-                <div className="timeline-marker" />
-                <div className="timeline-card">
-                  <div className="time-yr">{item.year}</div>
-                  <h3 className="time-heading">{item.title}</h3>
-                  <p className="time-desc">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </section>
     </div>
   );
