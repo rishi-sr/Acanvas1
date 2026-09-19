@@ -88,5 +88,15 @@
   "samkalieen": [],
   "gallery": [],
   "submissions": [],
-  "inquiries": []
+  "inquiries": [],
+  "users": [
+    {
+      "id": "admin",
+      "username": "admin",
+      "password": "Canvas@0022",
+      "role": "admin",
+      "name": "Akshar Canvas Administrator",
+      "email": "admin@aksharcanvas.com"
+    }
+  ]
 }

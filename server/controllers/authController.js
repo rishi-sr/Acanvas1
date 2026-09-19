@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { db } from '../config/db.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'akshar_canvas_super_secret_jwt_key_2026_xyz';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
@@ -14,25 +15,52 @@ export const login = async (req, res) => {
       });
     }
 
-    const envUser = (process.env.ADMIN_USERNAME || 'aksharcanva').trim();
-    const envPass = (process.env.ADMIN_PASSWORD || 'Akshar@2026').trim();
-
     const inputUser = username.trim().toLowerCase();
-    const expectedUser = envUser.toLowerCase();
-
-    const isUserMatch = (inputUser === expectedUser) || 
-                        (inputUser === 'aksharcanva') || 
-                        (inputUser === 'aksharcanvas') ||
-                        (inputUser === 'admin');
-
     const trimmedInputPass = password.trim();
-    const isPassMatch = (trimmedInputPass === envPass) || 
-                        (trimmedInputPass === 'Akshar@2026') || 
-                        (trimmedInputPass === 'akshar2026') ||
-                        (trimmedInputPass === 'Admin@2026') ||
-                        (trimmedInputPass === 'admin123');
 
-    if (!isUserMatch || !isPassMatch) {
+    // 1. Check database users collection
+    let authenticatedUser = null;
+    try {
+      const dbUser = await db.getUserByUsername(inputUser);
+      if (dbUser && (dbUser.password === trimmedInputPass || dbUser.password === password)) {
+        authenticatedUser = {
+          id: dbUser.id || 'admin',
+          username: dbUser.username,
+          role: dbUser.role || 'admin',
+          name: dbUser.name || 'Akshar Canvas Administrator'
+        };
+      }
+    } catch (dbErr) {
+      console.warn('DB user lookup fallback:', dbErr.message);
+    }
+
+    // 2. Fallback to Environment Variables or System Hardcoded Defaults
+    if (!authenticatedUser) {
+      const envUser = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
+      const envPass = (process.env.ADMIN_PASSWORD || 'Canvas@0022').trim();
+
+      const isUserMatch = (inputUser === envUser) || 
+                          (inputUser === 'admin') || 
+                          (inputUser === 'aksharcanva') || 
+                          (inputUser === 'aksharcanvas');
+
+      const isPassMatch = (trimmedInputPass === envPass) || 
+                          (trimmedInputPass === 'Canvas@0022') || 
+                          (trimmedInputPass === 'Akshar@2026') || 
+                          (trimmedInputPass === 'akshar2026') ||
+                          (trimmedInputPass === 'Admin@2026');
+
+      if (isUserMatch && isPassMatch) {
+        authenticatedUser = {
+          id: 'admin',
+          username: inputUser,
+          role: 'admin',
+          name: 'Akshar Canvas Administrator'
+        };
+      }
+    }
+
+    if (!authenticatedUser) {
       return res.status(401).json({
         success: false,
         message: 'Invalid administrative credentials. Access denied.'
@@ -41,9 +69,9 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: 'admin-1',
-        username: envUser,
-        role: 'admin'
+        id: authenticatedUser.id,
+        username: authenticatedUser.username,
+        role: authenticatedUser.role
       },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
@@ -53,11 +81,7 @@ export const login = async (req, res) => {
       success: true,
       message: 'Admin authentication successful',
       token,
-      user: {
-        id: 'admin-1',
-        username: envUser,
-        role: 'admin'
-      }
+      user: authenticatedUser
     });
   } catch (error) {
     console.error('Login error:', error);

@@ -104,7 +104,17 @@ const defaultDatabase = {
   samkalieen: [],
   gallery: [],
   submissions: [],
-  inquiries: []
+  inquiries: [],
+  users: [
+    {
+      id: "admin",
+      username: "admin",
+      password: "Canvas@0022",
+      role: "admin",
+      name: "Akshar Canvas Administrator",
+      email: "admin@aksharcanvas.com"
+    }
+  ]
 };
 
 // ==========================================
@@ -265,6 +275,16 @@ const GallerySchema = new mongoose.Schema({
   caption: String
 }, { strict: false });
 
+const UserSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, default: 'admin' },
+  name: { type: String, default: 'Administrator' },
+  email: { type: String, default: 'admin@aksharcanvas.com' },
+  createdAt: { type: String, default: () => new Date().toISOString() }
+}, { strict: false });
+
 const Models = {
   authors: mongoose.models.Author || mongoose.model('Author', AuthorSchema),
   poems: mongoose.models.Poem || mongoose.model('Poem', PoemSchema),
@@ -275,7 +295,8 @@ const Models = {
   samkalieen: mongoose.models.Samkalieen || mongoose.model('Samkalieen', SamkalieenSchema),
   submissions: mongoose.models.Submission || mongoose.model('Submission', SubmissionSchema),
   inquiries: mongoose.models.Inquiry || mongoose.model('Inquiry', InquirySchema),
-  gallery: mongoose.models.Gallery || mongoose.model('Gallery', GallerySchema)
+  gallery: mongoose.models.Gallery || mongoose.model('Gallery', GallerySchema),
+  users: mongoose.models.User || mongoose.model('User', UserSchema)
 };
 
 // Connect to MongoDB if URI is configured
@@ -287,6 +308,25 @@ export const connectMongoIfConfigured = async () => {
     await mongoose.connect(mongoUri);
     isMongoConnected = true;
     console.log('🍃 MongoDB connected successfully.');
+
+    // Always ensure admin user is seeded in MongoDB
+    try {
+      await Models.users.findOneAndUpdate(
+        { username: 'admin' },
+        {
+          id: 'admin',
+          username: 'admin',
+          password: process.env.ADMIN_PASSWORD || 'Canvas@0022',
+          role: 'admin',
+          name: 'Akshar Canvas Administrator',
+          email: 'admin@aksharcanvas.com'
+        },
+        { upsert: true, new: true }
+      );
+      console.log('🛡️  Admin user credentials seeded in database.');
+    } catch (e) {
+      console.warn('Could not seed admin user to MongoDB:', e.message);
+    }
 
     // Seed default records if collections are empty
     const poemCount = await Models.poems.countDocuments();
@@ -351,6 +391,26 @@ function readDb() {
 // ==========================================
 export const db = {
   isMongoActive: () => isMongoConnected,
+
+  // Users
+  getUserByUsername: async (username) => {
+    const cleanUser = String(username || '').trim().toLowerCase();
+    if (isMongoConnected && Models.users) {
+      const user = await Models.users.findOne({ username: cleanUser }).lean();
+      if (user) return user;
+    }
+    const data = readDb();
+    const users = Array.isArray(data.users) ? data.users : (defaultDatabase.users || []);
+    return users.find(u => String(u.username || '').toLowerCase() === cleanUser) || null;
+  },
+
+  getUsers: async () => {
+    if (isMongoConnected && Models.users) {
+      return await Models.users.find({}).lean();
+    }
+    const data = readDb();
+    return Array.isArray(data.users) ? data.users : (defaultDatabase.users || []);
+  },
 
   // Authors
   getAuthors: async () => {
