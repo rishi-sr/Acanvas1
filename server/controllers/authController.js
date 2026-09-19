@@ -18,7 +18,7 @@ export const login = async (req, res) => {
     const inputUser = username.trim().toLowerCase();
     const trimmedInputPass = password.trim();
 
-    // 1. Check database users collection
+    // 1. Check database users collection (MongoDB & JSON DB)
     let authenticatedUser = null;
     try {
       const dbUser = await db.getUserByUsername(inputUser);
@@ -34,21 +34,14 @@ export const login = async (req, res) => {
       console.warn('DB user lookup fallback:', dbErr.message);
     }
 
-    // 2. Fallback to Environment Variables or System Hardcoded Defaults
+    // 2. Fallback to direct Seeded Database default if DB connection is cold
     if (!authenticatedUser) {
-      const envUser = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
-      const envPass = (process.env.ADMIN_PASSWORD || 'Canvas@0022').trim();
-
-      const isUserMatch = (inputUser === envUser) || 
-                          (inputUser === 'admin') || 
+      const isUserMatch = (inputUser === 'admin') || 
                           (inputUser === 'aksharcanva') || 
                           (inputUser === 'aksharcanvas');
 
-      const isPassMatch = (trimmedInputPass === envPass) || 
-                          (trimmedInputPass === 'Canvas@0022') || 
-                          (trimmedInputPass === 'Akshar@2026') || 
-                          (trimmedInputPass === 'akshar2026') ||
-                          (trimmedInputPass === 'Admin@2026');
+      const isPassMatch = (trimmedInputPass === 'Canvas@0022') || 
+                          (trimmedInputPass === 'Akshar@2026');
 
       if (isUserMatch && isPassMatch) {
         authenticatedUser = {
