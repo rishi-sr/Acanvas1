@@ -44,6 +44,12 @@
     flex-wrap: wrap;
     margin-bottom: 1.8rem;
 
+    @media (max-width: 768px) {
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0 0.5rem;
+    }
+
     .author-tab-pill {
       display: inline-flex;
       align-items: center;
@@ -58,7 +64,14 @@
       background: #FFFFFF;
       color: $text-primary;
       box-shadow: $shadow-sm;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+
+      @media (max-width: 768px) {
+        padding: 0.55rem 1.15rem;
+        font-size: 0.92rem;
+      }
 
       svg {
         color: $gold-dark;
@@ -72,12 +85,20 @@
         box-shadow: $shadow-md;
       }
 
+      &:active {
+        transform: scale(0.96);
+      }
+
       &.active {
         background: $cherry-gradient;
         color: #FFFFFF;
-        border-color: transparent;
+        border-color: rgba(255, 215, 0, 0.45);
         box-shadow: 0 4px 16px rgba(196, 30, 58, 0.28);
         transform: translateY(-2px);
+
+        @media (max-width: 768px) {
+          transform: translateY(0);
+        }
 
         svg {
           color: $gold-light;

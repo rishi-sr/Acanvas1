@@ -18,6 +18,19 @@ const Poems = () => {
   const [activeTab, setActiveTab] = useState('anamika');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalPoem, setActiveModalPoem] = useState(null);
+  const tabsNavRef = React.useRef(null);
+
+  const handleTabClick = (tabId, e) => {
+    setActiveTab(tabId);
+    setSearchQuery('');
+    if (e && e.currentTarget) {
+      e.currentTarget.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  };
 
   // Filter items based on active tab
   const tabItems = useMemo(() => {
@@ -84,22 +97,21 @@ const Poems = () => {
 
       {/* Main Tabs and Content Section */}
       <section className="container rachnaye-container">
-        {/* Category Tabs Bar */}
-        <div className="rachnaye-tabs-nav">
-          {RACHNAYE_TABS.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`rachnaye-tab-pill ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setSearchQuery('');
-              }}
-            >
-              <span className="tab-icon">{tab.icon}</span>
-              <span className="tab-text">{tab.label}</span>
-            </button>
-          ))}
+        {/* Category Tabs Bar with Mobile Touch Track */}
+        <div className="rachnaye-tabs-wrapper">
+          <div className="rachnaye-tabs-nav" ref={tabsNavRef}>
+            {RACHNAYE_TABS.map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                className={`rachnaye-tab-pill ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={(e) => handleTabClick(tab.id, e)}
+              >
+                <span className="tab-icon">{tab.icon}</span>
+                <span className="tab-text">{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Search Bar */}
