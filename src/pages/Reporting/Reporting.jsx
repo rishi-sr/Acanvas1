@@ -14,11 +14,9 @@ const Reporting = () => {
         <div className="container">
           <div className="section-title-wrap">
             <h1 className="main-title">
-              साहित्यिक <span className="highlight">रिपोर्टिंग</span>
+              <span className="highlight">रिपोर्टिंग</span>
             </h1>
-            <p className="desc">
-              राष्ट्रीय मंचों, पत्र-पत्रिकाओं, आकाशवाणी और साहित्यिक समारोहों में 'अक्षर कैनवास' की उपस्थिति व समीक्षाएँ।
-            </p>
+           
             <div className="ornament-divider">
               <span className="line" /><span className="diamond" /><span className="line" />
             </div>

@@ -144,7 +144,7 @@ const Admin = () => {
     },
     {
       id: 'reports',
-      label: `साहित्यिक रिपोर्टिंग (Press & Media)`,
+      label: `रिपोर्टिंग (Press & Media)`,
       shortLabel: 'रिपोर्टिंग',
       icon: <Newspaper size={18} />,
       badge: `${reports?.length || 0} कवरेज`
@@ -172,8 +172,8 @@ const Admin = () => {
     },
     {
       id: 'gallery',
-      label: `चित्र दीर्घा (Gallery Management)`,
-      shortLabel: 'चित्र दीर्घा',
+      label: `गैलरी (Gallery Management)`,
+      shortLabel: 'गैलरी',
       icon: <ImageIcon size={18} />,
       badge: `${gallery?.length || 0} चित्र`
     },
@@ -1523,7 +1523,7 @@ const Admin = () => {
         {activeTab === 'reports' && (
           <div className="admin-panel-content">
             <div className="panel-top-bar">
-              <h2 className="panel-heading">साहित्यिक रिपोर्टिंग व प्रेस कवरेज (Press & Coverage)</h2>
+              <h2 className="panel-heading">रिपोर्टिंग व प्रेस कवरेज (Press & Coverage)</h2>
               <button className="btn-royal" onClick={() => { setShowAddReport(!showAddReport); setEditingReport(null); }}>
                 <Plus size={16} />
                 <span>{showAddReport ? 'Close Form' : 'नई रिपोर्टिंग जोड़ें / Add Press Item'}</span>
@@ -2250,7 +2250,7 @@ const Admin = () => {
         {activeTab === 'gallery' && (
           <div className="admin-panel-content">
             <div className="panel-top-bar">
-              <h2 className="panel-heading">चित्र दीर्घा (Gallery Management)</h2>
+              <h2 className="panel-heading">गैलरी (Gallery Management)</h2>
               <button className="btn-royal" onClick={() => setShowAddGallery(!showAddGallery)}>
                 <Plus size={16} />
                 <span>{showAddGallery ? 'Close Form' : 'चित्र जोड़ें / Add Photo'}</span>
@@ -2448,7 +2448,7 @@ const Admin = () => {
                   {gallery.length === 0 ? (
                     <tr>
                       <td colSpan={6} style={{ textAlign: 'center', color: '#7D6B6E', padding: '2.5rem' }}>
-                        चित्र दीर्घा में वर्तमान में कोई फोटो उपलब्ध नहीं है। ऊपर "चित्र जोड़ें" बटन दबाकर नई फोटो अपलोड करें।
+                        गैलरी में वर्तमान में कोई फोटो उपलब्ध नहीं है। ऊपर "चित्र जोड़ें" बटन दबाकर नई फोटो अपलोड करें।
                       </td>
                     </tr>
                   ) : (

@@ -14,12 +14,12 @@ const Samkalieen = () => {
       <section className="samkalieen-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">साहित्यिक स्तंभ एवं विमर्श</span>
+            
             <h1 className="main-title">
-              समकालीन <span className="highlight">आलेख व चिंतन</span>
+              <span className="highlight">समकालीन</span>
             </h1>
             <p className="desc">
-              आधुनिक चेतना, मानवीय सरोकार, स्त्री अस्मिता और सांस्कृतिक मूल्यों पर दोनों रचनाकारों के वैचारिक आलेख।
+              अक्षर कैनवास पर सद्यः प्रकाशित रचनाओं के लिए क्लिक करें 
             </p>
             <div className="ornament-divider">
               <span className="line" /><span className="diamond" /><span className="line" />
@@ -37,7 +37,7 @@ const Samkalieen = () => {
                 <BookOpen size={28} color="#C5A059" />
               </div>
               <h3 style={{ fontSize: '1.3rem', fontFamily: 'Cinzel, serif', color: '#1C191A', marginBottom: '0.6rem', fontWeight: 700 }}>
-                वर्तमान में कोई समकालीन आलेख सूचीबद्ध नहीं है
+                वर्तमान में कोई समकालीन आलेख सूचीबद्ध नहीं है।
               </h3>
               <p style={{ color: '#7D6B6E', fontSize: '0.95rem', lineHeight: '1.6' }}>
                 नवीन साहित्यिक, दार्शनिक एवं समकालीन चिंतन से संबंधित आलेख शीघ्र ही यहाँ प्रकाशित किए जाएँगे।

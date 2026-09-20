@@ -15,7 +15,7 @@ const Workshop = () => {
         <div className="container">
           <div className="section-title-wrap">
             <h1 className="main-title">
-              सृजन एवं <span className="highlight">वर्कशॉप्स</span>
+             <span className="highlight">वर्कशॉप</span>
             </h1>
             <p className="desc">
               काव्य शिल्प, छंद-साधना, स्टोरीटेलिंग और मंच प्रस्तुति की कलात्मक बारीकियों को सीखने का अनूठा मंच।

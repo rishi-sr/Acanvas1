@@ -99,7 +99,7 @@ const Navbar = () => {
       path: '/gallery', 
       label: t('nav.gallary') || 'गैलरी', 
       num: '08', 
-      sub: 'चित्र दीर्घा व स्मृतियाँ',
+      sub: 'गैलरी व स्मृतियाँ',
       icon: Image 
     }
   ];
