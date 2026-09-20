@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { poetsData as defaultPoetsData } from '../../../data/poetsData';
 import { useContent } from '../../../context/ContentContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import { resolveImageUrl } from '../../../utils/imageUrl';
 import './PoetsSpotlight.scss';
 
 const PoetsSpotlight = () => {
@@ -20,8 +21,9 @@ const PoetsSpotlight = () => {
   const currentPoet = activePoet === 'kanchan' ? kanchan : garima;
   const isGarima = activePoet === 'garima';
 
-  // Default images if avatarUrl is not set
-  const portraitImage = currentPoet.avatarUrl || (isGarima ? '/assets/garima-portrait.png' : '/assets/kanchan-portrait.png');
+  // Default images if avatarUrl is not set or failed to load
+  const fallbackAsset = isGarima ? '/assets/garima-portrait.png' : '/assets/kanchan-portrait.png';
+  const portraitImage = resolveImageUrl(currentPoet?.avatarUrl, fallbackAsset);
 
   return (
     <section className="poets-spotlight-section section-padding">
@@ -183,6 +185,10 @@ const PoetsSpotlight = () => {
                 src={portraitImage}
                 alt={currentPoet.name}
                 className="parichay-portrait-photo"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = fallbackAsset;
+                }}
               />
             </div>
           </motion.div>

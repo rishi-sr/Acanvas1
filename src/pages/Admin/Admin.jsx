@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../../context/ContentContext';
+import { resolveImageUrl } from '../../utils/imageUrl';
 import './Admin.scss';
 
 const Admin = () => {
@@ -360,6 +361,9 @@ const Admin = () => {
     setUploadingAvatar(false);
 
     if (res.success) {
+      if (res.avatarUrl) {
+        setAuthorForm(prev => ({ ...prev, avatarUrl: res.avatarUrl }));
+      }
       setAuthorSaveMsg('✅ फोटो सफलतापूर्वक अपलोड की गई!');
       setTimeout(() => setAuthorSaveMsg(''), 4000);
     } else {
@@ -890,7 +894,15 @@ const Admin = () => {
                 {/* Avatar upload */}
                 <div className="author-avatar-upload-box">
                   {authorForm.avatarUrl ? (
-                    <img src={authorForm.avatarUrl} alt={authorForm.name} className="avatar-preview-circle" />
+                    <img
+                      src={resolveImageUrl(authorForm.avatarUrl, selectedAuthorId === 'kanchan' ? '/assets/kanchan-portrait.png' : '/assets/garima-portrait.png')}
+                      alt={authorForm.name || 'Author'}
+                      className="avatar-preview-circle"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = selectedAuthorId === 'kanchan' ? '/assets/kanchan-portrait.png' : '/assets/garima-portrait.png';
+                      }}
+                    />
                   ) : (
                     <div className="avatar-placeholder-circle">
                       {selectedAuthorId === 'kanchan' ? 'K' : 'G'}
@@ -2389,7 +2401,7 @@ const Admin = () => {
                       }}
                     >
                       <img
-                        src={galleryImagePreview || newGalleryItem.image}
+                        src={resolveImageUrl(galleryImagePreview || newGalleryItem.image)}
                         alt="Preview"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -2444,7 +2456,7 @@ const Admin = () => {
                       <tr key={item.id}>
                         <td>
                           <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', background: '#f0e6e6' }}>
-                            <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={resolveImageUrl(item.image)} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           </div>
                         </td>
                         <td style={{ fontWeight: 700 }}>{item.title}</td>

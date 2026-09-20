@@ -26,8 +26,9 @@ jobs:
 
             cd /opt/akshar-canvas
 
-            echo "Pulling latest code..."
-            git pull origin main
+            echo "Fetching and resetting to latest code..."
+            git fetch origin main
+            git reset --hard origin/main
 
             echo "Installing frontend dependencies..."
             npm ci
@@ -40,7 +41,7 @@ jobs:
             npm ci
 
             echo "Restarting Akshar Canvas backend..."
-            pm2 restart akshar-canvas-api --update-env
+            pm2 restart akshar-canvas-api --update-env || pm2 start index.js --name akshar-canvas-api
 
             echo "Saving PM2 process list..."
             pm2 save

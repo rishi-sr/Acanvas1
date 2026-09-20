@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, Calendar, MapPin, Sparkles, Tag, Feather } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
+import { resolveImageUrl } from '../../utils/imageUrl';
 import './Gallery.scss';
 
 const CATEGORY_MAP = {
@@ -73,7 +74,7 @@ const Gallery = () => {
                     >
                       <div className="pure-gallery-card">
                         <div className={`img-wrapper ${ratioClass}`}>
-                          <img src={item.image} alt={item.title} loading="lazy" />
+                          <img src={resolveImageUrl(item.image)} alt={item.title} loading="lazy" />
                           
                           {/* Subtle overlay on hover */}
                           <div className="img-hover-overlay">
@@ -117,7 +118,7 @@ const Gallery = () => {
 
               {/* Left Column: Full Image Display */}
               <div className="lightbox-media-pane">
-                <img src={selectedPhoto.image} alt={selectedPhoto.title} />
+                <img src={resolveImageUrl(selectedPhoto.image)} alt={selectedPhoto.title} />
               </div>
 
               {/* Right Column: Image Details Pane */}

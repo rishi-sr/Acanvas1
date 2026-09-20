@@ -5,6 +5,7 @@ import { Award, BookOpen, Feather, ArrowRight } from 'lucide-react';
 import { poetsData as defaultPoetsData } from '../../data/poetsData';
 import { useContent } from '../../context/ContentContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { resolveImageUrl } from '../../utils/imageUrl';
 import './About.scss';
 
 const About = () => {
@@ -16,8 +17,8 @@ const About = () => {
   const garima = authors?.garima || defaultPoetsData.garima;
   const synergy = authors?.synergy || defaultPoetsData.synergy;
 
-  const kanchanPortrait = kanchan.avatarUrl || '/assets/kanchan-portrait.png';
-  const garimaPortrait = garima.avatarUrl || '/assets/garima-portrait.png';
+  const kanchanPortrait = resolveImageUrl(kanchan?.avatarUrl, '/assets/kanchan-portrait.png');
+  const garimaPortrait = resolveImageUrl(garima?.avatarUrl, '/assets/garima-portrait.png');
 
   // Dynamic real count fetched from backend books collection or author profile stats
   const kanchanPublishedBooks = (books || []).filter(b =>
