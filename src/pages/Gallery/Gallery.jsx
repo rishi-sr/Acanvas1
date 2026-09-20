@@ -30,10 +30,10 @@ const Gallery = () => {
         <div className="container">
           <div className="section-title-wrap">
             <h1 className="main-title">
-              चित्र <span className="highlight">दीर्घा</span>
+               <span className="highlight">गैलरी</span>
             </h1>
             <p className="desc">
-              मंच प्रस्तुतियाँ, पुस्तक विमोचन, साहित्यिक गोष्ठियों और अविस्मरणीय क्षणों का कलात्मक संकलन।
+              मंच प्रस्तुतियाँ, पुस्तक विमोचन, साहित्यिक गोष्ठियों और अविस्मरणीय क्षणों का कैनवास।
             </p>
             <div className="ornament-divider">
               <span className="line" />
@@ -51,8 +51,7 @@ const Gallery = () => {
           {gallery.length === 0 ? (
             <div className="no-gallery-items">
               <Feather size={36} className="empty-icon" />
-              <h3>जल्द ही गैलरी में साहित्यिक स्मृतियाँ प्रकाशित की जाएँगी</h3>
-              <p>इस अनुभाग में नई तस्वीरें और मंच प्रस्तुतियाँ शीघ्र जोड़ी जाएँगी।</p>
+              <h3>इस अनुभाग में नई तस्वीरें और मंच प्रस्तुतियाँ शीघ्र जोड़ी जाएँगी।</h3>
             </div>
           ) : (
             <div className="gallery-masonry-grid">
