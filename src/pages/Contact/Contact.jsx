@@ -12,13 +12,13 @@ const Contact = () => {
       <section className="contact-hero">
         <div className="container">
           <div className="section-title-wrap">
-            <span className="subtitle">{t('contact.subtitle')}</span>
+            {/* <span className="subtitle">{t('contact.subtitle')}</span> */}
             <h1 className="main-title">
-              {t('contact.title1')} <span className="highlight">{t('contact.title2')}</span>
+              <span className="highlight">{t('contact.title2')}</span>
             </h1>
-            <p className="desc">
+            {/* <p className="desc">
               {t('contact.desc')}
-            </p>
+            </p> */}
             <div className="ornament-divider">
               <span className="line" />
               <span className="diamond" />
@@ -61,7 +61,7 @@ const Contact = () => {
               </div>
               <div className="item-text">
                 <div className="lbl">{t('contact.info.phone.lbl')}</div>
-                <div className="val">+91 98765 43210 / +91 94512 34567</div>
+                <div className="val">+91 72369 10316 / +91 79053 09214</div>
               </div>
             </div>
 
