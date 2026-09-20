@@ -68,7 +68,7 @@ export const createPoem = async (req, res) => {
       title,
       titleHindi: titleHindi || title,
       poet: poet || 'Kanchan Lata Jaiswal',
-      poetHindi: poetHindi || poet || 'कंचन लता जायसवाल',
+      poetHindi: poetHindi || poet || 'डॉ. कंचन जायसवाल',
       book: book || '',
       category: category || 'Life Philosophy',
       featured: !!featured,

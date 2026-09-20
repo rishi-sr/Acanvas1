@@ -30,9 +30,8 @@ const PoetsSpotlight = () => {
       <div className="container">
         {/* Section Header */}
         <div className="section-title-wrap">
-          <span className="subtitle">{t('spotlight.subtitle')}</span>
           <h2 className="main-title">
-            {t('spotlight.title1')} <span className="highlight">{t('spotlight.title2')}</span>
+            <span className="highlight">{t('spotlight.title2')}</span>
           </h2>
           <div className="ornament-divider">
             <span className="line" /><span className="diamond" /><span className="line" />
@@ -55,7 +54,7 @@ const PoetsSpotlight = () => {
             onClick={() => setActivePoet('kanchan')}
           >
             <Feather size={15} />
-            <span>{isHindi ? 'कंचन लता जायसवाल' : 'Kanchan Lata Jaiswal'}</span>
+            <span>{isHindi ? 'डॉ. कंचन जायसवाल' : 'Kanchan Lata Jaiswal'}</span>
           </button>
         </div>
 
@@ -145,7 +144,7 @@ const PoetsSpotlight = () => {
                   to={`/about#${activePoet}`}
                   className="parichay-read-bio-link"
                 >
-                  <span>{isHindi ? 'पूरी जीवनवृत्त पढ़ें' : 'Read Full Biography'}</span>
+                  <span>{isHindi ? ' जीवनवृत्त पढ़ें' : 'Read Full Biography'}</span>
                   <ArrowRight size={16} />
                 </Link>
               </div>

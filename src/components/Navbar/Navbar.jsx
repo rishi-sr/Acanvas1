@@ -57,7 +57,7 @@ const Navbar = () => {
       path: '/about', 
       label: t('nav.parichay') || 'परिचय', 
       num: '02', 
-      sub: 'कवयित्री परिचय',
+      sub: 'परिचय',
       icon: Info 
     },
     { 

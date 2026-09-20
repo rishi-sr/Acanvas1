@@ -43,7 +43,7 @@ const Books = () => {
               पुस्तकें
             </h1>
             <p className="desc">
-              कवयित्री कंचन लता जायसवाल एवं गरिमा सिंह की प्रकाशित एवं आगामी साहित्यिक कृतियाँ।
+              डॉ. कंचन जायसवाल एवं गरिमा सिंह की प्रकाशित एवं आगामी साहित्यिक कृतियाँ।
             </p>
             <div className="ornament-divider">
               <span className="line" />
@@ -71,7 +71,7 @@ const Books = () => {
             onClick={() => setSelectedAuthor('kanchan')}
           >
             <Feather size={15} />
-            <span>डॉ. कंचन लता जायसवाल</span>
+            <span>डॉ. कंचन जायसवाल</span>
           </button>
         </div>
 

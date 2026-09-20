@@ -9,234 +9,161 @@
     text-align: center;
   }
 
-  .contact-layout-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: 3.5rem;
-    margin-bottom: 5.5rem;
+  .contact-main-container {
+    max-width: 980px;
+    margin: 0 auto 5.5rem;
+    padding: 0 1.5rem;
 
-    @include respond-to('lg') {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
+    @include respond-to('sm') {
+      padding: 0 1rem;
+      margin-bottom: 4rem;
     }
   }
 
-  // Left Info Pane
-  .contact-info-pane {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  .secretariat-royal-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 3.5rem 3.5rem 3.2rem;
+    position: relative;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-left: 6px solid #8B0000;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(197, 160, 89, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    .info-card {
-      @include royal-card;
-      padding: 2.8rem 2.2rem;
+    @include respond-to('md') {
+      padding: 2.5rem 2rem 2.2rem;
+      border-radius: 20px;
+    }
 
-      .info-title {
+    @include respond-to('sm') {
+      padding: 2rem 1.4rem 1.8rem;
+      border-radius: 18px;
+    }
+
+    &:hover {
+      box-shadow: 0 20px 54px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(197, 160, 89, 0.12);
+    }
+
+    .secretariat-card-header {
+      margin-bottom: 2.5rem;
+
+      .secretariat-title {
         font-family: $font-serif;
-        font-size: 1.65rem;
+        font-size: 2.4rem;
         font-weight: 800;
-        color: $text-primary;
-        margin-bottom: 1rem;
+        color: #1a1a1a;
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.01em;
+
+        @include respond-to('sm') {
+          font-size: 1.8rem;
+        }
       }
 
-      .info-desc {
-        color: $text-secondary;
-        line-height: 1.7;
-        margin-bottom: 2rem;
-        font-size: 0.96rem;
-      }
+      .secretariat-desc {
+        font-family: $font-body;
+        font-size: 1.12rem;
+        color: #555555;
+        line-height: 1.75;
+        max-width: 820px;
 
-      .contact-items-list {
+        @include respond-to('sm') {
+          font-size: 1rem;
+          line-height: 1.6;
+        }
+      }
+    }
+
+    .secretariat-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+
+      .secretariat-item-row {
         display: flex;
-        flex-direction: column;
-        gap: 1.3rem;
+        align-items: center;
+        gap: 1.4rem;
+        padding: 1.1rem 1.4rem;
+        border-radius: 16px;
+        background: rgba(253, 246, 237, 0.45);
+        border: 1px solid rgba(197, 160, 89, 0.22);
+        transition: all 0.25s ease;
 
-        .contact-item-row {
-          display: flex;
-          align-items: flex-start;
-          gap: 1.1rem;
+        @include respond-to('sm') {
+          gap: 1rem;
+          padding: 0.9rem 1rem;
+          border-radius: 14px;
+        }
 
-          .icon-box {
+        &:hover {
+          background: #FFFFFF;
+          border-color: $primary-cherry;
+          transform: translateX(4px);
+          box-shadow: 0 6px 20px rgba(196, 30, 58, 0.08);
+        }
+
+        .icon-box {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: rgba(196, 30, 58, 0.08);
+          border: 1px solid rgba(196, 30, 58, 0.22);
+          color: $primary-cherry;
+          @include flex-center;
+          flex-shrink: 0;
+          transition: transform 0.25s ease, background 0.25s ease;
+
+          @include respond-to('sm') {
             width: 44px;
             height: 44px;
-            border-radius: 50%;
-            background: rgba(196, 30, 58, 0.08);
-            border: 1px solid rgba(196, 30, 58, 0.2);
-            color: $primary-cherry;
-            @include flex-center;
-            flex-shrink: 0;
+          }
+        }
+
+        &:hover .icon-box {
+          background: $primary-cherry;
+          color: #FFFFFF;
+          transform: scale(1.05);
+        }
+
+        .item-text {
+          flex: 1;
+
+          .lbl {
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: $text-muted;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+
+            @include respond-to('sm') {
+              font-size: 0.78rem;
+            }
           }
 
-          .item-text {
-            .lbl {
-              font-size: 0.78rem;
-              text-transform: uppercase;
-              letter-spacing: 0.08em;
-              color: $text-muted;
-              font-weight: 700;
+          .val {
+            font-family: $font-serif;
+            font-weight: 700;
+            color: $text-primary;
+            font-size: 1.1rem;
+            line-height: 1.45;
+            word-break: break-word;
+
+            @include respond-to('sm') {
+              font-size: 0.98rem;
             }
-            .val {
-              font-weight: 600;
-              color: $text-primary;
-              font-size: 0.95rem;
-              margin-top: 0.15rem;
 
-              a {
-                color: $primary-cherry;
-                text-decoration: none;
+            a {
+              color: $primary-cherry;
+              text-decoration: none;
+              transition: color 0.2s ease;
 
-                &:hover {
-                  text-decoration: underline;
-                }
+              &:hover {
+                text-decoration: underline;
+                color: $primary-cherry-dark;
               }
             }
           }
-        }
-      }
-    }
-  }
-
-  // Right Form Pane
-  .contact-form-pane {
-    @include royal-card;
-    padding: 3rem 2.5rem;
-
-    @include respond-to('sm') {
-      padding: 2rem 1.5rem;
-    }
-
-    .form-heading {
-      font-family: $font-serif;
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: $text-primary;
-      margin-bottom: 0.4rem;
-    }
-
-    .form-sub {
-      color: $text-secondary;
-      font-size: 0.92rem;
-      margin-bottom: 2rem;
-    }
-
-    .booking-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.2rem;
-
-        @include respond-to('sm') {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-
-        label {
-          font-size: 0.88rem;
-          font-weight: 700;
-          color: $text-primary;
-        }
-
-        input, select, textarea {
-          width: 100%;
-          padding: 0.85rem 1.1rem;
-          border-radius: $radius-md;
-          border: 1.5px solid $border-light;
-          background: $bg-parchment;
-          color: $text-primary;
-          font-family: $font-body;
-          font-size: 0.95rem;
-          outline: none;
-          transition: $transition-smooth;
-
-          &:focus {
-            border-color: $primary-cherry;
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.08);
-          }
-        }
-
-        textarea {
-          resize: vertical;
-          min-height: 120px;
-        }
-      }
-    }
-
-    .submission-success-banner {
-      background: rgba(196, 30, 58, 0.08);
-      border: 1px solid rgba(196, 30, 58, 0.25);
-      border-radius: $radius-md;
-      padding: 2rem;
-      text-align: center;
-
-      .success-title {
-        font-family: $font-serif;
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: $primary-cherry;
-        margin-bottom: 0.6rem;
-      }
-
-      p {
-        color: $text-secondary;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-      }
-    }
-  }
-
-  // FAQ Accordion
-  .faq-section {
-    background: $bg-parchment;
-    padding: 5.5rem 0;
-    margin-bottom: 4.5rem;
-
-    .faq-list {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-
-      .faq-item {
-        background: #ffffff;
-        border-radius: $radius-md;
-        border: 1px solid $border-light;
-        overflow: hidden;
-
-        .faq-question {
-          width: 100%;
-          padding: 1.25rem 1.6rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          background: none;
-          border: none;
-          font-family: $font-serif;
-          font-size: 1.12rem;
-          font-weight: 700;
-          color: $text-primary;
-          text-align: left;
-          cursor: pointer;
-        }
-
-        .faq-answer {
-          padding: 0 1.6rem 1.4rem;
-          color: $text-secondary;
-          font-size: 0.95rem;
-          line-height: 1.7;
-          border-top: 1px dashed $border-light;
-          padding-top: 1rem;
         }
       }
     }

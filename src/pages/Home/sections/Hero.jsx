@@ -39,10 +39,6 @@ const Hero = () => {
             </p>
 
             <div className="hero-actions-row">
-              <Link to="/poems" className="btn-royal">
-                <Feather size={17} />
-                <span>{t('hero.explorePoems')}</span>
-              </Link>
               <Link to="/books" className="btn-royal-outline">
                 <BookOpen size={17} />
                 <span>{t('hero.discoverBooks')}</span>

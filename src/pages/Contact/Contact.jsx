@@ -1,62 +1,11 @@
-import React, { useState } from 'react';
-import { Mail, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import React from 'react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
-import confetti from 'canvas-confetti';
-import { useContent } from '../../context/ContentContext';
 import { useLanguage } from '../../context/LanguageContext';
 import './Contact.scss';
 
 const Contact = () => {
-  const { submitInquiry } = useContent();
   const { t } = useLanguage();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    city: '',
-    eventType: t('contact.event.1'),
-    date: '',
-    message: '',
-    website_url_hp: '' // Honeypot trap
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-
-    setIsSubmitting(true);
-    setErrorMessage('');
-
-    const res = await submitInquiry(formData);
-    setIsSubmitting(false);
-
-    if (res.success) {
-      setSubmitted(true);
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#8B0000', '#C5A059', '#C41E3A', '#FFFFFF']
-      });
-
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        city: '',
-        eventType: t('contact.event.1'),
-        date: '',
-        message: '',
-        website_url_hp: ''
-      });
-    } else {
-      setErrorMessage(res.message || 'Failed to submit inquiry. Please try again.');
-    }
-  };
 
   return (
     <div className="contact-page">
@@ -79,186 +28,55 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="container">
-        <div className="contact-layout-grid">
-          {/* Left Info Pane */}
-          <div className="contact-info-pane">
-            <motion.div
-              className="info-card"
-              initial={{ opacity: 0, x: -25 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="info-title">{t('contact.info.title')}</h2>
-              <p className="info-desc">
-                {t('contact.info.desc')}
-              </p>
-
-              <div className="contact-items-list">
-                <div className="contact-item-row">
-                  <div className="icon-box">
-                    <Mail size={20} />
-                  </div>
-                  <div className="item-text">
-                    <div className="lbl">{t('contact.info.email.lbl')}</div>
-                    <div className="val">
-                      <a href="mailto:aksharcanvas@gmail.com">aksharcanvas@gmail.com</a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="contact-item-row">
-                  <div className="icon-box">
-                    <Phone size={20} />
-                  </div>
-                  <div className="item-text">
-                    <div className="lbl">{t('contact.info.phone.lbl')}</div>
-                    <div className="val">+91 98765 43210 / +91 94512 34567</div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+      <section className="container contact-main-container">
+        <motion.div
+          className="secretariat-royal-card"
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="secretariat-card-header">
+            <h2 className="secretariat-title">{t('contact.info.title')}</h2>
+            <p className="secretariat-desc">{t('contact.info.desc')}</p>
           </div>
 
-          {/* Right Booking Form */}
-          <motion.div
-            className="contact-form-pane"
-            initial={{ opacity: 0, x: 25 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            {submitted ? (
-              <div className="submission-success-banner">
-                <CheckCircle size={48} color="#C41E3A" style={{ marginBottom: '1rem' }} />
-                <h3 className="success-title">{t('contact.success.title')}</h3>
-                <p>
-                  {t('contact.success.desc')}
-                </p>
-                <button
-                  className="btn-royal"
-                  onClick={() => setSubmitted(false)}
-                >
-                  <span>{t('contact.success.btn')}</span>
-                </button>
+          <div className="secretariat-items-list">
+            {/* 1. Email */}
+            <div className="secretariat-item-row">
+              <div className="icon-box">
+                <Mail size={22} />
               </div>
-            ) : (
-              <>
-                <h2 className="form-heading">{t('contact.form.heading')}</h2>
-                <p className="form-sub">
-                  {t('contact.form.sub')}
-                </p>
+              <div className="item-text">
+                <div className="lbl">{t('contact.info.email.lbl')}</div>
+                <div className="val">
+                  <a href="mailto:aksharcanvas@gmail.com">aksharcanvas@gmail.com</a>
+                </div>
+              </div>
+            </div>
 
-                {errorMessage && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.8rem 1rem', background: '#FFEBEE', border: '1px solid #FFCDD2', color: '#C62828', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                    <AlertCircle size={18} />
-                    <span>{errorMessage}</span>
-                  </div>
-                )}
+            {/* 2. Coordination Desk / Phone */}
+            <div className="secretariat-item-row">
+              <div className="icon-box">
+                <Phone size={22} />
+              </div>
+              <div className="item-text">
+                <div className="lbl">{t('contact.info.phone.lbl')}</div>
+                <div className="val">+91 98765 43210 / +91 94512 34567</div>
+              </div>
+            </div>
 
-                <form onSubmit={handleSubmit} className="booking-form">
-                  {/* Bot Honeypot Trap */}
-                  <div style={{ display: 'none', position: 'absolute', left: '-9999px' }} aria-hidden="true">
-                    <label htmlFor="website_url_hp">Do not fill this</label>
-                    <input
-                      id="website_url_hp"
-                      type="text"
-                      name="website_url_hp"
-                      tabIndex={-1}
-                      autoComplete="off"
-                      value={formData.website_url_hp}
-                      onChange={(e) => setFormData({ ...formData, website_url_hp: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>{t('contact.form.name')}</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder={t('contact.form.namePh')}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>{t('contact.form.email')}</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="name@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>{t('contact.form.phone')}</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+91 98765 00000"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>{t('contact.form.city')}</label>
-                      <input
-                        type="text"
-                        placeholder={t('contact.form.cityPh')}
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>{t('contact.form.eventType')}</label>
-                      <select
-                        value={formData.eventType}
-                        onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
-                      >
-                        <option value={t('contact.event.1')}>{t('contact.event.1')}</option>
-                        <option value={t('contact.event.2')}>{t('contact.event.2')}</option>
-                        <option value={t('contact.event.3')}>{t('contact.event.3')}</option>
-                        <option value={t('contact.event.4')}>{t('contact.event.4')}</option>
-                        <option value={t('contact.event.5')}>{t('contact.event.5')}</option>
-                        <option value={t('contact.event.6')}>{t('contact.event.6')}</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>{t('contact.form.date')}</label>
-                      <input
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>{t('contact.form.message')}</label>
-                    <textarea
-                      required
-                      placeholder={t('contact.form.messagePh')}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    />
-                  </div>
-
-                  <button type="submit" disabled={isSubmitting} className="btn-royal" style={{ width: '100%', padding: '1rem', marginTop: '0.5rem' }}>
-                    <Send size={16} />
-                    <span>{isSubmitting ? 'Sending Request...' : t('contact.form.submit')}</span>
-                  </button>
-                </form>
-              </>
-            )}
-          </motion.div>
-        </div>
+            {/* 3. Location / स्थान */}
+            <div className="secretariat-item-row">
+              <div className="icon-box">
+                <MapPin size={22} />
+              </div>
+              <div className="item-text">
+                <div className="lbl">{t('contact.info.loc.lbl')}</div>
+                <div className="val">{t('contact.info.loc.val')}</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
     </div>
   );

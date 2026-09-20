@@ -872,7 +872,7 @@ const Admin = () => {
                 className={`author-pill-btn ${selectedAuthorId === 'kanchan' ? 'active' : ''}`}
                 onClick={() => setSelectedAuthorId('kanchan')}
               >
-                डॉ. कंचन लता जायसवाल (Dr. Kanchan Jaiswal)
+                डॉ. कंचन जायसवाल (Dr. Kanchan Jaiswal)
               </button>
               <button
                 type="button"
@@ -1025,14 +1025,14 @@ const Admin = () => {
                         if (aid === 'garima') {
                           setNewBook({ ...newBook, authorId: 'garima', author: 'Garima Singh', authorHindi: 'गरिमा सिंह' });
                         } else if (aid === 'kanchan') {
-                          setNewBook({ ...newBook, authorId: 'kanchan', author: 'Dr. Kanchan Jaiswal', authorHindi: 'डॉ. कंचन लता जायसवाल' });
+                          setNewBook({ ...newBook, authorId: 'kanchan', author: 'Dr. Kanchan Jaiswal', authorHindi: 'डॉ. कंचन जायसवाल' });
                         } else {
                           setNewBook({ ...newBook, authorId: 'joint', author: 'Joint Collaboration', authorHindi: 'संयुक्त संकलन' });
                         }
                       }}
                     >
                       <option value="garima">गरिमा सिंह (Garima Singh)</option>
-                      <option value="kanchan">डॉ. कंचन लता जायसवाल (Dr. Kanchan Jaiswal)</option>
+                      <option value="kanchan">डॉ. कंचन जायसवाल (Dr. Kanchan Jaiswal)</option>
                       <option value="joint">संयुक्त संकलन (Joint)</option>
                     </select>
                   </div>
@@ -1148,14 +1148,14 @@ const Admin = () => {
                         if (aid === 'garima') {
                           setEditingBook({ ...editingBook, authorId: 'garima', author: 'Garima Singh', authorHindi: 'गरिमा सिंह' });
                         } else if (aid === 'kanchan') {
-                          setEditingBook({ ...editingBook, authorId: 'kanchan', author: 'Dr. Kanchan Jaiswal', authorHindi: 'डॉ. कंचन लता जायसवाल' });
+                          setEditingBook({ ...editingBook, authorId: 'kanchan', author: 'Dr. Kanchan Jaiswal', authorHindi: 'डॉ. कंचन जायसवाल' });
                         } else {
                           setEditingBook({ ...editingBook, authorId: 'joint', author: 'Joint Collaboration', authorHindi: 'संयुक्त संकलन' });
                         }
                       }}
                     >
                       <option value="garima">गरिमा सिंह (Garima Singh)</option>
-                      <option value="kanchan">डॉ. कंचन लता जायसवाल (Dr. Kanchan Jaiswal)</option>
+                      <option value="kanchan">डॉ. कंचन जायसवाल (Dr. Kanchan Jaiswal)</option>
                       <option value="joint">संयुक्त संकलन (Joint)</option>
                     </select>
                   </div>
