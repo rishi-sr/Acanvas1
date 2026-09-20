@@ -31,7 +31,7 @@ import samkalieenRoutes from './routes/samkalieenRoutes.js';
 import { globalLimiter } from './middleware/rateLimiter.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Trust reverse proxy (Render, Vercel, Heroku, Cloudflare)

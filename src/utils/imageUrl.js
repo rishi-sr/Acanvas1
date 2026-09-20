@@ -23,7 +23,7 @@ export const resolveImageUrl = (url, fallback = '') => {
     const backendHost = import.meta.env.VITE_API_URL
       ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
       : (typeof window !== 'undefined' && (window.location.port === '5173' || window.location.port === '5174')
-          ? 'http://localhost:5000'
+          ? 'http://localhost:5002'
           : '');
     return backendHost ? `${backendHost}${trimmed}` : trimmed;
   }
