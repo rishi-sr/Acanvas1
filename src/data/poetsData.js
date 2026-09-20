@@ -25,7 +25,7 @@ export const poetsData = {
     philosophyHindi: "",
     awards: [],
     stats: {
-      publishedBooks: "2+"
+      publishedBooks: 0
     },
     social: {
       instagram: "https://instagram.com",
@@ -61,7 +61,7 @@ export const poetsData = {
     philosophyHindi: "",
     awards: [],
     stats: {
-      publishedBooks: "3"
+      publishedBooks: 0
     },
     social: {
       instagram: "https://instagram.com",

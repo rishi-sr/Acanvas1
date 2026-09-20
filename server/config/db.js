@@ -43,7 +43,7 @@ const defaultDatabase = {
       avatarUrl: "",
       awards: [],
       stats: {
-        publishedBooks: 1
+        publishedBooks: 0
       },
       social: {
         instagram: "https://instagram.com",
@@ -80,7 +80,7 @@ const defaultDatabase = {
       avatarUrl: "",
       awards: [],
       stats: {
-        publishedBooks: 2
+        publishedBooks: 0
       },
       social: {
         instagram: "https://instagram.com",

@@ -33,14 +33,15 @@
       "avatarUrl": "",
       "awards": [],
       "stats": {
-        "publishedBooks": 1
+        "publishedBooks": 0
       },
       "social": {
         "instagram": "https://instagram.com",
         "facebook": "https://facebook.com",
         "youtube": "https://youtube.com",
         "email": "kanchan@aksharcanvas.com"
-      }
+      },
+      "stats.publishedBooks": 0
     },
     "garima": {
       "id": "garima",
@@ -79,14 +80,15 @@
       "avatarUrl": "/uploads/1789848626792-61312fed4c047846123e05d2.jpeg",
       "awards": [],
       "stats": {
-        "publishedBooks": 2
+        "publishedBooks": 0
       },
       "social": {
         "instagram": "https://instagram.com",
         "facebook": "https://facebook.com",
         "youtube": "https://youtube.com",
         "email": "garima@aksharcanvas.com"
-      }
+      },
+      "stats.publishedBooks": 0
     },
     "synergy": {
       "title": "Akshar Canvas",

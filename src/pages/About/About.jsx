@@ -35,13 +35,8 @@ const About = () => {
      b.authorHindi?.includes('गरिमा'))
   );
 
-  const kanchanBookCount = kanchanPublishedBooks.length > 0
-    ? kanchanPublishedBooks.length
-    : (kanchan?.stats?.publishedBooks ?? kanchan?.publishedBooks?.length ?? 0);
-
-  const garimaBookCount = garimaPublishedBooks.length > 0
-    ? garimaPublishedBooks.length
-    : (garima?.stats?.publishedBooks ?? garima?.publishedBooks?.length ?? 0);
+  const kanchanBookCount = kanchanPublishedBooks.length;
+  const garimaBookCount = garimaPublishedBooks.length;
 
   return (
     <div className="about-page">
