@@ -30,3 +30,4 @@ export const resolveImageUrl = (url, fallback = '') => {
 
   return trimmed;
 };
+

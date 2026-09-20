@@ -1,0 +1,67 @@
+# Hostinger VPS Nginx Configuration for Akshar Canvas
+# Place in: /etc/nginx/sites-available/akshar-canvas
+# Enable with: sudo ln -s /etc/nginx/sites-available/akshar-canvas /etc/nginx/sites-enabled/
+# Test with: sudo nginx -t && sudo systemctl reload nginx
+
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com; # Replace with your domain or VPS IP
+
+    # Frontend Static Files (Vite build)
+    root /opt/akshar-canvas/dist;
+    index index.html;
+
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_proxied any;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/xml+rss application/atom+xml image/svg+xml;
+
+    # React SPA Routing (Route all non-file requests to index.html)
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Static Assets Caching (JS, CSS, Images, Fonts)
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|webp|svg|woff2?)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        access_log off;
+    }
+
+    # Backend API Proxy (Port 5000)
+    location /api/ {
+        proxy_pass http://127.0.0.1:5000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        
+        # Rate-limiting / timeout buffers
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Uploads Proxy (Local uploaded images fallback)
+    location /uploads/ {
+        proxy_pass http://127.0.0.1:5000/uploads/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000";
+    }
+
+    # Security Headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+}
